@@ -1,0 +1,80 @@
+Testing Agent class from agents.agent
+=====================================================================
+
+
+Test import
+---------------------------------------------------------------------
+>>> from rllib.agents import Agent
+
+
+Test initialization
+---------------------------------------------------------------------
+>>> a = Agent(3, 2)
+>>> a.stateDim
+3
+>>> a.actionDim
+2
+
+
+Test if history is initialy reset
+---------------------------------------------------------------------
+>>> len(a.history)
+1
+>>> len(a.episode)
+0
+
+
+Test progress counter is reset
+---------------------------------------------------------------------
+>>> a.progressCnt
+0
+
+
+Test integrateObservation() function
+---------------------------------------------------------------------
+>>> a.integrateObservation([1, 2, 3])
+>>> a.progressCnt
+1
+>>> a.obs
+[1, 2, 3]
+>>> a.action
+
+
+Test exception when integrateObservation is called twice.
+---------------------------------------------------------------------
+>>> a.integrateObservation([1, 2, 3])
+Traceback (most recent call last):
+    ...
+AgentException: observation was given twice before action was requested.
+
+
+Test getAction() function
+---------------------------------------------------------------------
+>>> a.getAction()
+array([ 0.,  0.])
+>>> a.getAction()
+Traceback (most recent call last):
+    ...
+AgentException: action was requested after reward was given.
+>>> a.progressCnt
+2
+
+
+Test giveReward() function
+---------------------------------------------------------------------
+>>> a.giveReward(-4)
+>>> a.progressCnt
+0
+>>> print a.history
+[ 1.  2.  3.][ 0.  0.] -4.0
+>>> print a.episode
+[ 1.  2.  3.][ 0.  0.] -4.0
+
+
+Test newEpisode() function
+---------------------------------------------------------------------
+>>> a.newEpisode()
+>>> len(a.history)
+2
+>>> print a.episode
+<BLANKLINE>
