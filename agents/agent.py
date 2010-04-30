@@ -40,7 +40,7 @@ class Agent(object):
                 
     def getAction(self):
         if self.progressCnt == 1:
-            self.calcAction()
+            self._calculate()
             self.progressCnt = 2
             return self.action
         else:
@@ -66,7 +66,7 @@ class Agent(object):
     def learn(self):
         pass
         
-    def calcAction(self):
+    def _calculate(self):
         """ this method needs to be overwritten by subclasses to return a non-zero action. """
         self.action = zeros(self.actionDim)
     
