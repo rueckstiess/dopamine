@@ -55,7 +55,7 @@ class Agent(object):
             self.progressCnt = 0
             self.history.append(self.obs, self.action, self.reward)
         else:
-            raise AgentException('reward was requested before action was returned.')
+            raise AgentException('reward was given before action was returned.')
         
     def newEpisode(self):
         self.history.newEpisode()
