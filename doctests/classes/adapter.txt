@@ -1,0 +1,15 @@
+Testing Adapter class from adapters.adapter
+=====================================================================
+
+
+Test the invariance of the default Adapter class
+---------------------------------------------------------------------
+
+>>> from rllib.adapters import Adapter
+>>> a = Adapter()
+>>> a.applyState([1, 2, 3])
+[1, 2, 3]
+>>> a.applyState([4, 5, 6])
+[4, 5, 6]
+>>> a.applyReward(7)
+7
