@@ -6,5 +6,6 @@ import os
 for (paths, dirs, files) in os.walk('.'):
     for f in files:
         if f.endswith('.txt'):
-            doctest.testfile(f)
-
+            print "testing %s"% os.path.join(paths, f)
+            testresult = doctest.testfile(os.path.join(paths, f))
+            

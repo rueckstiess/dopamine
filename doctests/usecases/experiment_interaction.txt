@@ -12,7 +12,6 @@
 >>> len(agent.history[0])
 10
 >>> print agent.history
---> print(agent.history)
 [][] 0.0
 [][] 0.0
 [][] 0.0
