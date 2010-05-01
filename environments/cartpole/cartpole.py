@@ -14,21 +14,30 @@ class CartPoleEnvironment(Environment):
         Runge-Kutta method.
     """       
     
+    # define state and action dimensions
+    stateDim = 4
+    actionDim = 1 
+        
+    # define if states and/or actions are discrete (rather than continuous)
+    discreteStates = False
+    discreteActions = False
+    
+    # define if environment has episodes (True) or is life-long (False)
+    episodic = True
+    
     # some physical constants
     g = 9.81
     l = 0.5
     mp = 0.1
     mc = 1.0
-    dt = 0.02    
+    dt = 0.02   
     
-    def __init__(self):
-        self.stateDim = 4
-        self.actionDim = 1
+    def __init__(self, maxSteps=100):
         
         # initialize the environment (randomly)
         self.reset()
         self.action = 0.0
-        self.delay = False
+        self.maxSteps = maxSteps
 
     def getState(self):
         """ returns the state one step (dt) ahead in the future. stores the state in
@@ -58,10 +67,23 @@ class CartPoleEnvironment(Environment):
         pos = random.uniform(-0.5, 0.5)
         self.sensors = (angle, 0.0, pos, 0.0)
         
+    def episodeFinished(self):
+        return self.timestep >= self.maxSteps    
         
     def getReward(self):
         Environment.getReward(self)
         # TODO integrate reward from task in environment
+
+        angle = abs(self.sensors[0])
+        s = abs(self.sensors[2])
+        reward = 0
+        if angle < 0.05 and s < 0.05:
+            reward = 0.
+        elif angle > 0.7 or s > 2.4:
+            reward = -2. * (self.N - self.t)
+        else: 
+            reward = -1.
+        return reward
         
     def _derivs(self, x, t): 
         """ This function is needed for the Runge-Kutta integration approximation method. It calculates the 
