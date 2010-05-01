@@ -16,6 +16,14 @@ class MDPMaze(Maze):
     
     goal = (7, 7)
     
+    # define the state and action dimensionality
+    stateDim = 81
+    actionDim = 4
+    
+    # define if states and/or actions are discrete (rather than continuous)
+    discreteStates = True
+    discreteActions = True
+    
     def __init__(self):
         Maze.__init__(self, self.matrix, self.goal)
         
