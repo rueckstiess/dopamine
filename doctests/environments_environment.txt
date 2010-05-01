@@ -1,0 +1,67 @@
+Test Environment class from environments.environment
+=====================================================================
+
+
+Test import and class variables
+---------------------------------------------------------------------
+>>> from rllib.environments.environment import Environment
+>>> e = Environment()
+>>> e.actionDim
+0
+>>> e.stateDim
+0
+>>> e.discreteStates
+False
+>>> e.discreteActions
+False
+>>> e.episodic
+False
+
+
+Test getState() function
+---------------------------------------------------------------------
+>>> e.getState()
+array([], dtype=float64)
+>>> e.getState()
+Traceback (most recent call last):
+	...
+EnvironmentException: state was requested twice before action was given.
+
+
+Test performAction() function
+---------------------------------------------------------------------
+>>> e.performAction([1])
+>>> e.performAction([1])
+Traceback (most recent call last):
+	...
+EnvironmentException: action was given twice, before reward was requested.
+
+>>> e.getState()
+Traceback (most recent call last):
+	...
+EnvironmentException: state was requested twice before action was given.
+
+
+Test getReward() function
+---------------------------------------------------------------------
+>>> e.getReward()
+0
+>>> e.getReward()
+Traceback (most recent call last):
+	...
+EnvironmentException: reward was requested before action was performed.
+
+
+Test episodeFinished() function
+---------------------------------------------------------------------
+>>> e.episodeFinished()
+False
+
+
+Test timestep and reset() function
+---------------------------------------------------------------------
+>>> e.timestep
+1
+>>> e.reset()
+>>> e.timestep
+0

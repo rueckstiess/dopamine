@@ -9,20 +9,25 @@ class Environment(object):
         (partial) observations. 
     """       
     
-    def __init__(self):
-        # define the state and action dimensionality
-        self.actionDim = 0
-        self.stateDim = 0
-        
-        # define if states and/or actions are discrete (rather than continuous)
-        self.discreteStates = False
-        self.discreteActions = False
+    # define the state and action dimensionality
+    actionDim = 0
+    stateDim = 0
     
+    # define if states and/or actions are discrete (rather than continuous)
+    discreteStates = False
+    discreteActions = False
+    
+    # define if environment has episodes or is life-long
+    episodic = False
+    
+    def __init__(self):
         # progress counter:
         # 0 = before state has been requested
         # 1 = after state has been requested, before action has been performed
         # 2 = after action has been performed, before reward has been requested
         self.progressCnt = 0
+        
+        # counts the number of executed interactions (s, a, r) with the environment
         self.timestep = 0
     
     def getState(self):
@@ -57,6 +62,10 @@ class Environment(object):
             return 0
         else:
             raise EnvironmentException('reward was requested before action was performed.')
+
+    def episodeFinished(self):
+        """ return whether or not an episode is over. Life-long environments always return False. """
+        return False
 
     def reset(self):
         """ Most environments will implement this optional method that allows for 
