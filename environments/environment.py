@@ -29,6 +29,9 @@ class Environment(object):
         
         # counts the number of executed interactions (s, a, r) with the environment
         self.timestep = 0
+        
+        # in case environment has a renderer
+        self.renderer = None
     
     def getState(self):
         """ the currently visible state of the world (the observation may be 

@@ -1,5 +1,5 @@
 from matplotlib.mlab import rk4 
-from math import sin, cos
+from numpy import sin, cos
 import time
 from numpy import eye, matrix, random, asarray, clip
 
@@ -32,7 +32,7 @@ class CartPoleEnvironment(Environment):
     mc = 1.0
     dt = 0.02   
     
-    def __init__(self, maxSteps=100):
+    def __init__(self, maxSteps=500):
         
         # initialize the environment (randomly)
         self.reset()
@@ -46,7 +46,7 @@ class CartPoleEnvironment(Environment):
             origin).
         """
         Environment.getState(self)
-        return asarray(self.sensors)
+        return asarray(self.sensors).flatten()
                             
     def performAction(self, action):
         """ stores the desired action for the next runge-kutta step. Actions are expected
@@ -58,6 +58,9 @@ class CartPoleEnvironment(Environment):
     def _update(self):
         self.sensors = rk4(self._derivs, self.sensors, [0, self.dt])
         self.sensors = self.sensors[-1]
+        if self.renderer:
+            self.renderer.updateData(self.sensors)
+        
                         
     def reset(self):
         """ re-initializes the environment, setting the cart back in a random position.
@@ -72,7 +75,6 @@ class CartPoleEnvironment(Environment):
         
     def getReward(self):
         Environment.getReward(self)
-        # TODO integrate reward from task in environment
 
         angle = abs(self.sensors[0])
         s = abs(self.sensors[2])
@@ -80,7 +82,7 @@ class CartPoleEnvironment(Environment):
         if angle < 0.05 and s < 0.05:
             reward = 0.
         elif angle > 0.7 or s > 2.4:
-            reward = -2. * (self.N - self.t)
+            reward = -2.
         else: 
             reward = -1.
         return reward
