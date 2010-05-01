@@ -1,0 +1,26 @@
+>>> from rllib.agents import Agent
+>>> from rllib.environments.environment import Environment
+>>> from rllib.experiments import Experiment
+>>> agent = Agent(0, 0)
+>>> env = Environment()
+>>> exp = Experiment(env, agent)
+>>> for i in range(10):
+...     exp.interact()
+...     
+>>> len(agent.history)
+1
+>>> len(agent.history[0])
+10
+>>> print agent.history
+--> print(agent.history)
+[][] 0.0
+[][] 0.0
+[][] 0.0
+[][] 0.0
+[][] 0.0
+[][] 0.0
+[][] 0.0
+[][] 0.0
+[][] 0.0
+[][] 0.0
+>>> 
