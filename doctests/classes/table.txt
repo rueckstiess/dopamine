@@ -1,0 +1,35 @@
+Testing class Table from rllib.agents.valuebased.table
+=====================================================================
+
+
+Testing import and initialization
+---------------------------------------------------------------------
+>>> from rllib.agents.valuebased import Table
+>>> from numpy import *
+>>> t = Table(5, 5)
+>>> t.values
+array([[ 0.,  0.,  0.,  0.,  0.],
+       [ 0.,  0.,  0.,  0.,  0.],
+       [ 0.,  0.,  0.,  0.,  0.],
+       [ 0.,  0.,  0.,  0.,  0.],
+       [ 0.,  0.,  0.,  0.,  0.]])
+
+
+Testing getValue() function
+---------------------------------------------------------------------
+>>> t.getValue(3, 3)
+0.0
+>>> t.getValue([3], 3)
+0.0
+>>> t.getValue(array([3]), array([[3]]))
+0.0
+>>> t.getValue([3, 3], 3)
+Traceback (most recent call last):
+	...
+TableException: Table accepts only scalars or lists/arrays with one element as state or action.
+
+>>> t.getValue(array([3, 3]), 3)
+Traceback (most recent call last):
+	...
+TableException: Table accepts only scalars or lists/arrays with one element as state or action.
+
