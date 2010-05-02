@@ -31,4 +31,12 @@ class Experiment(object):
         for adapter in self.adapters:
             reward = adapter.applyReward(reward)
         self.agent.giveReward(reward)
+    
+    def runEpisode(self):
+        """ resets the environment, then calls interact() until the environment 
+            signals the end of an episode. 
+        """
+        self.environment.reset()
+        while not self.environment.episodeFinished():
+            self.interact()
         
