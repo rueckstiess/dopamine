@@ -14,15 +14,16 @@ class CartPoleEnvironment(Environment):
         Runge-Kutta method.
     """       
     
-    # define continuous states and actions
-    discreteStates = False
-    stateDim = 4
-
-    discreteActions = False
-    actionDim = 1 
-            
-    # define if environment has episodes (True) or is life-long (False)
-    episodic = True
+    # define the conditions of the environment
+    self.conditions = {
+      'discreteStates':False,
+      'stateDim':4,
+      'stateNum':inf,
+      'discreteActions':False,
+      'actionDim':1,
+      'actionNum':inf, 
+      'episodic':True
+    }
     
     # some physical constants
     g = 9.81

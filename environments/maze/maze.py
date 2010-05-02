@@ -19,15 +19,17 @@ class Maze(Environment):
     The observations can be noisy.
     """
     
-    # define the state dimensionality (continuous) and number of actions (discrete)
-    discreteStates = False
-    stateDim = 4
-    
-    discreteActions = True
-    actionNum = 4
-    
-    # define if environment has episodes or is life-long
-    episodic = True
+
+    # define the conditions of the environment
+    self.conditions = {
+      'discreteStates':False,
+      'stateDim':4,
+      'stateNum':inf,
+      'discreteActions':True,
+      'actionDim':1,
+      'actionNum':4, 
+      'episodic':True
+    }
     
     # table of booleans
     mazeTable = None

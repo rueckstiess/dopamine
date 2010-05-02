@@ -16,12 +16,17 @@ class MDPMaze(Maze):
     
     goal = (7, 7)
     
-    # define the state and action dimensionality
-    discreteStates = True
-    stateNum = 81
 
-    discreteActions = True
-    actionNum = 4
+    # define the conditions of the environment
+    self.conditions = {
+      'discreteStates':True,
+      'stateDim':1,
+      'stateNum':81,
+      'discreteActions':True,
+      'actionDim':1,
+      'actionNum':4, 
+      'episodic':True
+    }
     
     def __init__(self):
         Maze.__init__(self, self.matrix, self.goal)

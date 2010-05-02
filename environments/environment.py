@@ -1,4 +1,4 @@
-from numpy import zeros
+from numpy import zeros, inf
 
 class EnvironmentException(Exception):
     pass
@@ -9,21 +9,16 @@ class Environment(object):
         (partial) observations. 
     """       
     
-    # define the state and action dimensionality (in continous cases)
-    
-    actionDim = 0
-    stateDim = 0
-    
-    # define number of states and actions (in discrete cases)
-    actionNum = 0
-    stateNum = 0
-
-    # define if states and/or actions are discrete (rather than continuous)
-    discreteStates = False
-    discreteActions = False
-        
-    # define if environment has episodes or is life-long
-    episodic = False
+    # define the conditions of the environment
+    self.conditions = {
+      'discreteStates':False,
+      'stateDim':0,
+      'stateNum':inf,
+      'discreteActions':False,
+      'actionDim':0,
+      'actionNum':inf, 
+      'episodic':False
+    }                      
     
     def __init__(self):
         # progress counter:
@@ -44,7 +39,7 @@ class Environment(object):
         """
         if self.progressCnt == 0:
             self.progressCnt = 1
-            return zeros(self.stateDim)
+            return zeros(self.conditions['stateDim'])
         else:
             raise EnvironmentException('state was requested twice before action was given.')
                     
