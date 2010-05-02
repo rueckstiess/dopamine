@@ -14,14 +14,13 @@ class CartPoleEnvironment(Environment):
         Runge-Kutta method.
     """       
     
-    # define state and action dimensions
-    stateDim = 4
-    actionDim = 1 
-        
-    # define if states and/or actions are discrete (rather than continuous)
+    # define continuous states and actions
     discreteStates = False
+    stateDim = 4
+
     discreteActions = False
-    
+    actionDim = 1 
+            
     # define if environment has episodes (True) or is life-long (False)
     episodic = True
     
@@ -33,6 +32,7 @@ class CartPoleEnvironment(Environment):
     dt = 0.02   
     
     def __init__(self, maxSteps=500):
+        Environment.__init__(self)
         
         # initialize the environment (randomly)
         self.reset()

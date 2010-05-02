@@ -9,14 +9,19 @@ class Environment(object):
         (partial) observations. 
     """       
     
-    # define the state and action dimensionality
+    # define the state and action dimensionality (in continous cases)
+    
     actionDim = 0
     stateDim = 0
     
+    # define number of states and actions (in discrete cases)
+    actionNum = 0
+    stateNum = 0
+
     # define if states and/or actions are discrete (rather than continuous)
     discreteStates = False
     discreteActions = False
-    
+        
     # define if environment has episodes or is life-long
     episodic = False
     
