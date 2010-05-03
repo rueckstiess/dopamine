@@ -10,15 +10,7 @@ class Experiment(object):
         
         # marker that stores if setup on agent has been completed
         self.setupComplete = False
-        
-    def _setupAgent(self):
-        """ sets the agent up with the correct conditions after all adapters
-            (if any) have been applied. 
-        """
-        self.agent._setup(self.conditions)
-        self.setupComplete = True
-        
-    
+            
     def _flattenConditions(self):
         """ flattens the environment and adapters conditions to one conditions dictionary. """
         conditions = dict([(k,v) for k,v in self.environment.conditions.items()])
@@ -53,6 +45,7 @@ class Experiment(object):
                 raise ExperimentException('condition "%s" is not compatible to previous environment/adapter. Value must be %s'%(c, conditions[c]))
         
         # every condition matches, add to adapter stack
+        adapter.agent = self.agent
         self.adapters_.append(adapter)
         
         # conditions have changed, new agent setup is necessary
@@ -68,7 +61,8 @@ class Experiment(object):
             adapters to the agent.
         """
         if not self.setupComplete:
-            self._setupAgent()
+            self.agent._setup(self.conditions)
+            self.setupComplete = True
             
         state = self.environment.getState()
         for adapter in self.adapters_:
@@ -111,5 +105,5 @@ class Experiment(object):
                 episodeFinished = adapter.applyEpisodeFinished(episodeFinished)
         
         # tell agent that it should start a new episode
-        agent.newEpisode()
+        self.agent.newEpisode()
         

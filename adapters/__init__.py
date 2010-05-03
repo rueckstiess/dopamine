@@ -1,1 +1,3 @@
 from adapter import Adapter
+from episodic import MakeEpisodicAdapter
+from egreedy import EpsilonGreedyExplorer

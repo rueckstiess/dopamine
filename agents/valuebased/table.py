@@ -1,4 +1,5 @@
-from numpy import ones, ndarray
+from numpy import ones, ndarray, argmax, where, array
+from random import choice
 import types
 
 from rllib.agents.valuebased.estimator import Estimator
@@ -23,7 +24,8 @@ class Table(Estimator):
     def getMaxAction(self, state):
         """ expects a scalar or a list or array with one element. """
         state = self._forceScalar(state)
-        return max(self.values[state, :])
+        maxvalue = max(self.values[state, :])
+        return array([choice(where(self.values[state, :] == maxvalue)[0])])
         
     def getValue(self, state, action):
         """ returns the value of the given (state,action) pair. """
@@ -56,6 +58,7 @@ class Table(Estimator):
 
         return int(value)
         
-           
+    def __str__(self):
+        return str(self.values)
 
     

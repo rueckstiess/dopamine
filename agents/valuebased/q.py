@@ -4,14 +4,19 @@ from rllib.agents.valuebased import Table
 
 class QAgent(Agent):
     
-    def setup(self, discreteStates, discreteActions, states, actions):
+    alpha = 0.5
+    gamma = 0.9
+    
+    def _setup(self, conditions):
         """ if agent is discrete in states and actions create Q-Table. """
-        Agent.setup(self, discreteStates, discreteActions, states, actions)
-        if not (discreteStates and discreteActions):
+        Agent._setup(self, conditions)
+        if not (self.conditions['discreteStates'] and self.conditions['discreteActions']):
             raise AgentException('QAgent expects discrete states and actions. Use adapter or a different environment.')
             
-        self.table = Table(self.stateNum, self.actionNum)
-        
+        self.table = Table(self.conditions['stateNum'], self.conditions['actionNum'])
+    
+    def _calculate(self):
+        self.action = self.table.getMaxAction(self.state)
     
     def learn(self):
         """ go through whole episode and make Q-value updates. """

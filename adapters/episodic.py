@@ -1,16 +1,15 @@
 from rllib.adapters import Adapter
 
 class MakeEpisodicAdapter(Adapter):
-    """ This adapter makes episodic environments out of non-episodic ones.
-        It interrupts the experiment after 'episodeLength' steps.
+    """ This adapter makes episodic environments and interrupts 
+        the experiment after 'episodeLength' steps.
     """
     
-    # define the conditions of the environment
-    inConditions = {'episodic':False}    
+    # can be applied to all conditions
+    inConditions = {}
     
     # define the conditions of the environment
-    outConditions = {'episodic':True}
-    
+    outConditions = {'episodic':True}    
     
     def __init__(self, episodeLength):
         self.episodeLength = episodeLength
@@ -22,9 +21,10 @@ class MakeEpisodicAdapter(Adapter):
         return reward
           
     def applyEpisodeFinished(self, episodeFinished):
-        """ apply transformations to episodeFinished and return it. """
-        return self.counter >= self.episodeLength
+        """ stop episode after episodeLength steps or when it is naturally over. """
+        return (self.counter >= self.episodeLength) or episodeFinished
     
     def reset(self):
+        """ resets the counter. """
         self.counter = 0
     

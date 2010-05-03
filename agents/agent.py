@@ -1,3 +1,4 @@
+from rllib.tools.utilities import abstractMethod
 from rllib.tools import Episode, History
 from numpy import zeros, inf
 
@@ -8,7 +9,7 @@ class Agent(object):
     
     def __init__(self):        
         # current observation, action, reward
-        self.obs = None
+        self.state = None
         self.action = None
         self.reward = None
         
@@ -38,9 +39,9 @@ class Agent(object):
         """ returns the last (current) episode. """
         return self.history[-1]
         
-    def integrateState(self, obs):
+    def integrateState(self, state):
         if self.progressCnt == 0:
-            self.obs = obs
+            self.state = state
             self.progressCnt = 1
         else:
             raise AgentException('observation was given twice before action was requested.')
@@ -60,7 +61,7 @@ class Agent(object):
         if self.progressCnt == 2:
             self.reward = reward
             self.progressCnt = 0
-            self.history.append(self.obs, self.action, self.reward)
+            self.history.append(self.state, self.action, self.reward)
         else:
             raise AgentException('reward was given before action was returned.')
         
@@ -72,10 +73,14 @@ class Agent(object):
         
     def learn(self):
         pass
+    
+    def forget(self):
+        """ deletes the entire history. """
+        self.history.clear()
         
     def _calculate(self):
         """ this method needs to be overwritten by subclasses to return a non-zero action. """
-        self.action = zeros(self.conditions['actionDim'])
+        abstractMethod()
     
     
     

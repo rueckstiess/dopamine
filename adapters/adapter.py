@@ -6,6 +6,9 @@ class Adapter(object):
     # define the conditions of the environment
     outConditions = {}
     
+    def __init__(self):
+        self.conditions = {}
+    
     def applyState(self, state):
         """ apply transformations to state and return it. """
         return state
