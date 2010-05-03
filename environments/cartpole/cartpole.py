@@ -1,7 +1,7 @@
 from matplotlib.mlab import rk4 
 from numpy import sin, cos
 import time
-from numpy import eye, matrix, random, asarray, clip
+from numpy import eye, matrix, random, asarray, clip, inf
 
 from rllib.environments.environment import Environment
 
@@ -15,7 +15,7 @@ class CartPoleEnvironment(Environment):
     """       
     
     # define the conditions of the environment
-    self.conditions = {
+    conditions = {
       'discreteStates':False,
       'stateDim':4,
       'stateNum':inf,

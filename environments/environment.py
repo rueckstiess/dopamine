@@ -10,7 +10,7 @@ class Environment(object):
     """       
     
     # define the conditions of the environment
-    self.conditions = {
+    conditions = {
       'discreteStates':False,
       'stateDim':0,
       'stateNum':inf,

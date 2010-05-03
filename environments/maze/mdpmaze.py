@@ -18,7 +18,7 @@ class MDPMaze(Maze):
     
 
     # define the conditions of the environment
-    self.conditions = {
+    conditions = {
       'discreteStates':True,
       'stateDim':1,
       'stateNum':81,

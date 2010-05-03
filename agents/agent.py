@@ -1,23 +1,19 @@
 from rllib.tools import Episode, History
-from numpy import zeros
+from numpy import zeros, inf
 
 class AgentException(Exception):
     pass
 
 class Agent(object):
     
-    def __init__(self, stateDim, actionDim):
-        # store state and action dimensions
-        self.stateDim = stateDim
-        self.actionDim = actionDim
-        
-        # create history to store experiences
-        self.history = History(stateDim, actionDim)
-        
+    def __init__(self):        
         # current observation, action, reward
         self.obs = None
         self.action = None
         self.reward = None
+        
+        # agent conditions, inherited from environment (plus adapters)
+        self.conditions = {}
         
         # progress counter:
         # 0 = reward was given, before observation was integrated
@@ -26,12 +22,23 @@ class Agent(object):
         # 0 = reward was given. store experience in history
         self.progressCnt = 0
         
+        
+    def _setup(self, conditions):
+        """ Tells the agent, if the environment is discrete or continuous and the
+            number/dimensionalty of states and actions. This function is called
+            just before the first state is integrated.
+        """
+        self.conditions = conditions
+        
+        # create history to store experiences
+        self.history = History(conditions['stateDim'], conditions['actionDim'])
+        
     @property
     def episode(self):
         """ returns the last (current) episode. """
         return self.history[-1]
         
-    def integrateObservation(self, obs):
+    def integrateState(self, obs):
         if self.progressCnt == 0:
             self.obs = obs
             self.progressCnt = 1
@@ -68,7 +75,7 @@ class Agent(object):
         
     def _calculate(self):
         """ this method needs to be overwritten by subclasses to return a non-zero action. """
-        self.action = zeros(self.actionDim)
+        self.action = zeros(self.conditions['actionDim'])
     
     
     

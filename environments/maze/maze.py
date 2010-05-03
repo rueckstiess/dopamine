@@ -1,5 +1,5 @@
 from random import random, choice
-from numpy import zeros
+from numpy import zeros, inf
 
 from rllib.environments.environment import Environment
     
@@ -21,7 +21,7 @@ class Maze(Environment):
     
 
     # define the conditions of the environment
-    self.conditions = {
+    conditions = {
       'discreteStates':False,
       'stateDim':4,
       'stateNum':inf,

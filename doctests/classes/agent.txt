@@ -30,9 +30,9 @@ Test progress counter is reset
 0
 
 
-Test integrateObservation() function
+Test integrateState() function
 ---------------------------------------------------------------------
->>> a.integrateObservation([1, 2, 3])
+>>> a.integrateState([1, 2, 3])
 >>> a.progressCnt
 1
 >>> a.obs
@@ -40,9 +40,9 @@ Test integrateObservation() function
 >>> a.action
 
 
-Test exception when integrateObservation is called twice.
+Test exception when integrateState is called twice.
 ---------------------------------------------------------------------
->>> a.integrateObservation([1, 2, 3])
+>>> a.integrateState([1, 2, 3])
 Traceback (most recent call last):
     ...
 AgentException: observation was given twice before action was requested.
