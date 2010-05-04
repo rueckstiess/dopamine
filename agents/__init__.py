@@ -1,2 +1,2 @@
 from agent import Agent
-from valuebased import QAgent
+from valuebased import QAgent, NFQAgent
