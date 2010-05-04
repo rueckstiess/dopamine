@@ -29,21 +29,30 @@ class History(object):
         
     def extend(self, history):
         self.episodes_.extend(history)
-        
+    
+    @property
+    def episodes(self):
+        """ if the last episode is empty, do not consider it. """
+        if len(self.episodes_[-1]) == 0:
+            return self.episodes_[:-1]
+        else:
+            return self.episodes_
         
     def __len__(self):
-        return len(self.episodes_)
+        """ returns the length of episodes (empty episode at the end not considered). """
+        return len(self.episodes)
         
     def __iter__(self):
-        for ep in self.episodes_:
+        """ iterates over episodes (empty episode at the end not considered). """        
+        for ep in self.episodes:
             yield ep
     
     def __getitem__(self, index):
-        """Return the sequence at the given index. """ 
-        return self.episodes_[index]
+        """return the episode at the given index. """ 
+        return self.episodes[index]
     
     def __str__(self):
         out = []
-        for episode in self.episodes_:
+        for episode in self.episodes:
             out.append(str(episode))
         return "\n\n".join(out)
