@@ -3,4 +3,5 @@ try:
 except ImportError:
     raise ImportError('This environment needs the matplotlib library installed.')
 
-from cartpole import CartPoleEnvironment
+from cartpole import CartPoleEnvironment, DiscreteCartPoleEnvironment
+from renderer import CartPoleRenderer

@@ -1,5 +1,5 @@
 from matplotlib.mlab import rk4 
-from numpy import sin, cos
+from numpy import sin, cos, array
 import time
 from numpy import eye, matrix, random, asarray, clip, inf
 
@@ -32,7 +32,7 @@ class CartPoleEnvironment(Environment):
     mc = 1.0
     dt = 0.02   
     
-    def __init__(self, maxSteps=500):
+    def __init__(self, maxSteps=200):
         Environment.__init__(self)
         
         # initialize the environment (randomly)
@@ -61,6 +61,7 @@ class CartPoleEnvironment(Environment):
         self.sensors = self.sensors[-1]
         if self.renderer:
             self.renderer.updateData(self.sensors)
+            time.sleep(0.05)
         
                         
     def reset(self):
@@ -72,6 +73,10 @@ class CartPoleEnvironment(Environment):
         self.sensors = (angle, 0.0, pos, 0.0)
         
     def episodeFinished(self):
+        angle = abs(self.sensors[0])
+        s = abs(self.sensors[2])
+        if angle > 0.7 or s > 2.4:
+            return True
         return self.timestep >= self.maxSteps    
         
     def getReward(self):
@@ -83,7 +88,7 @@ class CartPoleEnvironment(Environment):
         if angle < 0.05 and s < 0.05:
             reward = 0.
         elif angle > 0.7 or s > 2.4:
-            reward = -2.
+            reward = -2. # * (self.maxSteps - self.timestep)
         else: 
             reward = -1.
         return reward
@@ -105,4 +110,25 @@ class CartPoleEnvironment(Environment):
         v = s_
         v_ = (F - mp * l * (u_ * cos_theta - (s_ ** 2 * sin_theta))) / (mc + mp)     
         return (u, u_, v, v_)   
+    
+
+class DiscreteCartPoleEnvironment(CartPoleEnvironment):
+
+    # define the conditions of the environment
+    conditions = {
+      'discreteStates':False,
+      'stateDim':4,
+      'stateNum':inf,
+      'discreteActions':True,
+      'actionDim':1,
+      'actionNum':3, 
+      'episodic':True
+    }
+    
+    def performAction(self, action):
+        """ stores the desired action for the next runge-kutta step. Three discrete actions
+            are available, which are mapped to -50, 0, and +50 Newton.
+        """
+        action = array([(action[0] - 1) * 10.])
+        Environment.performAction(self, action)
     
