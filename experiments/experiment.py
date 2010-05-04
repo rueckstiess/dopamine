@@ -44,8 +44,8 @@ class Experiment(object):
                 # condition could be found but does not match
                 raise ExperimentException('condition "%s" is not compatible to previous environment/adapter. Value must be %s'%(c, conditions[c]))
         
-        # every condition matches, add to adapter stack
-        adapter.agent = self.agent
+        # every condition matches, set experiment and add to adapter stack
+        adapter.setExperiment(self)
         self.adapters_.append(adapter)
         
         # conditions have changed, new agent setup is necessary

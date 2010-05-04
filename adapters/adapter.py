@@ -8,6 +8,11 @@ class Adapter(object):
     
     def __init__(self):
         self.conditions = {}
+        self.experiment = None
+        
+    def setExperiment(self, experiment):
+        """ give adapter access to the experiment. """
+        self.experiment = experiment
     
     def applyState(self, state):
         """ apply transformations to state and return it. """
