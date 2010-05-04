@@ -7,10 +7,9 @@ from rllib.agents.valuebased.estimator import Estimator
 class TableException(Exception):
     pass
     
-class Table(Estimator):
+class TableEstimator(Estimator):
     
-    discreteStates = True
-    discreteActions = True
+    conditions = {'discreteStates':True, 'discreteActions':True}
     
     def __init__(self, stateNum, actionNum):
         """ initialize with the number of states and actions. the table
@@ -50,7 +49,7 @@ class Table(Estimator):
         """
         if type(value) in [ndarray, types.ListType]:
             if len(value) > 1:
-                raise TableException('Table accepts only scalars or lists/arrays with one element as state or action.')
+                raise TableException('TableEstimator accepts only scalars or lists/arrays with one element as state or action.')
             if type(value) == ndarray:
                 value = value.item()
             else:

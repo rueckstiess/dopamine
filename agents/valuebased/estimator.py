@@ -2,8 +2,7 @@ from rllib.tools.utilities import abstractMethod
 
 class Estimator(object):
     
-    discreteStates = False
-    discreteActions = False
+    conditions = {'discreteStates':False, 'discreteActions':False}
     
     def getMaxAction(self, state):
         """ returns the action with the highest value in the given state. """
