@@ -1,7 +1,7 @@
 from rllib.environments import DiscreteCartPoleEnvironment, CartPoleRenderer
 from rllib.agents import NFQAgent
 from rllib.experiments import Experiment
-from rllib.adapters import EpsilonGreedyExplorer, NormalizingAdapter
+from rllib.adapters import EpsilonGreedyExplorer, NormalizingAdapter, IndexingAdapter
 
 from matplotlib import pyplot as plt
 
@@ -10,27 +10,31 @@ agent = NFQAgent()
 environment = DiscreteCartPoleEnvironment()
 experiment = Experiment(environment, agent)
 
+# cut off last two state dimensions
+indexer = IndexingAdapter([0, 1], None)
+experiment.addAdapter(indexer)
+
 # add normalization adapter
 normalizer = NormalizingAdapter()
 experiment.addAdapter(normalizer)
 
 # add e-greedy exploration
-explorer = EpsilonGreedyExplorer(0.2, 0.9999)
+explorer = EpsilonGreedyExplorer(0.2, 1.0)
 experiment.addAdapter(explorer)
 
-
-for i in range(20):
+for i in range(10):
     experiment.runEpisode(reset=True)
-agent.forget()
 
+explorer.decay = 0.999
 renderer = CartPoleRenderer()
 environment.renderer = renderer
 renderer.start()
 
 # run experiment
-for i in range(500):
+for i in range(100):
     experiment.runEpisode(reset=True)
-    for j in range(150):
-        agent.learn()
-    print agent.history[0].rewards
-    agent.forget()
+    agent.learn()
+    print explorer.epsilon
+    
+    # print agent.history[0].rewards
+    # agent.forget()

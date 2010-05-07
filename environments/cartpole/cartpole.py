@@ -129,6 +129,6 @@ class DiscreteCartPoleEnvironment(CartPoleEnvironment):
         """ stores the desired action for the next runge-kutta step. Three discrete actions
             are available, which are mapped to -50, 0, and +50 Newton.
         """
-        action = array([(action[0] - 1) * 10.])
+        action = array([(action[0] - 1) * 50.])
         Environment.performAction(self, action)
     

@@ -1,7 +1,10 @@
 from numpy import *
 from rllib.tools.utilities import one_to_n
 from rllib.agents.valuebased.estimator import Estimator
-from rllib.tools.ffn import FeedForwardNetwork
+
+from pybrain.tools.shortcuts import buildNetwork
+from pybrain.datasets import SupervisedDataSet
+from pybrain.supervised.trainers.rprop import RPropMinusTrainer, BackpropTrainer
 
 class NetworkEstimator(Estimator):
 
@@ -11,7 +14,8 @@ class NetworkEstimator(Estimator):
         """ initialize with the state dimension and number of actions. """
         self.stateDim = stateDim
         self.actionNum = actionNum
-        self.network = FeedForwardNetwork(stateDim + actionNum, (stateDim + actionNum) * 3, 1)
+        self.network =buildNetwork(stateDim + actionNum, (stateDim + actionNum), 1)
+        self.dataset = SupervisedDataSet(stateDim + actionNum, 1)
 
     def getMaxAction(self, state):
         """ returns the action with maximal value in the given state. """
@@ -19,10 +23,13 @@ class NetworkEstimator(Estimator):
 
     def getValue(self, state, action):
         """ returns the value of the given (state,action) pair. """
-        self.network.forward(r_[state, one_to_n(action[0], self.actionNum)])
-        return self.network.getOutput()
+        return self.network.activate(r_[state, one_to_n(action[0], self.actionNum)])
 
-    def train(self, state, action, target):
-        self.getValue(state, action)
-        return self.network.backward(target)
+    def train(self, maxEpochs):
+        # train module with backprop/rprop on dataset
+        trainer = RPropMinusTrainer(self.network, dataset=self.dataset, batchlearning=True, verbose=True)
+        # trainer = BackpropTrainer(self.network, dataset=self.dataset, batchlearning=True, verbose=True)
+        trainer.trainUntilConvergence(maxEpochs=maxEpochs)     
+        # trainer.train()   
+        
 
