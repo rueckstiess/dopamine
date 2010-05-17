@@ -67,10 +67,7 @@ class Agent(object):
         
     def newEpisode(self):
         self.history.newEpisode()
-    
-    def explore(self):
-        pass
-        
+            
     def learn(self):
         pass
     
