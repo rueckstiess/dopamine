@@ -12,7 +12,7 @@ class NormalizingAdapter(Adapter):
     # define the conditions of the environment
     outConditions = {}    
     
-    def __init__(self, normalizeRewards=True):
+    def __init__(self, normalizeRewards=False):
         self.normalizeRewards = normalizeRewards
     
     def setExperiment(self, experiment):
@@ -42,5 +42,5 @@ class NormalizingAdapter(Adapter):
             if denominator != 0:
                 reward = (reward - self.minReward) / denominator * 2. - 1.
         return reward
-          
+    
     
