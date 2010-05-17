@@ -11,3 +11,8 @@ class Estimator(object):
     def getValue(self, state, action):
         """ returns the value of the (state, action) tuple. """
         abstractMethod()
+    
+    def updateValue(self, state, action, value):
+        """ updates the value for the given (state, action) tuple. """
+        pass
+        
