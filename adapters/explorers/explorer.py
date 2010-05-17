@@ -16,3 +16,6 @@ class Explorer(Adapter):
     
     def _explore(self, action):
         pass
+    
+    
+
