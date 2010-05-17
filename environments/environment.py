@@ -1,4 +1,5 @@
 from numpy import zeros, inf
+from rllib.tools.utilities import abstractMethod
 
 class EnvironmentException(Exception):
     pass
@@ -32,6 +33,12 @@ class Environment(object):
         
         # in case environment has a renderer
         self.renderer = None
+        
+        # the current state, action, reward. used in _update()
+        self.state = None
+        self.action = None
+        self.reward = None
+
     
     def getState(self):
         """ the currently visible state of the world (the observation may be 
@@ -39,7 +46,7 @@ class Environment(object):
         """
         if self.progressCnt == 0:
             self.progressCnt = 1
-            return zeros(self.conditions['stateDim'])
+            return self.state
         else:
             raise EnvironmentException('state was requested twice before action was given.')
                     
@@ -62,7 +69,7 @@ class Environment(object):
         if self.progressCnt == 2:
             self.progressCnt = 0
             self.timestep += 1
-            return 0
+            return self.reward
         else:
             raise EnvironmentException('reward was requested before action was performed.')
 
@@ -78,4 +85,5 @@ class Environment(object):
         self.timestep = 0
         
     def _update(self):
-        pass
+        """ integrate the action into the environment and set the new state and reward. """
+        abstractMethod()
