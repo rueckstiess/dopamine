@@ -34,5 +34,5 @@ class NFQAgent(Agent):
                     target = qvalue + self.alpha * (reward + self.gamma * maxnext - qvalue)
 
                     self.estimator.dataset.addSample(r_[state, one_to_n(action, self.conditions['actionNum'])], target)
-            self.estimator.train(30)
+            self.estimator._train(30)
 
