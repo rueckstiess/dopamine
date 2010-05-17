@@ -1,7 +1,7 @@
-from rllib.adapters import Adapter
+from rllib.adapters import Explorer
 from numpy import random, array
 
-class EpsilonGreedyExplorer(Adapter):
+class EpsilonGreedyExplorer(Explorer):
     
     # define the conditions of the environment
     inConditions = {'discreteActions':True}    
@@ -14,8 +14,11 @@ class EpsilonGreedyExplorer(Adapter):
         self.epsilon = epsilon
         self.decay = decay
         
-    def applyAction(self, action):
-        """ apply transformations to action and return it. """
+        
+    def _explore(self, action):
+        """ draw random number r uniformly in [0,1]. if r < epsilon, make random move,
+            otherwise return action as is.
+        """
         if random.random() < self.epsilon:
             action = array([random.randint(self.experiment.conditions['actionNum'])])
         
