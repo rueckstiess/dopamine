@@ -14,7 +14,7 @@ class NetworkEstimator(Estimator):
         """ initialize with the state dimension and number of actions. """
         self.stateDim = stateDim
         self.actionNum = actionNum
-        self.network =buildNetwork(stateDim + actionNum, (stateDim + actionNum), 1)
+        self.network = buildNetwork(stateDim + actionNum, (stateDim + actionNum), 1)
         self.dataset = SupervisedDataSet(stateDim + actionNum, 1)
 
     def getMaxAction(self, state):
@@ -25,9 +25,12 @@ class NetworkEstimator(Estimator):
         """ returns the value of the given (state,action) pair. """
         return self.network.activate(r_[state, one_to_n(action[0], self.actionNum)])
 
-    def train(self, maxEpochs):
+    def updateValue(self, state, action, value):
+        self.dataset.addSample(r_[state, one_to_n(action, self.actionNum)], value)
+
+    def _train(self, maxEpochs):
         # train module with backprop/rprop on dataset
-        trainer = RPropMinusTrainer(self.network, dataset=self.dataset, batchlearning=True, verbose=True)
+        trainer = RPropMinusTrainer(self.network, dataset=self.dataset, batchlearning=True, verbose=False)
         # trainer = BackpropTrainer(self.network, dataset=self.dataset, batchlearning=True, verbose=True)
         trainer.trainUntilConvergence(maxEpochs=maxEpochs)     
         # trainer.train()   
