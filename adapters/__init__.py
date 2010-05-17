@@ -1,5 +1,5 @@
 from adapter import Adapter
-from explorer import Explorer
+from explorers import *
 from episodic import MakeEpisodicAdapter
 from egreedy import EpsilonGreedyExplorer
 from normalize import NormalizingAdapter
