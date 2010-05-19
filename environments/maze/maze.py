@@ -56,6 +56,8 @@ class Maze(Environment):
     stochObs = 0.    
     
     def __init__(self, topology, goal):
+        Environment.__init__(self)
+        
         self.mazeTable = topology
         self.goal = goal
         if self.initPos == None:
@@ -86,18 +88,16 @@ class Maze(Environment):
         """ return True if the agent has reached the goal. """
         return self.perseus == self.goal
         
-    def performAction(self, action):
+    def _update(self):
         if self.stochAction > 0:
             if random() < self.stochAction:
-                action = choice(range(len(self.allActions)))
-        tmp = self._moveInDir(self.perseus, self.allActions[action])
+                self.action = choice(range(len(self.allActions)))
+        tmp = self._moveInDir(self.perseus, self.allActions[self.action])
         if self.mazeTable[tmp] == False:
             self.perseus = tmp
             self.bang = False
         else:
             self.bang = True
-        
-        Environment.performAction(self, action)
     
     def getState(self):
         Environment.getState(self)
