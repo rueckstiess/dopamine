@@ -1,7 +1,7 @@
 >>> from dopamine.agents import Agent
 >>> from dopamine.environments.environment import Environment
 >>> from dopamine.experiments import Experiment
->>> agent = Agent(0, 0)
+>>> agent = Agent()
 >>> env = Environment()
 >>> exp = Experiment(env, agent)
 >>> for i in range(10):

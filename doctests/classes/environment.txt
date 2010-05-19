@@ -13,6 +13,7 @@ Test import and class initial conditions
 Test state, action, reward cycle
 ---------------------------------------------------------------------
 >>> e.getState()
+array([], dtype=float64)
 >>> e.progressCnt
 1
 >>> e.getState()
@@ -29,6 +30,7 @@ Traceback (most recent call last):
 EnvironmentException: action was given twice, before reward was requested.
 
 >>> e.getReward()
+0
 >>> e.progressCnt
 0
 >>> e.getReward()
@@ -42,6 +44,7 @@ Test episodeFinished and reset functions
 >>> e.episodeFinished()
 False
 >>> e.getState()
+array([], dtype=float64)
 >>> e.progressCnt
 1
 >>> e.timestep
