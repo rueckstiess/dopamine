@@ -1,80 +1,76 @@
 Testing Agent class from agents.agent
 =====================================================================
 
-
-Test import
+Create dummy conditions and initialize agent
 ---------------------------------------------------------------------
+>>> conditions = {'stateDim':3, 'actionDim':4}
 >>> from dopamine.agents import Agent
-
-
-Test initialization
----------------------------------------------------------------------
->>> a = Agent(3, 2)
->>> a.stateDim
-3
->>> a.actionDim
-2
-
-
-Test if history is initialy reset
----------------------------------------------------------------------
+>>> a = Agent()
+>>> a._setup(conditions)
+>>> a.conditions
+{'stateDim': 3, 'actionDim': 4}
 >>> len(a.history)
-1
->>> len(a.episode)
 0
-
-
-Test progress counter is reset
----------------------------------------------------------------------
+>>> a.episode
 >>> a.progressCnt
 0
 
 
-Test integrateState() function
+Test state, action, reward cycle of agent
 ---------------------------------------------------------------------
 >>> a.integrateState([1, 2, 3])
 >>> a.progressCnt
 1
->>> a.obs
+>>> a.state
 [1, 2, 3]
 >>> a.action
-
-
-Test exception when integrateState is called twice.
----------------------------------------------------------------------
 >>> a.integrateState([1, 2, 3])
 Traceback (most recent call last):
-    ...
+	...
 AgentException: observation was given twice before action was requested.
 
-
-Test getAction() function
----------------------------------------------------------------------
 >>> a.getAction()
-array([ 0.,  0.])
+array([ 0.,  0.,  0.,  0.])
 >>> a.getAction()
 Traceback (most recent call last):
-    ...
+	...
 AgentException: action was requested after reward was given.
+
 >>> a.progressCnt
 2
-
-
-Test giveReward() function
----------------------------------------------------------------------
 >>> a.giveReward(-4)
 >>> a.progressCnt
 0
->>> print a.history
-[ 1.  2.  3.][ 0.  0.] -4.0
->>> print a.episode
-[ 1.  2.  3.][ 0.  0.] -4.0
 
 
-Test newEpisode() function
+Test history and episode properties
 ---------------------------------------------------------------------
+>>> print a.history
+[ 1.  2.  3.][ 0.  0.  0.  0.] -4.0
+>>> print a.episode
+[ 1.  2.  3.][ 0.  0.  0.  0.] -4.0
+>>> a.integrateState([4, 5, 6])
+>>> a.getAction()
+array([ 0.,  0.,  0.,  0.])
+>>> a.giveReward(-2)
+>>> print a.episode
+[ 1.  2.  3.][ 0.  0.  0.  0.] -4.0
+[ 4.  5.  6.][ 0.  0.  0.  0.] -2.0
 >>> a.newEpisode()
 >>> len(a.history)
-2
->>> print a.episode
+1
+>>> a.integrateState([7, 8, 9])
+>>> a.getAction()
+array([ 0.,  0.,  0.,  0.])
+>>> a.giveReward(-1.5)
+>>> print a.history
+[ 1.  2.  3.][ 0.  0.  0.  0.] -4.0
+[ 4.  5.  6.][ 0.  0.  0.  0.] -2.0
 <BLANKLINE>
+[ 7.  8.  9.][ 0.  0.  0.  0.] -1.5
+>>> print a.episode
+[ 7.  8.  9.][ 0.  0.  0.  0.] -1.5
+>>> len(a.history)
+2
+>>> len(a.episode)
+1

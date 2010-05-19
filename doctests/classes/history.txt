@@ -4,48 +4,48 @@ Testing History class from tools.datasets
 
 Test if import works
 ---------------------------------------------------------------------
->>> from dopamine.tools import History
+>>> from dopaminh.tools import History
 >>> e = History(3, 2)
 
 
 Test stateDim and actionDim properties
 ---------------------------------------------------------------------
->>> e.stateDim
+>>> h.stateDim
 3
->>> e.actionDim
+>>> h.actionDim
 2
 
 Test __length__() function
 >>> len(e)
-1
+0
 
 Test append() function
 ---------------------------------------------------------------------
->>> e.append([7, 8, 9], [7, 8], 7)
+>>> h.append([7, 8, 9], [7, 8], 7)
 >>> print e[0]
 [ 7.  8.  9.][ 7.  8.] 7.0
 
 
 Test newEpisode() function
 ---------------------------------------------------------------------
->>> e.newEpisode()
+>>> h.newEpisode()
 >>> len(e)
-2
->>> e.newEpisode()
+1
+>>> h.newEpisode()
 >>> len(e)
-2
+1
 
 
 Test __getitem__() function
 ---------------------------------------------------------------------
->>> e.append([7, 8, 9], [7, 8], 7)
+>>> h.append([7, 8, 9], [7, 8], 7)
 >>> print e[1]
 [ 7.  8.  9.][ 7.  8.] 7.0
 
 
 Test __iter__() function
 ---------------------------------------------------------------------
->>> e.append([7, 8, 9], [7, 8], 7)
+>>> h.append([7, 8, 9], [7, 8], 7)
 >>> for i, ep in enumerate(e):
 ...     for s, a, r, ns in ep:
 ...         print i, s, a, r
@@ -66,6 +66,6 @@ Test __str__() function
 
 Test clear() function
 ---------------------------------------------------------------------
->>> e.clear()
+>>> h.clear()
 >>> len(e)
-1
+0

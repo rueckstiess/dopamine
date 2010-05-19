@@ -2,49 +2,34 @@ Test Environment class from environments.environment
 =====================================================================
 
 
-Test import and class variables
+Test import and class initial conditions
 ---------------------------------------------------------------------
 >>> from dopamine.environments.environment import Environment
 >>> e = Environment()
->>> e.actionDim
-0
->>> e.stateDim
-0
->>> e.discreteStates
-False
->>> e.discreteActions
-False
->>> e.episodic
-False
+>>> e.conditions
+{'episodic': False, 'discreteStates': False, 'discreteActions': False, 'stateNum': inf, 'stateDim': 0, 'actionDim': 0, 'actionNum': inf}
 
 
-Test getState() function
+Test state, action, reward cycle
 ---------------------------------------------------------------------
 >>> e.getState()
-array([], dtype=float64)
+>>> e.progressCnt
+1
 >>> e.getState()
 Traceback (most recent call last):
 	...
 EnvironmentException: state was requested twice before action was given.
 
-
-Test performAction() function
----------------------------------------------------------------------
->>> e.performAction([1])
->>> e.performAction([1])
+>>> e.performAction([])
+>>> e.progressCnt
+2
+>>> e.performAction([])
 Traceback (most recent call last):
 	...
 EnvironmentException: action was given twice, before reward was requested.
 
->>> e.getState()
-Traceback (most recent call last):
-	...
-EnvironmentException: state was requested twice before action was given.
-
-
-Test getReward() function
----------------------------------------------------------------------
 >>> e.getReward()
+>>> e.progressCnt
 0
 >>> e.getReward()
 Traceback (most recent call last):
@@ -52,16 +37,17 @@ Traceback (most recent call last):
 EnvironmentException: reward was requested before action was performed.
 
 
-Test episodeFinished() function
+Test episodeFinished and reset functions
 ---------------------------------------------------------------------
 >>> e.episodeFinished()
 False
-
-
-Test timestep and reset() function
----------------------------------------------------------------------
+>>> e.getState()
+>>> e.progressCnt
+1
 >>> e.timestep
 1
 >>> e.reset()
+>>> e.progressCnt
+0
 >>> e.timestep
 0
