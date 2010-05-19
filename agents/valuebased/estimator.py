@@ -4,7 +4,7 @@ class Estimator(object):
     
     conditions = {'discreteStates':False, 'discreteActions':False}
     
-    def getMaxAction(self, state):
+    def getBestAction(self, state):
         """ returns the action with the highest value in the given state. """
         abstractMethod()
     

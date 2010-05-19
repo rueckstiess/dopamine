@@ -3,12 +3,12 @@ from dopamine.agents.agent import AgentException
 from dopamine.agents.valuebased import NetworkEstimator
 from dopamine.tools.utilities import one_to_n
 
-from numpy import mean, array, r_, c_, atleast_2d
+from numpy import mean, array, r_, c_, atleast_2d, random
 import time
 
 class NFQAgent(Agent):
     
-    alpha = 0.1
+    alpha = 0.5
     gamma = 0.9
     
     def _setup(self, conditions):
@@ -20,19 +20,27 @@ class NFQAgent(Agent):
         self.estimator = NetworkEstimator(self.conditions['stateDim'], self.conditions['actionNum'])
     
     def _calculate(self):
-        self.action = self.estimator.getMaxAction(self.state)
+        self.action = self.estimator.getBestAction(self.state)
     
     def learn(self):
         """ go through whole episode and make Q-value updates. """  
-        for i in range(1):
+        for i in range(100):
             self.estimator.dataset.clear()
+            self.estimator.network._setParameters(random.normal(0, 0.01, self.estimator.network.params.shape))
           
             for episode in self.history:
                 for state, action, reward, nextstate in episode:
                     qvalue = self.estimator.getValue(state, action)
-                    maxnext = self.estimator.getValue(nextstate, self.estimator.getMaxAction(nextstate))
-                    target = qvalue + self.alpha * (reward + self.gamma * maxnext - qvalue)
+                    bestnext = self.estimator.getValue(nextstate, self.estimator.getBestAction(nextstate))
+                    target = (1-self.alpha) * qvalue + self.alpha * (reward + self.gamma * bestnext)
 
-                    self.estimator.dataset.addSample(r_[state, one_to_n(action, self.conditions['actionNum'])], target)
-            self.estimator._train(30)
+                    self.estimator.updateValue(state, action, target)
+                    # self.estimator.dataset.addSample(r_[state, one_to_n(action, self.conditions['actionNum'])], target)
+    
+            # avoiding the value drift by substracting the minimum of the training set
+            # targets = self.estimator.dataset['target']
+            # targets = (targets - min(targets)) / (max(targets) - min(targets))
+            # self.estimator.dataset.setField('target', targets)
+            
+            self.estimator._train(1)
 

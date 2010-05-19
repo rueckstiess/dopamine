@@ -16,7 +16,7 @@ class QAgent(Agent):
         self.estimator = TableEstimator(self.conditions['stateNum'], self.conditions['actionNum'])
     
     def _calculate(self):
-        self.action = self.estimator.getMaxAction(self.state)
+        self.action = self.estimator.getBestAction(self.state)
     
     def learn(self):
         """ go through whole episode and make Q-value updates. """
@@ -28,7 +28,7 @@ class QAgent(Agent):
                 nextstate = int(nextstate)
      
                 qvalue = self.estimator.getValue(self.state, self.action)
-                maxnext = self.estimator.getValue(nextstate, self.estimator.getMaxAction(nextstate))
+                maxnext = self.estimator.getValue(nextstate, self.estimator.getBestAction(nextstate))
                 
                 self.estimator.updateValue(state, action, qvalue + self.alpha * (reward + self.gamma * maxnext - qvalue))
 

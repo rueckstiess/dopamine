@@ -20,11 +20,11 @@ class TableEstimator(Estimator):
         
         self.initialize(0.0)
  
-    def getMaxAction(self, state):
+    def getBestAction(self, state):
         """ expects a scalar or a list or array with one element. """
         state = self._forceScalar(state)
-        maxvalue = max(self.values[state, :])
-        return array([choice(where(self.values[state, :] == maxvalue)[0])])
+        bestvalue = max(self.values[state, :])
+        return array([choice(where(self.values[state, :] == bestvalue)[0])])
         
     def getValue(self, state, action):
         """ returns the value of the given (state,action) pair. """

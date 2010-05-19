@@ -15,11 +15,12 @@ class NetworkEstimator(Estimator):
         self.stateDim = stateDim
         self.actionNum = actionNum
         self.network = buildNetwork(stateDim + actionNum, (stateDim + actionNum), 1)
+        self.network._setParameters(random.normal(0, 0.1, self.network.params.shape))
         self.dataset = SupervisedDataSet(stateDim + actionNum, 1)
 
-    def getMaxAction(self, state):
+    def getBestAction(self, state):
         """ returns the action with maximal value in the given state. """
-        return array([argmax([self.getValue(state, array([a])) for a in range(self.actionNum)])])
+        return array([argmin([self.getValue(state, array([a])) for a in range(self.actionNum)])])
 
     def getValue(self, state, action):
         """ returns the value of the given (state,action) pair. """
