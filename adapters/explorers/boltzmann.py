@@ -31,5 +31,6 @@ class BoltzmannExplorer(Explorer):
         
         r = random.random()
         self.tau *= self.decay
-        return array([min(where(array(cdf) >= r)[0])])
-        
+        action = sum(array(cdf) < r)
+
+        return array([action])
