@@ -1,5 +1,4 @@
 from numpy import zeros, inf
-from dopamine.tools.utilities import abstractMethod
 
 class EnvironmentException(Exception):
     pass
@@ -35,9 +34,9 @@ class Environment(object):
         self.renderer = None
         
         # the current state, action, reward. used in _update()
-        self.state = None
-        self.action = None
-        self.reward = None
+        self.state = zeros(0)
+        self.action = zeros(0)
+        self.reward = 0
 
     
     def getState(self):
@@ -86,4 +85,4 @@ class Environment(object):
         
     def _update(self):
         """ integrate the action into the environment and set the new state and reward. """
-        abstractMethod()
+        pass
