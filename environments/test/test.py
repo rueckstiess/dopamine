@@ -32,12 +32,12 @@ class TestEnvironment(Environment):
     def reset(self):
         Environment.reset(self)
         self.state = random.uniform(-1, 1, 1)
-        self.target = array([0.5])
+        self.target = array([0.4])
 
     def _update(self):
         self.state += self.actions[self.action]
-        self.reward = -(self.state.item() - self.target.item())*4
-        # print self.state, self.actions[self.action], self.reward
+        diff = -abs(self.state.item() - self.target.item())
+        return diff
         
         
     
