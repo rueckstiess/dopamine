@@ -10,6 +10,7 @@ class TableException(Exception):
 class TableEstimator(Estimator):
     
     conditions = {'discreteStates':True, 'discreteActions':True}
+    trainable = False
     
     def __init__(self, stateNum, actionNum):
         """ initialize with the number of states and actions. the table

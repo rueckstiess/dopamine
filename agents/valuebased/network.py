@@ -9,7 +9,8 @@ from pybrain.supervised.trainers.rprop import RPropMinusTrainer, BackpropTrainer
 class NetworkEstimator(Estimator):
 
     conditions = {'discreteStates':False, 'discreteActions':True}
-
+    trainable = True
+    
     def __init__(self, stateDim, actionNum):
         """ initialize with the state dimension and number of actions. """
         self.stateDim = stateDim
@@ -29,11 +30,11 @@ class NetworkEstimator(Estimator):
     def updateValue(self, state, action, value):
         self.dataset.addSample(r_[state, one_to_n(action, self.actionNum)], value)
 
-    def _train(self, maxEpochs):
+    def _train(self):
         # train module with backprop/rprop on dataset
         trainer = RPropMinusTrainer(self.network, dataset=self.dataset, batchlearning=True, verbose=False)
         # trainer = BackpropTrainer(self.network, dataset=self.dataset, batchlearning=True, verbose=True)
-        trainer.trainUntilConvergence(maxEpochs=maxEpochs)     
-        # trainer.train()   
+        trainer.trainUntilConvergence(maxEpochs=100)
+     
         
 
