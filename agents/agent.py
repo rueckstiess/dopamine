@@ -14,7 +14,7 @@ class Agent(object):
         self.reward = None
         
         # agent conditions, inherited from environment (plus adapters)
-        self.conditions = {}
+        self.conditions_ = {}
         
         # progress counter:
         # 0 = reward was given, before observation was integrated
@@ -29,10 +29,14 @@ class Agent(object):
             number/dimensionalty of states and actions. This function is called
             just before the first state is integrated.
         """
-        self.conditions = conditions
+        self.conditions_ = conditions
         
         # create history to store experiences
         self.history = History(conditions['stateDim'], conditions['actionDim'])
+    
+    @property
+    def conditions(self):
+        return self.conditions_
         
     @property
     def episode(self):
