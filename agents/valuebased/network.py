@@ -20,7 +20,7 @@ class NetworkEstimator(Estimator):
 
     def getBestAction(self, state):
         """ returns the action with maximal value in the given state. """
-        return array([argmin([self.getValue(state, array([a])) for a in range(self.actionNum)])])
+        return array([argmax([self.getValue(state, array([a])) for a in range(self.actionNum)])])
 
     def getValue(self, state, action):
         """ returns the value of the given (state,action) pair. """
