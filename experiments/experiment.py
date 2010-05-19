@@ -23,10 +23,12 @@ class Experiment(object):
     
     @property
     def conditions(self):
+        """ returns the conditions after applying all adapters (read-only). """
         return self._flattenConditions()
     
     @property
     def adapters(self):
+        """ returns the list of adapters (read-only). """
         return self.adapters_
         
     def addAdapter(self, adapter):
@@ -74,7 +76,7 @@ class Experiment(object):
             action = adapter.applyAction(action)
         self.environment.performAction(action)
         
-        reward = self.environment.getReward()
+        reward = self.environment.getReward()        
         for adapter in self.adapters_:
             reward = adapter.applyReward(reward)
         self.agent.giveReward(reward)
