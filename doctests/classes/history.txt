@@ -4,7 +4,7 @@ Testing History class from tools.datasets
 
 Test if import works
 ---------------------------------------------------------------------
->>> from rllib.tools import History
+>>> from dopamine.tools import History
 >>> e = History(3, 2)
 
 

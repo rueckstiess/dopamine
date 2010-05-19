@@ -2,7 +2,7 @@ from numpy import ones, ndarray, argmax, where, array
 from random import choice
 import types
 
-from rllib.agents.valuebased.estimator import Estimator
+from dopamine.agents.valuebased.estimator import Estimator
 
 class TableException(Exception):
     pass

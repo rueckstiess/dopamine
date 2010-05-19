@@ -1,10 +1,10 @@
-Testing class Table from rllib.agents.valuebased.table
+Testing class Table from dopamine.agents.valuebased.table
 =====================================================================
 
 
 Testing import and initialization
 ---------------------------------------------------------------------
->>> from rllib.agents.valuebased import Table
+>>> from dopamine.agents.valuebased import Table
 >>> from numpy import *
 >>> t = Table(5, 5)
 >>> t.values

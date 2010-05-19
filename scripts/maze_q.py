@@ -1,7 +1,7 @@
-from rllib.environments import MDPMaze
-from rllib.agents import QAgent
-from rllib.experiments import Experiment
-from rllib.adapters import MakeEpisodicAdapter, EpsilonGreedyExplorer
+from dopamine.environments import MDPMaze
+from dopamine.agents import QAgent
+from dopamine.experiments import Experiment
+from dopamine.adapters import MakeEpisodicAdapter, EpsilonGreedyExplorer
 
 from matplotlib import pyplot as plt
 import time

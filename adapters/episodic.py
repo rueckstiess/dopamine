@@ -1,4 +1,4 @@
-from rllib.adapters import Adapter
+from dopamine.adapters import Adapter
 
 class MakeEpisodicAdapter(Adapter):
     """ This adapter makes episodic environments and interrupts 

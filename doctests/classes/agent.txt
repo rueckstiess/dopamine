@@ -4,7 +4,7 @@ Testing Agent class from agents.agent
 
 Test import
 ---------------------------------------------------------------------
->>> from rllib.agents import Agent
+>>> from dopamine.agents import Agent
 
 
 Test initialization

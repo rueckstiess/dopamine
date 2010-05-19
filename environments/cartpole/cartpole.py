@@ -3,7 +3,7 @@ from numpy import sin, cos, array
 import time
 from numpy import eye, matrix, random, asarray, clip, inf
 
-from rllib.environments.environment import Environment
+from dopamine.environments.environment import Environment
 
 
 class CartPoleEnvironment(Environment):

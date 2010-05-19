@@ -1,6 +1,6 @@
 from numpy import *
-from rllib.tools.utilities import one_to_n
-from rllib.agents.valuebased.estimator import Estimator
+from dopamine.tools.utilities import one_to_n
+from dopamine.agents.valuebased.estimator import Estimator
 
 from pybrain.tools.shortcuts import buildNetwork
 from pybrain.datasets import SupervisedDataSet

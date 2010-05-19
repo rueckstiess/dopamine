@@ -1,4 +1,4 @@
-from rllib.adapters import Adapter
+from dopamine.adapters import Adapter
 
 class Explorer(Adapter):
     

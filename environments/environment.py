@@ -1,5 +1,5 @@
 from numpy import zeros, inf
-from rllib.tools.utilities import abstractMethod
+from dopamine.tools.utilities import abstractMethod
 
 class EnvironmentException(Exception):
     pass

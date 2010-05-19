@@ -1,7 +1,7 @@
-from rllib.environments import DiscreteCartPoleEnvironment, CartPoleRenderer
-from rllib.agents import NFQAgent
-from rllib.experiments import Experiment
-from rllib.adapters import EpsilonGreedyExplorer, NormalizingAdapter, IndexingAdapter
+from dopamine.environments import DiscreteCartPoleEnvironment, CartPoleRenderer
+from dopamine.agents import NFQAgent
+from dopamine.experiments import Experiment
+from dopamine.adapters import EpsilonGreedyExplorer, NormalizingAdapter, IndexingAdapter
 
 from matplotlib import pyplot as plt
 

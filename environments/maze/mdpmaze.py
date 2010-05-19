@@ -1,4 +1,4 @@
-from rllib.environments.maze.maze import Maze
+from dopamine.environments.maze.maze import Maze
 from numpy import array
 
 

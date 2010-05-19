@@ -1,6 +1,6 @@
-from rllib.agents import Agent
-from rllib.agents.agent import AgentException
-from rllib.agents.valuebased import TableEstimator
+from dopamine.agents import Agent
+from dopamine.agents.agent import AgentException
+from dopamine.agents.valuebased import TableEstimator
 
 class QAgent(Agent):
     

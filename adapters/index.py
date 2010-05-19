@@ -1,4 +1,4 @@
-from rllib.adapters import Adapter
+from dopamine.adapters import Adapter
 from numpy import array, inf, ones
 
 class IndexingAdapter(Adapter):

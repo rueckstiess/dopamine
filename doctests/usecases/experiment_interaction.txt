@@ -1,6 +1,6 @@
->>> from rllib.agents import Agent
->>> from rllib.environments.environment import Environment
->>> from rllib.experiments import Experiment
+>>> from dopamine.agents import Agent
+>>> from dopamine.environments.environment import Environment
+>>> from dopamine.experiments import Experiment
 >>> agent = Agent(0, 0)
 >>> env = Environment()
 >>> exp = Experiment(env, agent)

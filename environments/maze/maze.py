@@ -1,7 +1,7 @@
 from random import random, choice
 from numpy import zeros, inf
 
-from rllib.environments.environment import Environment
+from dopamine.environments.environment import Environment
     
 
 class Maze(Environment):

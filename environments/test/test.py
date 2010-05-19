@@ -1,6 +1,6 @@
 from numpy import zeros, inf, random, array
 
-from rllib.environments.environment import Environment
+from dopamine.environments.environment import Environment
     
 
 class TestEnvironment(Environment):

@@ -7,7 +7,6 @@ class Adapter(object):
     outConditions = {}
     
     def __init__(self):
-        self.conditions = {}
         self.experiment = None
         
     def setExperiment(self, experiment):

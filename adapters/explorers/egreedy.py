@@ -1,4 +1,4 @@
-from rllib.adapters.explorers import Explorer
+from dopamine.adapters.explorers import Explorer
 from numpy import random, array
 
 class EpsilonGreedyExplorer(Explorer):

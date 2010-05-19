@@ -9,7 +9,7 @@ class Experiment(object):
         self.adapters_ = []
         
         # marker that stores if setup on agent has been completed
-        self.setupComplete = False
+        self.setupComplete_ = False
             
     def _flattenConditions(self):
         """ flattens the environment and adapters conditions to one conditions dictionary. """
@@ -49,7 +49,7 @@ class Experiment(object):
         self.adapters_.append(adapter)
         
         # conditions have changed, new agent setup is necessary
-        self.setupComplete = False
+        self.setupComplete_ = False
     
     
     def interact(self):
@@ -60,9 +60,9 @@ class Experiment(object):
             executed in the environment. A reward is then passed through the
             adapters to the agent.
         """
-        if not self.setupComplete:
+        if not self.setupComplete_:
             self.agent._setup(self.conditions)
-            self.setupComplete = True
+            self.setupComplete_ = True
             
         state = self.environment.getState()
         for adapter in self.adapters_:

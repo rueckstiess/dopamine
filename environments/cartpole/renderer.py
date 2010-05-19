@@ -3,7 +3,7 @@ from numpy import cos, sin
 import threading
 import time 
 
-from rllib.tools.renderer import Renderer
+from dopamine.tools.renderer import Renderer
 
 
 class CartPoleRenderer(Renderer):  

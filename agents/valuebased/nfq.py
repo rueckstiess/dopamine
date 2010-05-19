@@ -1,7 +1,7 @@
-from rllib.agents import Agent
-from rllib.agents.agent import AgentException
-from rllib.agents.valuebased import NetworkEstimator
-from rllib.tools.utilities import one_to_n
+from dopamine.agents import Agent
+from dopamine.agents.agent import AgentException
+from dopamine.agents.valuebased import NetworkEstimator
+from dopamine.tools.utilities import one_to_n
 
 from numpy import mean, array, r_, c_, atleast_2d
 import time

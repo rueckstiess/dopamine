@@ -4,7 +4,7 @@ Test Environment class from environments.environment
 
 Test import and class variables
 ---------------------------------------------------------------------
->>> from rllib.environments.environment import Environment
+>>> from dopamine.environments.environment import Environment
 >>> e = Environment()
 >>> e.actionDim
 0

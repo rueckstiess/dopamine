@@ -1,5 +1,5 @@
-from rllib.tools.utilities import abstractMethod
-from rllib.tools import Episode, History
+from dopamine.tools.utilities import abstractMethod
+from dopamine.tools import Episode, History
 from numpy import zeros, inf
 
 class AgentException(Exception):

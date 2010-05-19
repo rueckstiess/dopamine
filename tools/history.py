@@ -1,4 +1,4 @@
-from rllib.tools.episode import Episode
+from dopamine.tools.episode import Episode
 
 class History(object):
 

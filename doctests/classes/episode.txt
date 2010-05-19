@@ -4,7 +4,7 @@ Testing Episode class from tools.episode
 
 Test if import works
 ---------------------------------------------------------------------
->>> from rllib.tools import Episode
+>>> from dopamine.tools import Episode
 >>> d = Episode(3, 2)
 
 
