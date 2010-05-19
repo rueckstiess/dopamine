@@ -1,4 +1,3 @@
-from dopamine.tools.utilities import abstractMethod
 from dopamine.tools import Episode, History
 from numpy import zeros, inf
 
@@ -41,7 +40,10 @@ class Agent(object):
     @property
     def episode(self):
         """ returns the last (current) episode. """
-        return self.history[-1]
+        if len(self.history) > 0:
+            return self.history[-1]
+        else:
+            return None
         
     def integrateState(self, state):
         if self.progressCnt == 0:
@@ -81,7 +83,7 @@ class Agent(object):
         
     def _calculate(self):
         """ this method needs to be overwritten by subclasses to return a non-zero action. """
-        abstractMethod()
+        self.action = zeros(self.conditions['actionDim'])
     
     
     
