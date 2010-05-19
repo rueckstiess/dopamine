@@ -11,6 +11,8 @@ class EpsilonGreedyExplorer(Explorer):
     
     def __init__(self, epsilon, decay=0.999):
         """ set the probability epsilon, with which a random action is chosen. """
+        Explorer.__init__(self)
+        
         self.epsilon = epsilon
         self.decay = decay
         

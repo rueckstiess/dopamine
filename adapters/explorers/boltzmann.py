@@ -11,6 +11,8 @@ class BoltzmannExplorer(Explorer):
     
     def __init__(self, tau, decay=0.999):
         """ set the probability epsilon, with which a random action is chosen. """
+        Explorer.__init__(self)
+        
         self.tau = tau
         self.decay = decay
         self.state = None
