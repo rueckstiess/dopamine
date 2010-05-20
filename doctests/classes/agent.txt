@@ -74,3 +74,24 @@ array([ 0.,  0.,  0.,  0.])
 2
 >>> len(a.episode)
 1
+
+
+Test logging enabled and disabled
+---------------------------------------------------------------------
+>>> a.loggingEnabled = False
+>>> a.integrateState([-1, -2, -3])
+>>> a.getAction()
+array([ 0.,  0.,  0.,  0.])
+>>> a.giveReward(5)
+>>> print a.episode
+[ 7.  8.  9.][ 0.  0.  0.  0.] -1.5
+>>> a.loggingEnabled = True
+>>> a.integrateState([-1, -2, -3])
+>>> a.getAction()
+array([ 0.,  0.,  0.,  0.])
+>>> a.giveReward(5)
+>>> print a.episode
+[ 7.  8.  9.][ 0.  0.  0.  0.] -1.5
+[-1. -2. -3.][ 0.  0.  0.  0.] 5.0
+
+

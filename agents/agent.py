@@ -22,6 +22,9 @@ class Agent(object):
         # 0 = reward was given. store experience in history
         self.progressCnt = 0
         
+        # enable or disable logging to dataset (for testing)
+        self.loggingEnabled = True
+        
         
     def _setup(self, conditions):
         """ Tells the agent, if the environment is discrete or continuous and the
@@ -67,7 +70,8 @@ class Agent(object):
         if self.progressCnt == 2:
             self.reward = reward
             self.progressCnt = 0
-            self.history.append(self.state, self.action, self.reward)
+            if self.loggingEnabled:
+                self.history.append(self.state, self.action, self.reward)
         else:
             raise AgentException('reward was given before action was returned.')
         
