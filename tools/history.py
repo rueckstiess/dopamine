@@ -25,7 +25,7 @@ class History(object):
         self.episodes_[-1].append(state, action, reward)
     
     def appendEpisode(self, episode):
-        self.epsiodes_.append(episode)
+        self.episodes_.append(episode)
         
     def extend(self, history):
         self.episodes_.extend(history)
