@@ -1,3 +1,7 @@
+from copy import deepcopy
+from dopamine.adapters.explorers.explorer import Explorer
+from dopamine.tools.history import History
+
 class ExperimentException(Exception):
     pass
 
@@ -108,4 +112,34 @@ class Experiment(object):
         
         # tell agent that it should start a new episode
         self.agent.newEpisode()
+    
+    def runEpisodes(self, count, reset=True):
+        for i in range(count):
+            self.runEpisode(reset)
+    
+    def evaluateEpisodes(self, count, reset=True):
+        # disable all explorers and store them for later
+        explorers = []
+        for a in self.adapters_:
+            if isinstance(a, Explorer):
+                explorers.append(a)
+                a.active = False
+            
+        # run experiment for evaluation and store history
+        self.runEpisodes(count, reset)
+        
+        # copy the latest 'count' episodes to a new history
+        history = History(self.agent.history.stateDim, self.agent.history.actionDim)
+        for e in self.agent.history.episodes_[-count-1:-1]:
+            history.appendEpisode(e)
+
+        # remove the evaluation histories from the agent
+        self.agent.history.episodes_ = self.agent.history.episodes_[:-(count+1)] + [self.agent.history.episodes_[-1]]
+        
+        # enable exploration again
+        for a in explorers:
+            a.active = True
+        
+        return history
+        
         
