@@ -1,12 +1,15 @@
 from dopamine.environments import MDPMaze
-from dopamine.agents import QAgent
+from dopamine.agents import QAgent, SARSAAgent
 from dopamine.experiments import Experiment
 from dopamine.adapters import MakeEpisodicAdapter, EpsilonGreedyExplorer
 
 from matplotlib import pyplot as plt
 import time
 
+
 agent = QAgent()
+# agent = SARSAAgent()
+
 environment = MDPMaze()
 experiment = Experiment(environment, agent)
 experiment.addAdapter(MakeEpisodicAdapter(100))
