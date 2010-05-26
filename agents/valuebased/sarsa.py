@@ -1,6 +1,6 @@
-from dopamine.agents import QAgent
+from dopamine.agents.valuebased.q import QAgent
 
-class SARSAAgent(Agent):
+class SARSAAgent(QAgent):
     
     alpha = 0.5
     gamma = 0.9
