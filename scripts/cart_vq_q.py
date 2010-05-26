@@ -1,7 +1,7 @@
 from dopamine.environments import TestEnvironment
 from dopamine.environments import DiscreteCartPoleEnvironment, CartPoleRenderer
 
-from dopamine.agents import QAgent
+from dopamine.agents import QAgent, SARSAAgent
 from dopamine.experiments import Experiment
 from dopamine.adapters import EpsilonGreedyExplorer, VQDiscretizationAdapter
 
@@ -11,13 +11,13 @@ import time
 
 
 # create agent, environment, renderer, experiment
-agent = QAgent()
+agent = SARSAAgent()
 environment = DiscreteCartPoleEnvironment()
 
 experiment = Experiment(environment, agent)
 
 # add discretization adapter
-discretizer = VQDiscretizationAdapter(50)
+discretizer = VQDiscretizationAdapter(30)
 experiment.addAdapter(discretizer)
 
 # add e-greedy exploration
@@ -39,20 +39,23 @@ for i in range(len(discretizer.stateVectors)):
 plt.xlim(-2.5, 2.5)
 plt.ylim(-10, 10)
 
-plt.show()
 agent.forget()
-
-renderer = CartPoleRenderer()
-environment.renderer = renderer
-renderer.start()
-
+explorer.epsilon = 0.3
+# renderer = CartPoleRenderer()
+# environment.renderer = renderer
+# renderer.start()
 
 # run experiment
 for i in range(1000):
     experiment.runEpisode(reset=True)
+    discretizer.adaptClusters()
+    
+    plt.clf()
+    for i in range(len(discretizer.stateVectors)):
+        plt.text(discretizer.stateVectors[i,0], discretizer.stateVectors[i,1], "%i"%i, bbox=dict(facecolor='green', alpha=0.5))
+    plt.gca().autoscale_view(scalex=True, scaley=True)
+    plt.gcf().canvas.draw()
     agent.learn()
         
-    
     print "sum rewards:", sum(agent.episode.rewards)
-    print agent.episode
-    # print "exploration:", explorer.epsilon
+    print "exploration:", explorer.epsilon

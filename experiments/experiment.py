@@ -130,8 +130,7 @@ class Experiment(object):
         
         # copy the latest 'count' episodes to a new history
         history = History(self.agent.history.stateDim, self.agent.history.actionDim)
-        for e in self.agent.history.episodes_[-count-1:-1]:
-            history.appendEpisode(e)
+        history.episodes_ = self.agent.history.episodes_[-count-1:-1]
 
         # remove the evaluation histories from the agent
         self.agent.history.episodes_ = self.agent.history.episodes_[:-(count+1)] + [self.agent.history.episodes_[-1]]

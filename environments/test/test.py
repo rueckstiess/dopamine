@@ -37,7 +37,7 @@ class TestEnvironment(Environment):
     def _update(self):
         self.state += self.actions[self.action]
         diff = -abs(self.state.item() - self.target.item())
-        return diff
+        self.reward = diff
         
         
     

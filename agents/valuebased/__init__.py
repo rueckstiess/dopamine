@@ -1,6 +1,10 @@
 from table import TableEstimator
 from network import NetworkEstimator
 
+# discrete agents
 from q import QAgent
+from qlambda import QLambdaAgent
 from sarsa import SARSAAgent
-from nfq import NFQAgent
+
+# continuous agents
+from fqi import FQIAgent
