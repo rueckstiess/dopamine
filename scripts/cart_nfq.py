@@ -4,6 +4,8 @@ from dopamine.experiments import Experiment
 from dopamine.adapters import EpsilonGreedyExplorer, NormalizingAdapter, IndexingAdapter
 
 from matplotlib import pyplot as plt
+from numpy import *
+
 
 # create agent, environment, renderer, experiment
 agent = NFQAgent()
@@ -22,8 +24,8 @@ experiment.addAdapter(normalizer)
 explorer = EpsilonGreedyExplorer(0.2, 1.0)
 experiment.addAdapter(explorer)
 
-for i in range(10):
-    experiment.runEpisode(reset=True)
+experiment.runEpisodes(10)
+agent.forget()
 
 explorer.decay = 0.999
 renderer = CartPoleRenderer()
@@ -32,9 +34,11 @@ renderer.start()
 
 # run experiment
 for i in range(100):
-    experiment.runEpisode(reset=True)
+    experiment.runEpisodes(1)
     agent.learn()
-    print explorer.epsilon
-    
-    # print agent.history[0].rewards
-    # agent.forget()
+
+    valdata = experiment.evaluateEpisodes(5)
+    print "exploration", explorer.epsilon
+    print "mean return", mean([sum(v.rewards) for v in valdata])
+    print "num episodes", len(agent.history)
+

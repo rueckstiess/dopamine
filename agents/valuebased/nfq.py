@@ -3,7 +3,7 @@ from dopamine.agents.agent import AgentException
 from dopamine.agents.valuebased import NetworkEstimator
 from dopamine.tools.utilities import one_to_n
 
-from numpy import mean, array, r_, c_, atleast_2d, random
+from numpy import mean, array, r_, c_, atleast_2d, random, equal
 import time
 
 class NFQAgent(Agent):
@@ -24,12 +24,16 @@ class NFQAgent(Agent):
     
     def learn(self):
         """ go through whole episode and make Q-value updates. """  
-        for i in range(100):
+        for i in range(1):
             self.estimator.dataset.clear()
-            self.estimator.network._setParameters(random.normal(0, 0.01, self.estimator.network.params.shape))
+            # self.estimator.network._setParameters(random.normal(0, 0.01, self.estimator.network.params.shape))
           
             for episode in self.history:
                 for state, action, reward, nextstate in episode:
+                    # don't consider last state
+                    if equal(state, nextstate).all():
+                        break
+                    
                     qvalue = self.estimator.getValue(state, action)
                     bestnext = self.estimator.getValue(nextstate, self.estimator.getBestAction(nextstate))
                     target = (1-self.alpha) * qvalue + self.alpha * (reward + self.gamma * bestnext)
@@ -42,5 +46,5 @@ class NFQAgent(Agent):
             # targets = (targets - min(targets)) / (max(targets) - min(targets))
             # self.estimator.dataset.setField('target', targets)
             
-            self.estimator._train(1)
+            self.estimator._train()
 

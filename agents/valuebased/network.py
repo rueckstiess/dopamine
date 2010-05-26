@@ -34,7 +34,7 @@ class NetworkEstimator(Estimator):
         # train module with backprop/rprop on dataset
         trainer = RPropMinusTrainer(self.network, dataset=self.dataset, batchlearning=True, verbose=False)
         # trainer = BackpropTrainer(self.network, dataset=self.dataset, batchlearning=True, verbose=True)
-        trainer.trainUntilConvergence(maxEpochs=100)
+        trainer.trainEpochs(100)
      
         
 

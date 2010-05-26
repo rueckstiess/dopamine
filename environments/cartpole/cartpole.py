@@ -32,7 +32,7 @@ class CartPoleEnvironment(Environment):
     mc = 1.0
     dt = 0.02   
     
-    def __init__(self, maxSteps=200):
+    def __init__(self, maxSteps=100):
         Environment.__init__(self)
         
         # initialize the environment (randomly)
@@ -85,10 +85,10 @@ class CartPoleEnvironment(Environment):
         angle = abs(self.sensors[0])
         s = abs(self.sensors[2])
         reward = 0
-        if angle < 0.05 and s < 0.05:
+        if angle < 0.05:  # and s < 0.05:
             reward = 0.
         elif angle > 0.7 or s > 2.4:
-            reward = -2. # * (self.maxSteps - self.timestep)
+            reward = -2. * (self.maxSteps - self.timestep)
         else: 
             reward = -1.
         return reward
