@@ -30,7 +30,7 @@ class FQIAgent(Agent):
     def learn(self):
         """ go through whole episode and make Q-value updates. """  
         for i in range(1):
-            self.estimator.dataset.clear()
+            self.estimator._clear()
             # self.estimator.network._setParameters(random.normal(0, 0.01, self.estimator.network.params.shape))
           
             for episode in self.history:

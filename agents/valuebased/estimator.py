@@ -17,5 +17,14 @@ class Estimator(object):
         """ updates the value for the given (state, action) tuple. """
         pass
     
+    def _clear(self):
+        """ for estimators that collect samples and require training,
+            (trainable = True), this function should clear the entire dataset.
+        """
+        pass
+        
     def _train(self):
+        """ for estimators that collect samples and require training,
+            (trainable = True), this function should run one training step.
+        """
         pass

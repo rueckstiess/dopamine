@@ -1,5 +1,5 @@
 from dopamine.environments import DiscreteCartPoleEnvironment, CartPoleRenderer
-from dopamine.agents import NFQAgent
+from dopamine.agents import FQIAgent, RBFEstimator
 from dopamine.experiments import Experiment
 from dopamine.adapters import EpsilonGreedyExplorer, NormalizingAdapter, IndexingAdapter
 
@@ -8,7 +8,7 @@ from numpy import *
 
 
 # create agent, environment, renderer, experiment
-agent = NFQAgent()
+agent = FQIAgent(estimatorClass=RBFEstimator)
 environment = DiscreteCartPoleEnvironment()
 experiment = Experiment(environment, agent)
 
@@ -28,9 +28,9 @@ experiment.runEpisodes(10)
 agent.forget()
 
 explorer.decay = 0.999
-renderer = CartPoleRenderer()
-environment.renderer = renderer
-renderer.start()
+# renderer = CartPoleRenderer()
+# environment.renderer = renderer
+# renderer.start()
 
 # run experiment
 for i in range(100):

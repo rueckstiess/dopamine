@@ -30,6 +30,9 @@ class NetworkEstimator(Estimator):
     def updateValue(self, state, action, value):
         self.dataset.addSample(r_[state, one_to_n(action, self.actionNum)], value)
 
+    def _clear(self):
+        self.dataset.clear()
+
     def _train(self):
         # train module with backprop/rprop on dataset
         trainer = RPropMinusTrainer(self.network, dataset=self.dataset, batchlearning=True, verbose=False)

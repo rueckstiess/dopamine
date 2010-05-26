@@ -113,17 +113,27 @@ class RBFEstimator(Estimator):
 
     def getBestAction(self, state):
         """ returns the action with maximal value in the given state. """
-        return array([argmax([self.getValue(state, array([a])) for a in range(self.actionNum)])])
+        state = state.flatten()
+        action = array([argmax([self.getValue(state, array([a])) for a in range(self.actionNum)])])
+        return action
 
     def getValue(self, state, action):
         """ returns the value of the given (state,action) pair. """
-        return self.models[action].test(state)
+        state = state.flatten()
+        action = action.flatten()
+        return self.models[int(action.item())].test(state.reshape(1, self.stateDim)).item()
 
     def updateValue(self, state, action, value):
-        self.inputs = r_[self.inputs, state]
-        self.actions = r_[self.actions, action]
-        self.targets = r_[self.targets, value]
-        
+        self.inputs = r_[self.inputs, state.reshape(1, self.stateDim)]
+        self.actions = r_[self.actions, action.reshape(1, 1)]
+        self.targets = r_[self.targets, asarray(value).reshape(1, 1)]
+   
+    def _clear(self):
+        """ clear collected training set. """
+        self.inputs = zeros((0, self.stateDim))
+        self.actions = zeros((0, 1))
+        self.targets = zeros((0, 1))
+                
     def _train(self):
         """ train individual models for each actions seperately. """
         for a in range(self.actionNum):
