@@ -1,69 +1,71 @@
 from dopamine.adapters import Adapter
+import random as pyrnd
 from numpy import *
+from numpy.linalg import norm
+from matplotlib import pyplot as plt
 
 class VQDiscretizationAdapter(Adapter):
-    """ This adapter discretizes the state and action space by means
-        of a k-mean vector quantization. numStateVectors and numActionVectors
-        gives the number of vectors used to discretize. A value of 0
-        disables discretization.
+    """ This adapter discretizes the state space by means of a k-mean vector 
+        quantization. numStateVectors gives the number of vectors used to 
+        discretize. A value of 0 disables discretization.
     """
         
-    def __init__(self, numStateVectors, numActionVectors):
+    def __init__(self, numStateVectors):
         self.numStateVectors = numStateVectors
-        self.numActionVectors = numActionVectors
         
         if numStateVectors > 0:
+            self.outConditions['discreteStates'] = True
             self.outConditions['stateDim'] = 1
             self.outConditions['stateNum'] = numStateVectors
-        
-        if numActionVectors > 0:
-            self.outConditions['actionDim'] = 1
-            self.outConditions['actionNum'] = numActionVectors
-            
-        self.originalStateDim = None
-        self.originalActionDim = None
-        
-        self.alpha = 0.3
+                    
+        self.originalStateDim = None        
+        self.originalStates = []        
+        self.alpha = 0.1
         
         
     def setExperiment(self, experiment):
         """ give adapter access to the experiment. """
         self.experiment = experiment
 
+
+    def _findClosestCluster(self, clusters, vec):
+        """ returns the clostes cluster center to vec. """
+        dist = clusters - vec
+        # diff = [sum(map(lambda x: x**2, r)) for r in dist]
+        diff = [norm(r, 2) for r in dist]
+        return argmin(diff)
+    
+
     def applyState(self, state):
         if self.numStateVectors <= 0:
             return state
-            
+
+        self.originalStates.append(state)
+        
         # initialize if necessary
         if not self.originalStateDim:
             self.originalStateDim = len(state.flatten())
             self.stateVectors = random.random((self.numStateVectors, self.originalStateDim))
         
-        # calculate distances to each vector
-        dist = self.stateVectors - state.reshape(1, self.originalStateDim)
-        diff = [sum(map(lambda x: x**2, r)) for r in dist]
-        # find winner
-        state = argmin(diff)
-        # move winner closer to state
-        self.stateVectors[state, :] -= self.alpha * dist[state,:]
-        
+        state = self._findClosestCluster(self.stateVectors, state.reshape(1, self.originalStateDim))        
         return array([state])
 
-    def applyAction(self, action):
-        if self.numActionVectors <= 0:
-            return action
+    
+    def sampleClusters(self):
+        # sample for initialization
+        for i,sv in enumerate(pyrnd.sample(self.originalStates, self.numStateVectors)):
+            self.stateVectors[i,:] = sv
+
         
-        # initialize if necessary
-        if not self.originalActionDim:
-            self.originalActionDim = len(action.flatten())
-            self.actionVectors = random.random((self.numActionVectors, self.originalActionDim))
-        
-        # calculate distances to each vector
-        dist = self.actionVectors - action.reshape(1, self.originalActionDim)
-        diff = [sum(map(lambda x: x**2, r)) for r in dist]
-        # find winner
-        action = argmin(diff)
-        # move winner closer to state
-        self.actionVectors[action, :] -= self.alpha * dist[action,:]
-        
-        return array([action])
+    def adaptClusters(self):
+        """ adapts the cluster centers to better represent the data density. """
+        alpha = self.alpha
+          
+        for i in range(10):
+            for s in self.originalStates:
+                winner = self._findClosestCluster(self.stateVectors, s)
+                self.stateVectors[winner, :] -= alpha * (self.stateVectors[winner, :] - s)
+            alpha *= 0.9
+
+        # delete saved states and actions, decay alpha
+        self.originalStates = []
