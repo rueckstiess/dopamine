@@ -1,9 +1,9 @@
 from table import TableEstimator
 from network import NetworkEstimator
+from rbf import RBFEstimator
 
 # discrete agents
 from q import QAgent
-from qlambda import QLambdaAgent
 from sarsa import SARSAAgent
 
 # continuous agents
