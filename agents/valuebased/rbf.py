@@ -96,7 +96,7 @@ class RBFX:
 class RBFEstimator(Estimator):
 
     conditions = {'discreteStates':False, 'discreteActions':True}
-    trainable = False
+    trainable = True
     
     def __init__(self, stateDim, actionNum):
         """ initialize with the state dimension and number of actions. """
@@ -136,9 +136,14 @@ class RBFEstimator(Estimator):
                 
     def _train(self):
         """ train individual models for each actions seperately. """
+        
+        # avoiding the value drift by substracting the minimum of the training set
+        self.targets = (self.targets - min(self.targets))
+        
         for a in range(self.actionNum):
             idx = where(self.actions[:,0] == a)[0]
-            self.models[a].train_ml(self.inputs[idx,:], self.targets[idx,0])
+            if idx.any():
+                self.models[a].train_ml(self.inputs[idx,:], self.targets[idx,0])
         
      
 
