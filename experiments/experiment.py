@@ -1,6 +1,7 @@
-from copy import deepcopy
 from dopamine.adapters.explorers.explorer import Explorer
 from dopamine.tools.history import History
+from matplotlib import pyplot as plt
+from numpy import mean
 
 class ExperimentException(Exception):
     pass
@@ -11,6 +12,7 @@ class Experiment(object):
         self.environment = environment
         self.agent = agent
         self.adapters_ = []
+        self.visualHistory = []
         
         # marker that stores if setup on agent has been completed
         self.setupComplete_ = False
@@ -117,7 +119,7 @@ class Experiment(object):
         for i in range(count):
             self.runEpisode(reset)
     
-    def evaluateEpisodes(self, count, reset=True):
+    def evaluateEpisodes(self, count, reset=True, visualize=True):
         # disable all explorers and store them for later
         explorers = []
         for a in self.adapters_:
@@ -139,6 +141,13 @@ class Experiment(object):
         for a in explorers:
             a.active = True
         
+        if visualize:
+            plt.ion()
+            plt.clf()
+            self.visualHistory.append(mean([sum(e.rewards) for e in history]))
+            plt.plot(self.visualHistory, 'o-', color='black')
+            plt.gcf().canvas.draw()
+                
         return history
         
         
