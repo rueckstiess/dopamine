@@ -44,6 +44,7 @@ class History(object):
     
     @property
     def states(self):
+        """ return array of all states over all episodes in shape n x stateDim """
         st = zeros((0, self.stateDim))
         for e in self.episodes:
             st = r_[st, e.states.reshape(len(e), self.stateDim)]
@@ -51,6 +52,7 @@ class History(object):
     
     @property
     def actions(self):
+        """ return array of all actions over all episodes in shape n x actionDim """
         ac = zeros((0, self.actionDim))
         for e in self.episodes:
             ac = r_[ac, e.actions.reshape(len(e), self.actionDim)]
@@ -58,6 +60,7 @@ class History(object):
     
     @property
     def rewards(self):
+        """ return array of all rewards over all episodes in shape n x 1 """
         rew = zeros((0, 1))
         for e in self.episodes:
             rew = r_[rew, e.rewards.reshape(len(e), 1)]
