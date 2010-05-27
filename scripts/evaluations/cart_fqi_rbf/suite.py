@@ -6,7 +6,7 @@ from dopamine.experiments import Experiment
 from dopamine.adapters import EpsilonGreedyExplorer, NormalizingAdapter, IndexingAdapter
 
 from numpy import *
-
+import os, time
 
 class Suite(ExperimentSuite):
     
@@ -16,6 +16,8 @@ class Suite(ExperimentSuite):
     
     def reset(self, params, rep):
         """ needs to be implemented by subclass """
+        # seed random number generator
+        numpy.random.seed(int(os.getpid() + time.time()))
         
         # create agent, environment, renderer, experiment
         self.agent = FQIAgent(estimatorClass=eval(params['estimator']))
