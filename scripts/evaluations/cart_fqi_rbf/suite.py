@@ -17,7 +17,7 @@ class Suite(ExperimentSuite):
     def reset(self, params, rep):
         """ needs to be implemented by subclass """
         # seed random number generator
-        numpy.random.seed(int(os.getpid() + time.time()))
+        random.seed(int(os.getpid() + time.time()))
         
         # create agent, environment, renderer, experiment
         self.agent = FQIAgent(estimatorClass=eval(params['estimator']))
