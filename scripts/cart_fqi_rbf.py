@@ -21,7 +21,7 @@ normalizer = NormalizingAdapter()
 experiment.addAdapter(normalizer)
 
 # add e-greedy exploration
-explorer = EpsilonGreedyExplorer(0.2, 1.0)
+explorer = EpsilonGreedyExplorer(0.4, 1.0)
 experiment.addAdapter(explorer)
 
 experiment.runEpisodes(10)
@@ -37,8 +37,9 @@ for i in range(100):
     experiment.runEpisodes(1)
     agent.learn()
 
-    valdata = experiment.evaluateEpisodes(5)
+    valdata = experiment.evaluateEpisodes(20, visualize=True)
     print "exploration", explorer.epsilon
     print "mean return", mean([sum(v.rewards) for v in valdata])
     print "num episodes", len(agent.history)
+    # print "num total samples", agent.history.numTotalSamples()
 
