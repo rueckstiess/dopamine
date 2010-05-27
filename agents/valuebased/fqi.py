@@ -31,8 +31,7 @@ class FQIAgent(Agent):
         """ go through whole episode and make Q-value updates. """  
         for i in range(1):
             self.estimator._clear()
-            # self.estimator.network._setParameters(random.normal(0, 0.01, self.estimator.network.params.shape))
-          
+            
             for episode in self.history:
                 for state, action, reward, nextstate in episode:
                     # don't consider last state
@@ -44,12 +43,6 @@ class FQIAgent(Agent):
                     target = (1-self.alpha) * qvalue + self.alpha * (reward + self.gamma * bestnext)
 
                     self.estimator.updateValue(state, action, target)
-                    # self.estimator.dataset.addSample(r_[state, one_to_n(action, self.conditions['actionNum'])], target)
-    
-            # avoiding the value drift by substracting the minimum of the training set
-            # targets = self.estimator.dataset['target']
-            # targets = (targets - min(targets)) / (max(targets) - min(targets))
-            # self.estimator.dataset.setField('target', targets)
             
             self.estimator._train()
 
