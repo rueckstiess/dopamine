@@ -20,7 +20,7 @@ class FQIAgent(Agent):
         """ if agent is discrete in states and actions create Q-Table. """
         Agent._setup(self, conditions)
         if not (self.conditions['discreteStates'] == False and self.conditions['discreteActions']):
-            raise AgentException('QAgent expects discrete states and actions. Use adapter or a different environment.')
+            raise AgentException('FQIAgent expects continuous states and discrete actions. Use adapter or a different environment.')
             
         self.estimator = self.estimatorClass(self.conditions['stateDim'], self.conditions['actionNum'])
     
