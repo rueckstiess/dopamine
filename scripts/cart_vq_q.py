@@ -48,13 +48,7 @@ explorer.epsilon = 0.3
 # run experiment
 for i in range(1000):
     experiment.runEpisode(reset=True)
-    discretizer.adaptClusters()
-    
-    plt.clf()
-    for i in range(len(discretizer.stateVectors)):
-        plt.text(discretizer.stateVectors[i,0], discretizer.stateVectors[i,1], "%i"%i, bbox=dict(facecolor='green', alpha=0.5))
-    plt.gca().autoscale_view(scalex=True, scaley=True)
-    plt.gcf().canvas.draw()
+    # discretizer.adaptClusters()
     agent.learn()
         
     print "sum rewards:", sum(agent.episode.rewards)
