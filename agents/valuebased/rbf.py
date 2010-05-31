@@ -136,14 +136,12 @@ class RBFEstimator(Estimator):
                 
     def _train(self):
         """ train individual models for each actions seperately. """
-        
         # avoiding the value drift by substracting the minimum of the training set
         self.targets = (self.targets - min(self.targets))
         
         for a in range(self.actionNum):
             idx = where(self.actions[:,0] == a)[0]
-            if idx.any():
+            if len(idx) > 0 and idx.any():
                 self.models[a].train_ml(self.inputs[idx,:], self.targets[idx,0])
-        
      
 
