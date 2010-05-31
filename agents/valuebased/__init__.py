@@ -8,3 +8,4 @@ from sarsa import SARSAAgent
 
 # continuous agents
 from fqi import FQIAgent
+from bas import BASAgent
