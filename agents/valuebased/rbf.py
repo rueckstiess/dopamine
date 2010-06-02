@@ -22,7 +22,10 @@ class RBFX:
         return exp(-self.beta * norm(c-d)**2)
 
     def _designMatrix(self, X):
-        # create design matrix with basis functions
+        """ create design matrix with basis functions.
+            input n x indim.
+            output n x self.centers
+        """
         G = zeros((X.shape[0], self.numCenters), float)
         for ci, c in enumerate(self.centers):
             for xi, x in enumerate(X):

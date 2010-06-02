@@ -24,6 +24,5 @@ for i in range(100):
     experiment.runEpisode(reset=True)
     agent.learn()
     agent.forget()
-    print explorer.epsilon
     plt.pcolor(agent.estimator.values.max(axis=1).reshape(9, 9))
     plt.gcf().canvas.draw()
