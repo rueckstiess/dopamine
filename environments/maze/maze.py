@@ -6,12 +6,12 @@ from dopamine.environments.environment import Environment
 
 class Maze(Environment):
     """ 2D mazes, with actions being the direction of movement (N,E,S,W)
-    and observations being the presence of walls in those directions. 
+    and states being the presence of walls in those directions. 
 
     It has a finite number of states, a subset of which are potential starting states (default: all except goal states).
     A maze can have absorbing states, which, when reached end the episode (default: there is one, the goal).
 
-    There is a single agent walking around in the maze (Theseus).
+    There is a single agent walking around in the maze (Perseus).
     The movement can succeed or not, or be stochastically determined.
     Running against a wall does not get you anywhere.
     
@@ -19,7 +19,6 @@ class Maze(Environment):
     The observations can be noisy.
     """
     
-
     # define the conditions of the environment
     conditions = {
       'discreteStates':False,
@@ -49,7 +48,12 @@ class Maze(Environment):
     E = (0, 1)
     W = (0, -1)
     
-    allActions = [N, E, S, W]        
+    allActions = [N, E, S, W] 
+    
+    # rewards
+    bangReward = 0.
+    finalReward = 1.
+    defaultReward = 0.      
     
     # stochasticity
     stochAction = 0.
@@ -70,6 +74,7 @@ class Maze(Environment):
         Environment.reset(self)
         self.bang = False
         self.perseus = choice(self.initPos)
+        self.state = self._lookAround()
             
     def _freePos(self):
         """ produce a list of the free positions. """
@@ -83,12 +88,25 @@ class Maze(Environment):
     def _moveInDir(self, pos, dir):
         """ the new state after the movement in one direction. """
         return (pos[0] + dir[0], pos[1] + dir[1])
-    
+
+
+    def _lookAround(self):
+        """ returns the surroundings of perseus, whether there are walls or not. """
+        obs = zeros(4)
+        for i, a in enumerate(Maze.allActions):            
+            obs[i] = self.mazeTable[self._moveInDir(self.perseus, a)]
+        if self.stochObs > 0:    
+            for i in range(len(obs)):
+                if random() < self.stochObs:
+                    obs[i] = not obs[i]
+        return obs
+                
     def episodeFinished(self):
         """ return True if the agent has reached the goal. """
         return self.perseus == self.goal
         
     def _update(self):
+        self.action = int(self.action[0])
         if self.stochAction > 0:
             if random() < self.stochAction:
                 self.action = choice(range(len(self.allActions)))
@@ -98,19 +116,15 @@ class Maze(Environment):
             self.bang = False
         else:
             self.bang = True
-    
-    def getState(self):
-        Environment.getState(self)
         
-        obs = zeros(4)
-        for i, a in enumerate(Maze.allActions):            
-            obs[i] = self.mazeTable[self._moveInDir(self.perseus, a)]
-        if self.stochObs > 0:    
-            for i in range(len(obs)):
-                if random() < self.stochObs:
-                    obs[i] = not obs[i]
-
-        return obs
+        if self.perseus == self.goal:
+            self.reward = self.finalReward
+        elif self.bang:
+            self.reward = self.bangReward
+        else:
+            self.reward = self.defaultReward
+                
+        self.state = self._lookAround()
             
     def __str__(self):
         """ Ascii representation of the maze, with the current state """

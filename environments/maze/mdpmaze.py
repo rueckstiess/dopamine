@@ -30,20 +30,22 @@ class MDPMaze(Maze):
     
     def __init__(self):
         Maze.__init__(self, self.matrix, self.goal)
-        
     
-    def getState(self):
-        Maze.getState(self)
+    
+    def reset(self):
+        Maze.reset(self)
         self.state = array([self.perseus[0] * self.mazeTable.shape[0] + self.perseus[1]])
-        return self.state
-    
     
     def _update(self):
-        self.action = int(self.action[0])
         Maze._update(self)
                 
+        # set reward       
         if self.goal == self.perseus:
             self.reward = 1.
-            self.reset()
+            # self.reset()
         else:
             self.reward = 0
+    
+        # set state
+        self.state = array([self.perseus[0] * self.mazeTable.shape[0] + self.perseus[1]])
+        
