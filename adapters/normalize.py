@@ -13,6 +13,8 @@ class NormalizingAdapter(Adapter):
     # define the conditions of the environment
     outConditions = {}    
     
+    requirePretraining = 100
+    
     def __init__(self, scaleActions=False, normalizeRewards=False):
         Adapter.__init__(self)
         

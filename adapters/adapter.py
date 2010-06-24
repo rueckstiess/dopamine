@@ -6,6 +6,10 @@ class Adapter(object):
     # define the conditions of the environment
     outConditions = {}
     
+    # overwrite this value in any subclasses of adapter if your adapter
+    # requires some pretraining.
+    requirePretraining = 0
+    
     def __init__(self):
         self.experiment = None
         

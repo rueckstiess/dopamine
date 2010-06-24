@@ -9,7 +9,9 @@ class VQDiscretizationAdapter(Adapter):
         quantization. numStateVectors gives the number of vectors used to 
         discretize. A value of 0 disables discretization.
     """
-        
+      
+    requirePretraining = 100
+      
     def __init__(self, numStateVectors):
         self.numStateVectors = numStateVectors
         

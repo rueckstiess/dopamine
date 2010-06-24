@@ -20,11 +20,13 @@ class Experiment(object):
     def _flattenConditions(self):
         """ flattens the environment and adapters conditions to one conditions dictionary. """
         conditions = dict([(k,v) for k,v in self.environment.conditions.items()])
+        conditions['requirePretraining'] = 0
         
         for a in self.adapters_:
+            conditions['requirePretraining'] = max(conditions['requirePretraining'], a.requirePretraining)
             for k,v in a.outConditions.items():
                 conditions[k] = v
-                
+    
         return conditions
     
     @property
@@ -50,7 +52,7 @@ class Experiment(object):
             
             if conditions[c] != v:
                 # condition could be found but does not match
-                raise ExperimentException('condition "%s" is not compatible to previous environment/adapter. Value must be %s'%(c, conditions[c]))
+                raise ExperimentException('%s requires condition "%s" to be %s. Not compatible to environment/adapter stack with value %s.'%(adapter.__class__.__name__, c, v, conditions[c]))
         
         # every condition matches, set experiment and add to adapter stack
         adapter.setExperiment(self)
@@ -58,6 +60,17 @@ class Experiment(object):
         
         # conditions have changed, new agent setup is necessary
         self.setupComplete_ = False
+    
+    
+    def _performSetup(self):
+        """ provides the agents with the flattened conditions. Also executes
+            any necessary pretraining runs beforehand, if needed by any of the
+            adapters.
+        """
+        self.agent._setup(self.conditions)
+        self.setupComplete_ = True
+        if self.conditions['requirePretraining'] > 0:
+            self.evaluateEpisodes(self.conditions['requirePretraining'], reset=True, exploration=True, visualize=False)
     
     
     def interact(self):
@@ -69,8 +82,7 @@ class Experiment(object):
             adapters to the agent.
         """
         if not self.setupComplete_:
-            self.agent._setup(self.conditions)
-            self.setupComplete_ = True
+            self._performSetup()
             
         state = self.environment.getState()
         for adapter in self.adapters_:
@@ -119,13 +131,14 @@ class Experiment(object):
         for i in range(count):
             self.runEpisode(reset)
     
-    def evaluateEpisodes(self, count, reset=True, visualize=True):
+    def evaluateEpisodes(self, count, reset=True, exploration=False, visualize=True):
         # disable all explorers and store them for later
-        explorers = []
-        for a in self.adapters_:
-            if isinstance(a, Explorer):
-                explorers.append(a)
-                a.active = False
+        if not exploration:
+            explorers = []
+            for a in self.adapters_:
+                if isinstance(a, Explorer):
+                    explorers.append(a)
+                    a.active = False
             
         # run experiment for evaluation and store history
         self.runEpisodes(count, reset)
@@ -137,9 +150,10 @@ class Experiment(object):
         # remove the evaluation histories from the agent
         self.agent.history.episodes_ = self.agent.history.episodes_[:-(count+1)] + [self.agent.history.episodes_[-1]]
         
-        # enable exploration again
-        for a in explorers:
-            a.active = True
+        # enable exploration again if disabled before
+        if not exploration:
+            for a in explorers:
+                a.active = True
         
         if visualize:
             plt.ion()
