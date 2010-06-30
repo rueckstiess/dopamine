@@ -15,9 +15,9 @@ class BASAgent(Agent):
         """ initialize the agent with the estimatorClass. """
         Agent.__init__(self)
         
-        self.amin = -1.
-        self.amax = 1.
-        self.nres = 3
+        self.amin = -50.
+        self.amax = 50.
+        self.nres = 1
         
         # store (decision,action) tuples for one action in the list
         self.decisions = []
@@ -73,7 +73,7 @@ class BASAgent(Agent):
             decision = self.estimator.getBestAction(r_[self.state, a])
             
             # internal epsilon-greedy exploration
-            if random.random() < 0.5:
+            if random.random() < 0.1:
                 decision = array([random.randint(2**self.conditions['actionDim'])])
 
             # turn into binary list
@@ -96,7 +96,7 @@ class BASAgent(Agent):
     def learn(self):
         """ go through whole episode and make Q-value updates. """  
         for i in range(1):
-            print self.history
+            
             self.estimator._clear()
 
             for episode in self.history:
