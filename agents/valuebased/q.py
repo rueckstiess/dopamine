@@ -5,7 +5,7 @@ from dopamine.agents.valuebased import TableEstimator
 class QAgent(Agent):
     
     alpha = 0.5
-    gamma = 0.9
+    gamma = 0.5
     
     def _setup(self, conditions):
         """ if agent is discrete in states and actions create Q-Table. """
