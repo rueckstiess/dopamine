@@ -9,7 +9,7 @@ class FiniteDifferenceAgent(DirectAgent):
         self.deltas = None
         self.alpha = 0.01
         self.epsilon = 1.0
-        self.decay = 0.9999
+        self.decay = 0.9995
         
         self.deltaList = []
         self._evaluation = False
@@ -36,12 +36,12 @@ class FiniteDifferenceAgent(DirectAgent):
         self.controller.parameters = self.storedParameters
         
         # initialize matrix D and vector R
-        D = ones((len(self.deltaList), len(self.controller.parameters)+1))
+        D = ones((len(self.deltaList), len(self.controller.parameters)))
         R = zeros((len(self.deltaList), 1))
         
         # calculate the gradient with pseudo inverse
         for episode, deltas in enumerate(self.deltaList):
-            D[episode, :] = c_[deltas.reshape(1, len(deltas)), array([[1]])]
+            D[episode, :] = deltas.reshape(1, len(deltas))
             R[episode, :] = sum(self.history[episode].rewards)
                              
         beta = dot(pinv(D), R)        
@@ -49,7 +49,7 @@ class FiniteDifferenceAgent(DirectAgent):
         print "gradient", gradient
         
         # update the parameters
-        self.controller.parameters += self.alpha * gradient[:-1]     
+        self.controller.parameters += self.alpha * gradient   
         self.storedParameters = copy(self.controller.parameters)
         print "parameters", self.storedParameters
         print "epsilon", self.epsilon

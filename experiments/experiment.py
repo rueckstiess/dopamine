@@ -2,6 +2,7 @@ from dopamine.adapters.explorers.explorer import Explorer
 from dopamine.tools.history import History
 from matplotlib import pyplot as plt
 from numpy import mean
+import sys
 
 class ExperimentException(Exception):
     pass
@@ -69,9 +70,14 @@ class Experiment(object):
         """
         self.agent._setup(self.conditions)
         self.setupComplete_ = True
+        
+        # some adapters require pretraining. check if this is the case here.
         if self.conditions['requirePretraining'] > 0:
+            print "pre-training...",
+            sys.stdout.flush()
             self.evaluateEpisodes(self.conditions['requirePretraining'], reset=True, exploration=True, visualize=False)
-    
+            print "done."
+        self.agent.forget()
     
     def interact(self):
         """ run one interaction between agent and environment. The state from
@@ -134,6 +140,7 @@ class Experiment(object):
     def evaluateEpisodes(self, count, reset=True, exploration=False, visualize=True):
         # disable all explorers and store them for later
         if not exploration:
+            self.agent.evaluation = True
             explorers = []
             for a in self.adapters_:
                 if isinstance(a, Explorer):
@@ -152,6 +159,7 @@ class Experiment(object):
         
         # enable exploration again if disabled before
         if not exploration:
+            self.agent.evaluation = False
             for a in explorers:
                 a.active = True
         
