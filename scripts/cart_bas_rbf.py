@@ -17,8 +17,8 @@ indexer = IndexingAdapter([0, 1], None)
 experiment.addAdapter(indexer)
 
 # add normalization adapter
-# normalizer = NormalizingAdapter(scaleActions=[(-50, 50)])
-# experiment.addAdapter(normalizer)
+normalizer = NormalizingAdapter(scaleActions=[(-50, 50)])
+experiment.addAdapter(normalizer)
 
 # # add e-greedy exploration
 # explorer = EpsilonGreedyExplorer(0.4, 1.0)

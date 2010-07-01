@@ -15,9 +15,9 @@ class BASAgent(Agent):
         """ initialize the agent with the estimatorClass. """
         Agent.__init__(self)
         
-        self.amin = -50.
-        self.amax = 50.
-        self.nres = 1
+        self.amin = -1.
+        self.amax = 1.
+        self.nres = 3
         
         # store (decision,action) tuples for one action in the list
         self.decisions = []
