@@ -21,6 +21,7 @@ class Suite(ExperimentSuite):
         
         # create agent, environment, renderer, experiment
         self.agent = BASAgent(estimatorClass=eval(params['estimator']))
+        self.agent.nres = params['recursiondepth']
         self.environment = CartPoleEnvironment()
         self.experiment = Experiment(self.environment, self.agent)
 
