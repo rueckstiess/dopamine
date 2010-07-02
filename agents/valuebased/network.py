@@ -1,3 +1,6 @@
+# this class uses the PyBrain library, which can be
+# found under http://www.pybrain.org.
+
 from numpy import *
 from dopamine.tools.utilities import one_to_n
 from dopamine.agents.valuebased.estimator import Estimator
