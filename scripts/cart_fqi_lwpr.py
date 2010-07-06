@@ -23,21 +23,19 @@ normalizer = NormalizingAdapter()
 experiment.addAdapter(normalizer)
 
 # add e-greedy exploration
-explorer = EpsilonGreedyExplorer(0.4, 1.0)
+explorer = EpsilonGreedyExplorer(0.3, 1.0)
 experiment.addAdapter(explorer)
 
-experiment.runEpisodes(10)
-agent.forget()
-
-explorer.decay = 0.999
+explorer.decay = 0.99999
 # renderer = CartPoleRenderer()
 # environment.renderer = renderer
 # renderer.start()
 
 # run experiment
 for i in range(100):
-    experiment.runEpisodes(1)
+    experiment.runEpisodes(100)
     agent.learn()
+    # agent.forget()
 
     valdata = experiment.evaluateEpisodes(20, visualize=True)
     print "exploration", explorer.epsilon
