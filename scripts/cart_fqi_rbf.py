@@ -10,6 +10,7 @@ from numpy import *
 # create agent, environment, renderer, experiment
 agent = FQIAgent(estimatorClass=RBFEstimator)
 environment = DiscreteCartPoleEnvironment()
+environment.conditions['actionNum'] = 5
 experiment = Experiment(environment, agent)
 
 # cut off last two state dimensions
@@ -21,13 +22,9 @@ normalizer = NormalizingAdapter()
 experiment.addAdapter(normalizer)
 
 # add e-greedy exploration
-explorer = EpsilonGreedyExplorer(0.4, 1.0)
+explorer = EpsilonGreedyExplorer(0.4, 0.9995)
 experiment.addAdapter(explorer)
 
-experiment.runEpisodes(10)
-agent.forget()
-
-explorer.decay = 0.999
 # renderer = CartPoleRenderer()
 # environment.renderer = renderer
 # renderer.start()
