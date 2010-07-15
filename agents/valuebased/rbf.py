@@ -45,6 +45,9 @@ class RBFEstimator(Estimator):
                 
     def _train(self):
         """ train individual models for each actions seperately. """
+        if len(self.targets) == 0:
+            return
+            
         # avoiding the value drift by substracting the minimum of the training set
         self.targets = (self.targets - min(self.targets))
         

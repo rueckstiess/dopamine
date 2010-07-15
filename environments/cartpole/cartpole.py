@@ -128,9 +128,11 @@ class DiscreteCartPoleEnvironment(CartPoleEnvironment):
     }
     
     def performAction(self, action):
-        """ stores the desired action for the next runge-kutta step. Three discrete actions
-            are available, which are mapped to -50, 0, and +50 Newton.
+        """ stores the desired action for the next runge-kutta step. 
+            'actionNum' discrete actions are available, which are mapped 
+            to the discrete even-spaced interval of [-50, 50] Newton.
         """
-        action = array([(action[0] - 1) * 50.])
+        action = array([((2.0*action[0] / (float(self.conditions['actionNum'])-1.)) - 1.) * 50.])
+
         Environment.performAction(self, action)
     

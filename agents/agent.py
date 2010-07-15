@@ -25,6 +25,8 @@ class Agent(object):
         # enable or disable logging to dataset (for testing)
         self.loggingEnabled = True
         
+        # tell agent that evaluation takes place (no internal exploration)
+        self.evaluation = False
         
     def _setup(self, conditions):
         """ Tells the agent, if the environment is discrete or continuous and the
