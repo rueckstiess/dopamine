@@ -6,7 +6,7 @@ from dopamine.adapters import EpsilonGreedyExplorer, NormalizingAdapter, Indexin
 
 from matplotlib import pyplot as plt
 from numpy import *
-
+from mpl_toolkits.mplot3d import axes3d
 
 # create agent, environment, renderer, experiment
 agent = FQIAgent(estimatorClass=LWPREstimator)
@@ -23,23 +23,53 @@ normalizer = NormalizingAdapter()
 experiment.addAdapter(normalizer)
 
 # add e-greedy exploration
-explorer = EpsilonGreedyExplorer(0.3, 1.0)
+explorer = EpsilonGreedyExplorer(0.2, 0.99995)
 experiment.addAdapter(explorer)
 
-explorer.decay = 0.99999
 # renderer = CartPoleRenderer()
 # environment.renderer = renderer
 # renderer.start()
 
 # run experiment
-for i in range(100):
-    experiment.runEpisodes(100)
-    agent.learn()
-    # agent.forget()
 
+plt.ion()
+fig = plt.figure()
+ax = axes3d.Axes3D(fig)
+frame = None
+xgrid,ygrid = mgrid[-1:1:0.05, -12:12:0.5]
+
+for i in range(1000):
+    experiment.runEpisodes(1)
+    agent.learn()
+    # only keep the 10 most recent episodes
+    # agent.history.truncate(50, newest=True)
+
+    # agent.history.keepBest(10)
+    
     valdata = experiment.evaluateEpisodes(20, visualize=True)
     print "exploration", explorer.epsilon
     print "mean return", mean([sum(v.rewards) for v in valdata])
     print "num episodes", len(agent.history)
-    # print "num total samples", agent.history.numTotalSamples()
+    print "num total samples", agent.history.numTotalSamples()
+    
+        
+    # # model 1
+    # zgrid1 = zeros(len(xgrid.flatten()))
+    # for i, (x, y) in enumerate(zip(xgrid.flatten(), ygrid.flatten())):
+    #     zgrid1[i] = agent.estimator.models[0].predict(array([x, y]))
+    # 
+    # # model 2
+    # zgrid2 = zeros(len(xgrid.flatten()))
+    # for i, (x, y) in enumerate(zip(xgrid.flatten(), ygrid.flatten())):
+    #     zgrid2[i] = agent.estimator.models[1].predict(array([x, y]))
+    # 
+    # if frame:
+    #     ax.collections.remove(frame)
+    # 
+    # frame = ax.plot_wireframe(xgrid, ygrid, zgrid1.reshape(xgrid.shape) - zgrid2.reshape(xgrid.shape))
+    # 
+    # 
+    # plt.draw()
+
+plt.show()
 

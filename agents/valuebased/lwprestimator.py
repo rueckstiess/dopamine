@@ -8,7 +8,7 @@ from dopamine.agents.valuebased.estimator import Estimator
 class LWPREstimator(Estimator):
     
     conditions = {'discreteStates':False, 'discreteActions':True}
-    trainable = True
+    trainable = False
     
     def __init__(self, stateDim, actionNum):
         """ initialize with the state dimension and number of actions. """
@@ -16,10 +16,7 @@ class LWPREstimator(Estimator):
         self.actionNum = actionNum
         
         # initialize all RBF models, one for each action
-        self.models = [LWPR(stateDim, 1) for i in range(actionNum)]
-        for m in self.models:
-            m.init_D = 50*eye(stateDim)
-            m.init_alpha = 250*ones([stateDim,stateDim])
+        self._clear()
 
     def getBestAction(self, state):
         """ returns the action with maximal value in the given state. """
@@ -40,11 +37,12 @@ class LWPREstimator(Estimator):
 
     def _clear(self):
         """ clear collected training set. """
-        # initialize all RBF models, one for each action
+        # initialize all models, one for each action
         self.models = [LWPR(self.stateDim, 1) for i in range(self.actionNum)]        
         for m in self.models:
-            m.init_D = 50*eye(self.stateDim)
+            m.init_D = 100*eye(self.stateDim)
             m.init_alpha = 250*ones([self.stateDim, self.stateDim])
+            m.meta = True
     
     # def _train(self):
     #     """ train individual models for each actions seperately. """
