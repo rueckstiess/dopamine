@@ -43,6 +43,20 @@ class History(object):
             self.episodes_ = self.episodes_[-n:]
         else:
             self.episodes_ = self.episodes_[:n]
+            
+    def keepBest(self, n):
+        """ selects the best n episodes (with highest sum of rewards) and
+            discards the others.
+        """        
+        returns = [sum(e.rewards) for e in self.episodes]
+        decorated = [(r, i) for i,r in enumerate(returns)]
+        decorated.sort(reverse=True)
+        
+        new_episodes = [self.episodes[i] for r,i in decorated[:n]]
+        self.episodes_ = new_episodes
+
+        self.newEpisode()
+        
     
     @property
     def episodes(self):
