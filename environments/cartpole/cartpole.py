@@ -123,7 +123,7 @@ class DiscreteCartPoleEnvironment(CartPoleEnvironment):
       'stateNum':inf,
       'discreteActions':True,
       'actionDim':1,
-      'actionNum':3, 
+      'actionNum':2, 
       'episodic':True
     }
     
