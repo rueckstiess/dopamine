@@ -34,6 +34,16 @@ class History(object):
     def numTotalSamples(self):
         return sum([len(e) for e in self.episodes])
     
+    def truncate(self, n, newest=True):
+        """ truncates the history to leave only n episodes. if newest is set
+            to True (default), the n most recent episodes are kept, else the n
+            oldest episodes are kept. 
+        """
+        if newest:
+            self.episodes_ = self.episodes_[-n:]
+        else:
+            self.episodes_ = self.episodes_[:n]
+    
     @property
     def episodes(self):
         """ if the last episode is empty, do not consider it. """
