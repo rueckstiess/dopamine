@@ -1,6 +1,6 @@
 from dopamine.environments import DiscreteCartPoleEnvironment, CartPoleRenderer
 from dopamine.agents import FQIAgent, RBFEstimator
-from dopamine.agents.valuebased.lwprestimator import LWPREstimator
+from dopamine.agents import LWPREstimator
 from dopamine.experiments import Experiment
 from dopamine.adapters import EpsilonGreedyExplorer, NormalizingAdapter, IndexingAdapter
 
