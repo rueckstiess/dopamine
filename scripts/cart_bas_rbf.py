@@ -1,5 +1,5 @@
 from dopamine.environments import CartPoleEnvironment, CartPoleRenderer
-from dopamine.agents import BASAgent, RBFEstimator, NetworkEstimator
+from dopamine.agents import BASAgent, RBFEstimator, NNEstimator
 from dopamine.experiments import Experiment
 from dopamine.adapters import EpsilonGreedyExplorer, NormalizingAdapter, IndexingAdapter
 
@@ -8,7 +8,7 @@ from numpy import *
 
 
 # create agent, environment, renderer, experiment
-agent = BASAgent(estimatorClass=NetworkEstimator)
+agent = BASAgent(estimatorClass=NNEstimator)
 environment = CartPoleEnvironment()
 experiment = Experiment(environment, agent)
 

@@ -1,7 +1,7 @@
 from expsuite import ExperimentSuite
 
 from dopamine.environments import CartPoleEnvironment
-from dopamine.agents import FQIAgent, BASAgent, NetworkEstimator, RBFEstimator
+from dopamine.agents import FQIAgent, BASAgent, NNEstimator, RBFEstimator
 from dopamine.experiments import Experiment
 from dopamine.adapters import EpsilonGreedyExplorer, NormalizingAdapter, IndexingAdapter
 
