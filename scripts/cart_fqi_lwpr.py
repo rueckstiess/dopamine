@@ -10,20 +10,22 @@ from mpl_toolkits.mplot3d import axes3d
 
 # create agent, environment, renderer, experiment
 agent = FQIAgent(estimatorClass=LWPREstimator)
+agent.iterations = 20
+
 environment = DiscreteCartPoleEnvironment()
 environment.centerCart = False
 experiment = Experiment(environment, agent)
 
 # cut off last two state dimensions
-indexer = IndexingAdapter([0, 1], None)
-experiment.addAdapter(indexer)
+# indexer = IndexingAdapter([0, 1], None)
+# experiment.addAdapter(indexer)
 
 # add normalization adapter
 normalizer = NormalizingAdapter()
 experiment.addAdapter(normalizer)
 
 # add e-greedy exploration
-explorer = EpsilonGreedyExplorer(0.2, 0.99995)
+explorer = EpsilonGreedyExplorer(0.3, 0.99995)
 experiment.addAdapter(explorer)
 
 # renderer = CartPoleRenderer()
@@ -44,7 +46,7 @@ for i in range(1000):
     # only keep the 10 most recent episodes
     # agent.history.truncate(50, newest=True)
 
-    # agent.history.keepBest(10)
+    # agent.forget()
     
     valdata = experiment.evaluateEpisodes(20, visualize=True)
     print "exploration", explorer.epsilon

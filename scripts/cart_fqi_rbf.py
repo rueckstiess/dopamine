@@ -10,12 +10,12 @@ from numpy import *
 # create agent, environment, renderer, experiment
 agent = FQIAgent(estimatorClass=RBFEstimator)
 environment = DiscreteCartPoleEnvironment()
-environment.conditions['actionNum'] = 5
+environment.conditions['actionNum'] = 2
 experiment = Experiment(environment, agent)
 
 # cut off last two state dimensions
-indexer = IndexingAdapter([0, 1], None)
-experiment.addAdapter(indexer)
+# indexer = IndexingAdapter([0, 1], None)
+# experiment.addAdapter(indexer)
 
 # add normalization adapter
 normalizer = NormalizingAdapter()
@@ -38,5 +38,5 @@ for i in range(100):
     print "exploration", explorer.epsilon
     print "mean return", mean([sum(v.rewards) for v in valdata])
     print "num episodes", len(agent.history)
-    # print "num total samples", agent.history.numTotalSamples()
+    print "num total samples", agent.history.numTotalSamples()
 

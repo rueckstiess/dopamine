@@ -10,6 +10,7 @@ class FQIAgent(Agent):
     
     alpha = 0.5
     gamma = 0.9
+    iterations = 1
     
     def __init__(self, estimatorClass=NetworkEstimator):
         """ initialize the agent with the estimatorClass. """
@@ -29,22 +30,23 @@ class FQIAgent(Agent):
     
     def learn(self):
         """ go through whole episode and make Q-value updates. """  
-        for i in range(1):
-              
-            # if self.estimator.trainable:
-            #     self.estimator._clear()
+        for i in range(self.iterations):
+        
+            if self.estimator.trainable:
+                self.estimator._clear()
 
             for episode in self.history:
                 for state, action, reward, nextstate in episode:
                     # don't consider last state
                     if equal(state, nextstate).all():
                         break
+                    
                     qvalue = self.estimator.getValue(state, action)
                     bestnext = self.estimator.getValue(nextstate, self.estimator.getBestAction(nextstate))
                     target = (1-self.alpha) * qvalue + self.alpha * (reward + self.gamma * bestnext)
 
                     self.estimator.updateValue(state, action, target)
         
-            # if self.estimator.trainable:
-            #     self.estimator._train()
+            if self.estimator.trainable:
+                self.estimator._train()
 

@@ -40,7 +40,7 @@ class LWPREstimator(Estimator):
         # initialize all models, one for each action
         self.models = [LWPR(self.stateDim, 1) for i in range(self.actionNum)]        
         for m in self.models:
-            m.init_D = 100*eye(self.stateDim)
+            m.init_D = 50*eye(self.stateDim)
             m.init_alpha = 250*ones([self.stateDim, self.stateDim])
             m.meta = True
     
