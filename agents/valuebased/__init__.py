@@ -1,5 +1,5 @@
 from table import TableEstimator
-from network import NetworkEstimator
+from network import NNEstimator
 from rbf import RBFEstimator
 
 # discrete agents

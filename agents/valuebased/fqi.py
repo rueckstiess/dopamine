@@ -11,7 +11,7 @@ class FQIAgent(Agent):
     alpha = 0.5
     gamma = 0.9
     
-    def __init__(self, estimatorClass=NetworkEstimator):
+    def __init__(self, estimatorClass=NNEstimator):
         """ initialize the agent with the estimatorClass. """
         Agent.__init__(self)
         self.estimatorClass = estimatorClass

@@ -6,7 +6,7 @@ from pybrain.tools.shortcuts import buildNetwork
 from pybrain.datasets import SupervisedDataSet
 from pybrain.supervised.trainers.rprop import RPropMinusTrainer, BackpropTrainer
 
-class NetworkEstimator(Estimator):
+class NNEstimator(Estimator):
 
     conditions = {'discreteStates':False, 'discreteActions':True}
     trainable = True
