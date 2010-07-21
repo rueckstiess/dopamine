@@ -1,5 +1,5 @@
 from dopamine.environments import DiscreteCartPoleEnvironment, CartPoleRenderer
-from dopamine.agents import FQIAgent, RBFEstimator
+from dopamine.agents import FQIAgent, RBFEstimator, RBFOnlineEstimator, LWPREstimator
 from dopamine.experiments import Experiment
 from dopamine.adapters import EpsilonGreedyExplorer, NormalizingAdapter, IndexingAdapter
 
@@ -9,6 +9,7 @@ from numpy import *
 
 # create agent, environment, renderer, experiment
 agent = FQIAgent(estimatorClass=RBFEstimator)
+agent.iterations = 1
 environment = DiscreteCartPoleEnvironment()
 environment.conditions['actionNum'] = 2
 experiment = Experiment(environment, agent)
@@ -22,21 +23,22 @@ normalizer = NormalizingAdapter()
 experiment.addAdapter(normalizer)
 
 # add e-greedy exploration
-explorer = EpsilonGreedyExplorer(0.4, 0.9995)
+explorer = EpsilonGreedyExplorer(0.3, 0.9995)
 experiment.addAdapter(explorer)
 
 # renderer = CartPoleRenderer()
 # environment.renderer = renderer
 # renderer.start()
-
+    
 # run experiment
-for i in range(100):
+for i in range(1000):
     experiment.runEpisodes(1)
     agent.learn()
-
+    agent.history.truncate(10)
+    
     valdata = experiment.evaluateEpisodes(20, visualize=True)
+    mean_return = mean([sum(v.rewards) for v in valdata])
     print "exploration", explorer.epsilon
-    print "mean return", mean([sum(v.rewards) for v in valdata])
+    print "mean return", mean_return
     print "num episodes", len(agent.history)
     print "num total samples", agent.history.numTotalSamples()
-
