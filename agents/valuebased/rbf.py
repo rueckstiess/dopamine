@@ -57,3 +57,24 @@ class RBFEstimator(Estimator):
                 self.models[a].train_ml(self.inputs[idx,:], self.targets[idx,0])
      
 
+class RBFOnlineEstimator(RBFEstimator):
+
+    conditions = {'discreteStates':False, 'discreteActions':True}
+    trainable = False
+    
+    def __init__(self, stateDim, actionNum):
+        """ initialize with the state dimension and number of actions. """
+        self.stateDim = stateDim
+        self.actionNum = actionNum
+        
+        self.minimum = inf
+        
+        # initialize all RBF models, one for each action
+        self.models = [RBF(stateDim, 20, 1) for i in range(actionNum)]
+        
+    def updateValue(self, state, action, value):
+        self.minimum = min(self.minimum, value)
+        value -= self.minimum
+        
+        self.models[action.item()].add_sample_map(state.reshape(1, self.stateDim), asarray(value).reshape(1, 1))
+        
