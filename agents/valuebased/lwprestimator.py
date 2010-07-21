@@ -4,17 +4,62 @@
 from lwpr import LWPR
 from numpy import *
 from dopamine.agents.valuebased.estimator import Estimator
+from dopamine.tools.utilities import one_to_n
+
 
 class LWPREstimator(Estimator):
-    
+
     conditions = {'discreteStates':False, 'discreteActions':True}
     trainable = False
-    
+
     def __init__(self, stateDim, actionNum):
         """ initialize with the state dimension and number of actions. """
         self.stateDim = stateDim
         self.actionNum = actionNum
+
+        # initialize the LWPR function
+        self.lwpr = LWPR(self.stateDim + self.actionNum, 1)     
+        self.lwpr.init_D = 50*eye(self.stateDim + self.actionNum)
+        self.lwpr.init_alpha = 250*ones([self.stateDim + self.actionNum, self.stateDim + self.actionNum])
+        self.lwpr.meta = True
         
+        self.minimum = inf
+
+
+    def getBestAction(self, state):
+        """ returns the action with maximal value in the given state. """
+        state = state.flatten()
+        return array([argmax([self.getValue(state, array([a])) for a in range(self.actionNum)])])
+
+    def getValue(self, state, action):
+        """ returns the value of the given (state,action) pair. """
+        state = state.flatten()
+        action = action.flatten()
+        return self.lwpr.predict(r_[state, one_to_n(action[0], self.actionNum)])
+
+    def updateValue(self, state, action, value):
+        self.minimum = min(self.minimum, value)
+        # value -= self.minimum
+        
+        state = state.flatten()
+        action = action.flatten()
+        self.lwpr.update(r_[state, one_to_n(action, self.actionNum)], array(value).flatten())
+
+
+
+class LWPREstimators(Estimator):
+    """ This alternative uses several models (one for each action) to 
+        predict the values.
+    """
+
+    conditions = {'discreteStates':False, 'discreteActions':True}
+    trainable = False
+
+    def __init__(self, stateDim, actionNum):
+        """ initialize with the state dimension and number of actions. """
+        self.stateDim = stateDim
+        self.actionNum = actionNum
+
         # initialize all RBF models, one for each action
         self._clear()
 
@@ -43,7 +88,10 @@ class LWPREstimator(Estimator):
             m.init_D = 50*eye(self.stateDim)
             m.init_alpha = 250*ones([self.stateDim, self.stateDim])
             m.meta = True
-    
+
+
+
+
     # def _train(self):
     #     """ train individual models for each actions seperately. """
     #     # avoiding the value drift by substracting the minimum of the training set
