@@ -10,7 +10,7 @@ class BoltzmannExplorer(Explorer):
     outConditions = {}
     
     def __init__(self, tau, decay=0.999):
-        """ set the probability epsilon, with which a random action is chosen. """
+        """ set the probability tau, with which a random action is chosen. """
         Explorer.__init__(self)
         
         self.tau = tau
@@ -22,8 +22,7 @@ class BoltzmannExplorer(Explorer):
         return state
     
     def _explore(self, action):
-        """ draw random number r uniformly in [0,1]. if r < epsilon, make random move,
-            otherwise return action as is.
+        """ draw random move with probability proportional to the action's value.
         """
         pdf = [exp(self.experiment.agent.estimator.getValue(self.state, array([a]))/self.tau) for a in range(self.experiment.conditions['actionNum'])]
         pdf /= sum(pdf)
