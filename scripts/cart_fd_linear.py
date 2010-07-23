@@ -5,6 +5,7 @@ from dopamine.experiments import Experiment
 from numpy import *
 
 environment = CartPoleEnvironment()
+environment.centerCart = False
 agent = FiniteDifferenceAgent()
 experiment = Experiment(environment, agent)
 
