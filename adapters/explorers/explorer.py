@@ -18,6 +18,7 @@ class Explorer(Adapter):
         """ apply transformations to action and return it. """
         if self.active:
             action = self._explore(action)
+            # tell agent the action that was executed (for the history)
             self.experiment.agent.action = action
         
         return action
