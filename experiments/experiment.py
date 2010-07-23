@@ -77,7 +77,7 @@ class Experiment(object):
             sys.stdout.flush()
             self.evaluateEpisodes(self.conditions['requirePretraining'], reset=True, exploration=True, visualize=False)
             print "done."
-        self.agent.forget()
+        # self.agent.forget()
     
     def interact(self):
         """ run one interaction between agent and environment. The state from
@@ -138,9 +138,11 @@ class Experiment(object):
             self.runEpisode(reset)
     
     def evaluateEpisodes(self, count, reset=True, exploration=False, visualize=True):
-        # disable all explorers and store them for later
+        # tell agent that evaluation is taking place
+        self.agent.evaluation = True
+        
+        # disable all explorers and store them for later        
         if not exploration:
-            self.agent.evaluation = True
             explorers = []
             for a in self.adapters_:
                 if isinstance(a, Explorer):
@@ -159,10 +161,12 @@ class Experiment(object):
         
         # enable exploration again if disabled before
         if not exploration:
-            self.agent.evaluation = False
             for a in explorers:
                 a.active = True
         
+        # tell agent that evaluation is over
+        self.agent.evaluation = False
+
         if visualize:
             plt.ion()
             plt.clf()
