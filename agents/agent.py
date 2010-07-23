@@ -28,6 +28,10 @@ class Agent(object):
         # tell agent that evaluation takes place (no internal exploration)
         self.evaluation = False
         
+        # agent can access the (last added) explorer, if available
+        self.explorer = None
+        
+        
     def _setup(self, conditions):
         """ Tells the agent, if the environment is discrete or continuous and the
             number/dimensionalty of states and actions. This function is called

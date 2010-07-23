@@ -55,7 +55,7 @@ class Experiment(object):
                 # condition could be found but does not match
                 raise ExperimentException('%s requires condition "%s" to be %s. Not compatible to environment/adapter stack with value %s.'%(adapter.__class__.__name__, c, v, conditions[c]))
         
-        # every condition matches, set experiment and add to adapter stack
+        # every condition matches, set experiment and add to adapter list
         adapter.setExperiment(self)
         self.adapters_.append(adapter)
         
@@ -69,6 +69,13 @@ class Experiment(object):
             adapters.
         """
         self.agent._setup(self.conditions)
+        
+        # tell agent the last added adapter, if available
+        for a in reversed(self.adapters):
+            if isinstance(a, Explorer):
+                self.agent.explorer = a
+                break
+        
         self.setupComplete_ = True
         
         # some adapters require pretraining. check if this is the case here.
@@ -77,7 +84,7 @@ class Experiment(object):
             sys.stdout.flush()
             self.evaluateEpisodes(self.conditions['requirePretraining'], reset=True, exploration=True, visualize=False)
             print "done."
-        # self.agent.forget()
+            
     
     def interact(self):
         """ run one interaction between agent and environment. The state from
