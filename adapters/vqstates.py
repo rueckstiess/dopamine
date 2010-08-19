@@ -9,7 +9,7 @@ class VQDiscretizationAdapter(Adapter):
         quantization. numStateVectors gives the number of vectors used to 
         discretize. A value of 0 disables discretization.
     """
-      
+
     requirePretraining = 100
       
     def __init__(self, numStateVectors):
@@ -21,7 +21,8 @@ class VQDiscretizationAdapter(Adapter):
             self.outConditions['stateNum'] = numStateVectors
                     
         self.originalStateDim = None        
-        self.originalStates = []        
+        self.originalStates = []   
+        self.initialized = False     
         self.alpha = 0.1
         
         
@@ -48,8 +49,14 @@ class VQDiscretizationAdapter(Adapter):
         if not self.originalStateDim:
             self.originalStateDim = len(state.flatten())
             self.stateVectors = random.random((self.numStateVectors, self.originalStateDim))
+               
+        if not self.initialized and len(self.originalStates) >= self.requirePretraining:
+            self.sampleClusters()
+            self.adaptClusters()
+            self.initialized = True
         
-        state = self._findClosestCluster(self.stateVectors, state.reshape(1, self.originalStateDim))        
+        state = self._findClosestCluster(self.stateVectors, state.reshape(1, self.originalStateDim))      
+        
         return array([state])
 
     
