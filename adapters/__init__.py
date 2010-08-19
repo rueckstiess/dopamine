@@ -3,4 +3,5 @@ from explorers import EpsilonGreedyExplorer, BoltzmannExplorer, GaussianExplorer
 from episodic import MakeEpisodicAdapter
 from normalize import NormalizingAdapter
 from index import IndexingAdapter
-from vqdiscrete import VQDiscretizationAdapter
+from vqstates import VQStateDiscretizationAdapter
+from vqactions import VQActionDiscretizationAdapter

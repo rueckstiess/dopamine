@@ -4,7 +4,7 @@ from numpy import *
 from numpy.linalg import norm
 from matplotlib import pyplot as plt
 
-class VQDiscretizationAdapter(Adapter):
+class VQStateDiscretizationAdapter(Adapter):
     """ This adapter discretizes the state space by means of a k-mean vector 
         quantization. numStateVectors gives the number of vectors used to 
         discretize. A value of 0 disables discretization.

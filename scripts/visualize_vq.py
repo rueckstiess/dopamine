@@ -1,10 +1,10 @@
 from numpy import *
-from dopamine.adapters import VQDiscretizationAdapter
+from dopamine.adapters import VQStateDiscretizationAdapter
 from matplotlib import pyplot as plt
 
 plt.ion()
 
-vq = VQDiscretizationAdapter(50)
+vq = VQStateDiscretizationAdapter(50)
 
 states = random.normal([0, 3], [3, 1], (500, 2))
 states = r_[states, random.normal([-1, -2], [0.5, 2], (200, 2))]
