@@ -84,8 +84,16 @@ class Experiment(object):
             sys.stdout.flush()
             self.evaluateEpisodes(self.conditions['requirePretraining'], reset=True, exploration=True, visualize=False)
             print "done."
-            
+
+
+    def setup(self):
+        """ forces the execution of the setup including pretraining, which would 
+            normally be executed only when the first interaction is called. 
+        """
+        if not self.setupComplete_:
+            self._performSetup()
     
+            
     def interact(self):
         """ run one interaction between agent and environment. The state from
             the environment gets passed through all registered adapters before
