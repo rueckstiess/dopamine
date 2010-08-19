@@ -103,6 +103,20 @@ class Episode(object):
                 ns = self.states[i,:]
             yield(s, a, r, ns)
     
+    def randomizedSamples(self):
+        """ iterate over all samples in history (like __iter__) but
+            in random order. return state, action, reward and next state for each
+            iteration. the (originally) last sample returns state as next state. """
+        for i in random.permutation(xrange(self.length)):
+            s = self.states[i,:]
+            a = self.actions[i,:]
+            r = self.rewards[i]
+            if i+1 < self.length:
+                ns = self.states[i+1,:]
+            else:
+                ns = self.states[i,:]
+            yield(s, a, r, ns)
+    
     def __str__(self):
         """ string representation of episode. prints states, actions, rewards. """
         out = []
