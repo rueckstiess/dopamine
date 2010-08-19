@@ -19,7 +19,7 @@ class GaussianExplorer(Explorer):
     def _explore(self, action):
         """ add a random number, drawn from N(0, sigma^2), to each dimension
             of the continuous action vector. """
-        exploration = random.normal(0, sigma, size=action.shape)
+        exploration = random.normal(0, self.sigma, size=action.shape)
         action += exploration
 
         return action
