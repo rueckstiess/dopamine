@@ -7,7 +7,7 @@ from copy import copy
 class ReinforceAgent(DirectAgent):
  
     alpha = 10e-3
-    sigmadecay = 0.999
+    sigmadecay = 0.99
  
     def __init__(self, controllerClass=LinearController):
         DirectAgent.__init__(self, controllerClass)
@@ -28,7 +28,7 @@ class ReinforceAgent(DirectAgent):
         for episode in self.history:
             inner_loglh = []
             for s, a, r, ns in episode:
-                rl_error = array((a - self.controller.activate(s)) / self.explorer.sigma**2).reshape(1, self.conditions['actionDim'])
+                rl_error = array((a - self.controller.activate(s))).reshape(1, self.conditions['actionDim'])
                 inner_loglh.append(self.controller.paramsDerivative(s, rl_error))
             loglh.append(inner_loglh)
 
