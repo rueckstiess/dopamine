@@ -1,12 +1,12 @@
 from dopamine.environments import CartPoleEnvironment, CartPoleRenderer
-from dopamine.agents import ReinforceAgent, LinearController
+from dopamine.agents import ReinforceAgent, NNController
 from dopamine.adapters import IndexingAdapter, NormalizingAdapter, GaussianExplorer, StateDependentExplorer
 from dopamine.experiments import Experiment
 from numpy import *
 
 environment = CartPoleEnvironment(maxSteps=100)
 environment.centerCart = False
-agent = ReinforceAgent()
+agent = ReinforceAgent(controllerClass=NNController)
 experiment = Experiment(environment, agent)
 
 # cut off last two state dimensions
@@ -18,12 +18,13 @@ normalizer = NormalizingAdapter(scaleActions=[(-50, 50)])
 experiment.addAdapter(normalizer)
 
 # add gaussian explorer
-explorer = GaussianExplorer(sigma=0.2)
+# explorer = GaussianExplorer(sigma=0.2)
+explorer = StateDependentExplorer(sigma=0.2)
 experiment.addAdapter(explorer)
 
 # run experiment
 for i in range(5000):
-    experiment.runEpisodes(100)
+    experiment.runEpisodes(10)
     agent.learn()
     agent.forget()
 

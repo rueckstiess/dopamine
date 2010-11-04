@@ -70,7 +70,7 @@ class Experiment(object):
         """
         self.agent._setup(self.conditions)
         
-        # tell agent the last added adapter, if available
+        # tell agent the last added explorer, if available
         for a in reversed(self.adapters):
             if isinstance(a, Explorer):
                 self.agent.explorer = a

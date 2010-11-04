@@ -5,3 +5,4 @@ from boltzmann import BoltzmannExplorer
 
 # continuous exploration
 from gaussian import GaussianExplorer
+from sde import StateDependentExplorer
