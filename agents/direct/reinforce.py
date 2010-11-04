@@ -23,7 +23,7 @@ class ReinforceAgent(DirectAgent):
         # create the derivative of the log likelihoods for each timestep in each episode
         # loglh has the shape of lists (episodes) of lists (timesteps) of arrays of dimensions (s, a)
         loglh = [[dot(s.reshape(self.conditions['stateDim'], 1), 
-                     array((a - self.controller.activate(self.state)) / self.explorer.sigma**2).reshape(1, self.conditions['actionDim'])) for s, a, r, ns in episode] for episode in self.history]
+                     array((a - self.controller.activate(s)) / self.explorer.sigma**2).reshape(1, self.conditions['actionDim'])) for s, a, r, ns in episode] for episode in self.history]
         
         baseline = mean([sum(loglh[ie], axis=0)**2 * sum(e.rewards) for ie, e in enumerate(self.history)], axis=0) / mean([sum(loglh[ie], axis=0)**2 for ie, e in enumerate(self.history)], axis=0)
         gradient = mean([sum(loglh[ie], axis=0) * (sum(e.rewards) - baseline) for ie, e in enumerate(self.history)], axis=0)
