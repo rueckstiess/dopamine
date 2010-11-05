@@ -1,12 +1,12 @@
 from dopamine.environments import CartPoleEnvironment, CartPoleRenderer
-from dopamine.agents import ReinforceAgent, NNController
+from dopamine.agents import ReinforceAgent, NNController, RBFController, LinearController
 from dopamine.adapters import IndexingAdapter, NormalizingAdapter, GaussianExplorer, StateDependentExplorer
 from dopamine.experiments import Experiment
 from numpy import *
 
 environment = CartPoleEnvironment(maxSteps=100)
 environment.centerCart = False
-agent = ReinforceAgent(controllerClass=NNController)
+agent = ReinforceAgent(controllerClass=RBFController)
 experiment = Experiment(environment, agent)
 
 # cut off last two state dimensions
