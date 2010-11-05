@@ -47,13 +47,10 @@ class FiniteDifferenceAgent(DirectAgent):
                              
         beta = dot(pinv(D), R)        
         gradient = ravel(beta)
-        print "gradient", gradient
         
         # update the parameters
         self.controller.parameters += self.alpha * gradient   
         self.storedParameters = copy(self.controller.parameters)
-        print "parameters", self.storedParameters
-        print "epsilon", self.epsilon
 
     
     def forget(self):

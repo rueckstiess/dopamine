@@ -40,6 +40,15 @@ class Experiment(object):
         """ returns the list of adapters (read-only). """
         return self.adapters_
         
+    @property
+    def explorers(self):
+        """ return list of adapters, that are explorers (read-only). The
+            list is returned in reverse order, so that the bottom-most 
+            explorer (closest to the agent) is returned first. 
+        """
+        return [a for a in reversed(self.adapters) if isinstance(a, Explorer)]
+
+
     def addAdapter(self, adapter):
         """ add an adapter to the end of the adapter list if it is compatible. """
         # get the flattened conditions dictionary
@@ -62,20 +71,15 @@ class Experiment(object):
         # conditions have changed, new agent setup is necessary
         self.setupComplete_ = False
     
-    
+
     def _performSetup(self):
         """ provides the agents with the flattened conditions. Also executes
             any necessary pretraining runs beforehand, if needed by any of the
             adapters.
         """
         self.agent._setup(self.conditions)
-        
-        # tell agent the last added explorer, if available
-        for a in reversed(self.adapters):
-            if isinstance(a, Explorer):
-                self.agent.explorer = a
-                break
-        
+        self.agent.experiment = self
+                
         self.setupComplete_ = True
         
         # some adapters require pretraining. check if this is the case here.

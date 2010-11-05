@@ -28,8 +28,8 @@ class Agent(object):
         # tell agent that evaluation takes place (no internal exploration)
         self.evaluation = False
         
-        # agent can access the (last added) explorer, if available
-        self.explorer = None
+        # agent can access the experiment it is part of
+        self.experiment = None
         
         
     def _setup(self, conditions):

@@ -29,7 +29,7 @@ class DirectAgent(Agent):
         pass
             
     def _calculate(self):
-        """ this method needs to be overwritten by subclasses to return a non-zero action. """
+        """ calls the controller's activate and returns the result """
         self.action = self.controller.activate(self.state)
     
     
