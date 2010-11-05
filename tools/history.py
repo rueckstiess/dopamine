@@ -26,10 +26,20 @@ class History(object):
         self.episodes_[-1].append(state, action, reward)
     
     def appendEpisode(self, episode):
+        episode = self.episodes_[-1]
+        if len(episode) == 0:
+            self.episodes_ = self.episodes_[:-1]
         self.episodes_.append(episode)
+        if len(episode) == 0:
+            self.newEpisode()
         
     def extend(self, history):
+        episode = self.episodes_[-1]
+        if len(episode) == 0:
+            self.episodes_ = self.episodes_[:-1]
         self.episodes_.extend(history)
+        if len(episode) == 0:
+            self.newEpisode()
         
     def numTotalSamples(self):
         return sum([len(e) for e in self.episodes])

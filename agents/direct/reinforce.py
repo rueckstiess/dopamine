@@ -25,9 +25,9 @@ class ReinforceAgent(DirectAgent):
         gradient = mean([sum(loglh[ie], axis=0) * ((mean(e.rewards) - baseline)) for ie, e in enumerate(self.history)], axis=0)
         
         # update parameters of controller
-        print self.controller.parameters
+        # print self.controller.parameters
         self.controller.parameters = self.controller.parameters + self.alpha * gradient.flatten()
-        print self.controller.parameters
+        # print self.controller.parameters
         
         # decay exploration variance
         for explorer in self.experiment.explorers:

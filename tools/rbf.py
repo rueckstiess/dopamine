@@ -6,8 +6,8 @@ class RBF:
         self.indim = indim
         self.outdim = outdim
         self.numCenters = numCenters
-        self.centers = [random.uniform(0, 1, indim) for i in xrange(numCenters)]
-        self.beta = 10.
+        self.centers = [random.uniform(-1, 1, indim) for i in xrange(numCenters)]
+        self.beta = 8.
         self.W = random.random((self.numCenters, self.outdim))
 
         # parameters for maximum map

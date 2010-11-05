@@ -64,14 +64,13 @@ class CartPoleEnvironment(Environment):
         if self.renderer:
             self.renderer.updateData(self.sensors)
             time.sleep(0.05)
-        
                         
     def reset(self):
         """ re-initializes the environment, setting the cart back in a random position.
         """
         Environment.reset(self)
         angle = random.uniform(-0.2, 0.2)
-        pos = random.uniform(-0.5, 0.5)
+        pos = random.uniform(-1., 1.)
         self.sensors = (angle, 0.0, pos, 0.0)
         
     def episodeFinished(self):
@@ -91,8 +90,11 @@ class CartPoleEnvironment(Environment):
             reward = 0.
         elif angle > 0.7 or s > 2.4:
             reward = -2. * (self.maxSteps - self.timestep)
-        else: 
-            reward = -1.
+        else:
+            if self.centerCart:
+                reward = max(-1., -s)
+            else:
+                reward = -1.
         return reward
         
     def _derivs(self, x, t): 

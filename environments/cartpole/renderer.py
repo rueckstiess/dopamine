@@ -66,5 +66,5 @@ class CartPoleRenderer(Renderer):
             self.pole.set_xdata([self.pos, self.pos + self.polelength * sin(self.angle)])
             self.pole.set_ydata([0, self.polelength * cos(self.angle)])
             draw()
-            time.sleep(0.05)
+            time.sleep(0.01)
         self.stopRequest = False
