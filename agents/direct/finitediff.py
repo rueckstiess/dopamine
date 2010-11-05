@@ -10,7 +10,7 @@ class FiniteDifferenceAgent(DirectAgent):
         self.deltas = None
         self.alpha = 0.01
         self.epsilon = 0.1
-        self.decay = 0.999
+        self.decay = 0.99
         
         self.deltaList = []
         self._evaluation = False

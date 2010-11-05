@@ -20,7 +20,7 @@ class LinearController(Controller):
         """ setter method for parameters. """
         self.matrix = parameters.reshape(self.stateDim, self.actionDim)
     
-    def paramsDerivative(self, state, derivs):
+    def getDerivative(self, state, derivs):
         """ this function receive the derivatives of the actions with respect
             to the mean and needs to return the derivatives with respect to the 
             parameters. 

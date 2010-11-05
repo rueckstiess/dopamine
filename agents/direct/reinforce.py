@@ -6,7 +6,7 @@ from copy import copy
 
 class ReinforceAgent(DirectAgent):
  
-    alpha = 10e-3
+    alpha = 10e-1
     sigmadecay = 0.99
                               
     def learn(self):
@@ -18,16 +18,16 @@ class ReinforceAgent(DirectAgent):
             inner_loglh = []
             for s, a, r, ns in episode:
                 rl_error = array((a - self.controller.activate(s))).reshape(1, self.conditions['actionDim'])
-                inner_loglh.append(self.controller.paramsDerivative(s, rl_error))
+                inner_loglh.append(self.controller.getDerivative(s, rl_error))
             loglh.append(inner_loglh)
         
         baseline = mean([sum(loglh[ie], axis=0)**2 * mean(e.rewards) for ie, e in enumerate(self.history)], axis=0) / mean([sum(loglh[ie], axis=0)**2 for ie, e in enumerate(self.history)], axis=0)
         gradient = mean([sum(loglh[ie], axis=0) * ((mean(e.rewards) - baseline)) for ie, e in enumerate(self.history)], axis=0)
         
         # update parameters of controller
-        # print self.controller.parameters
+        print self.controller.parameters
         self.controller.parameters = self.controller.parameters + self.alpha * gradient.flatten()
-        # print self.controller.parameters
+        print self.controller.parameters
         
         # decay exploration variance
         for explorer in self.experiment.explorers:

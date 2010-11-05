@@ -1,5 +1,5 @@
 from dopamine.agents import Agent, AgentException
-from dopamine.agents.direct import *
+from dopamine.agents.direct.linear import LinearController
 
 from numpy import zeros, inf
 

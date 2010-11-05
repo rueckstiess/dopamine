@@ -15,7 +15,8 @@ class NNController(Controller):
         Controller.__init__(self, stateDim, actionDim)
         
         # create neural network and pybrain dataset
-        self.network = buildNetwork(stateDim, actionDim, bias=False)
+        nHidden = 2*stateDim
+        self.network = buildNetwork(stateDim, nHidden, actionDim, bias=False)
         self.dataset = SupervisedDataSet(stateDim, actionDim)
         self.randomize()
         
@@ -28,9 +29,8 @@ class NNController(Controller):
             network's activate() method.
         """
         return self.network.activate(state)
-    
 
-    def paramsDerivative(self, state, derivs):
+    def getDerivative(self, state, derivs):
         """ this function receive the derivatives of the actions with respect
             to the mean and needs to return the derivatives with respect to the 
             parameters. 
