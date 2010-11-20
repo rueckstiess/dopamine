@@ -27,8 +27,8 @@ class NNEstimator(Estimator):
         return array([argmax([self.getValue(state, array([a])) for a in range(self.actionNum)])])
 
     def getValue(self, state, action):
-        """ returns the value of the given (state,action) pair. """
-        return self.network.activate(r_[state, one_to_n(action[0], self.actionNum)])
+        """ returns the value of the given (state,action) pair as float. """
+        return self.network.activate(r_[state, one_to_n(action[0], self.actionNum)]).item()
 
     def updateValue(self, state, action, value):
         self.dataset.addSample(r_[state, one_to_n(action, self.actionNum)], value)
