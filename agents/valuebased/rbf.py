@@ -2,6 +2,8 @@ from numpy import *
 from dopamine.agents.valuebased.estimator import Estimator
 from dopamine.tools.rbf import RBF
 
+from matplotlib import pyplot as plt
+
 class RBFEstimator(Estimator):
 
     conditions = {'discreteStates':False, 'discreteActions':True}
@@ -13,7 +15,7 @@ class RBFEstimator(Estimator):
         self.actionNum = actionNum
         
         # define training and target array
-        self.inputs = zeros((0,stateDim))
+        self.inputs = zeros((0, stateDim))
         self.actions = zeros((0, 1))
         self.targets = zeros((0, 1))
         
@@ -27,7 +29,7 @@ class RBFEstimator(Estimator):
         return action
 
     def getValue(self, state, action):
-        """ returns the value of the given (state,action) pair. """
+        """ returns the value of the given (state,action) pair as float. """
         state = state.flatten()
         action = action.flatten()
         return self.models[int(action.item())].test(state.reshape(1, self.stateDim)).item()
@@ -50,7 +52,6 @@ class RBFEstimator(Estimator):
             
         # avoiding the value drift by substracting the minimum of the training set
         self.targets = (self.targets - min(self.targets))
-        
         for a in range(self.actionNum):
             idx = where(self.actions[:,0] == a)[0]
             if len(idx) > 0 and idx.any():
@@ -76,5 +77,5 @@ class RBFOnlineEstimator(RBFEstimator):
         self.minimum = min(self.minimum, value)
         value -= self.minimum
         
-        self.models[action.item()].add_sample_map(state.reshape(1, self.stateDim), asarray(value).reshape(1, 1))
+        self.models[int(action.item())].add_sample_map(state.reshape(1, self.stateDim), asarray(value).reshape(1, 1))
         
