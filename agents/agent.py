@@ -1,5 +1,6 @@
 from dopamine.tools import Episode, History
 from numpy import zeros, inf
+from copy import copy
 
 class AgentException(Exception):
     pass
@@ -56,7 +57,7 @@ class Agent(object):
         
     def integrateState(self, state):
         if self.progressCnt == 0:
-            self.state = state
+            self.state = copy(state)
             self.progressCnt = 1
         else:
             raise AgentException('observation was given twice before action was requested.')
