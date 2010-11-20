@@ -7,7 +7,6 @@ from matplotlib import pyplot as plt
 class RBFEstimator(Estimator):
 
     conditions = {'discreteStates':False, 'discreteActions':True}
-    trainable = True
     
     def __init__(self, stateDim, actionNum):
         """ initialize with the state dimension and number of actions. """
@@ -15,12 +14,7 @@ class RBFEstimator(Estimator):
         self.actionNum = actionNum
         
         # define training and target array
-        self.inputs = zeros((0, stateDim))
-        self.actions = zeros((0, 1))
-        self.targets = zeros((0, 1))
-        
-        # initialize all RBF models, one for each action
-        self.models = [RBF(stateDim, 20, 1) for i in range(actionNum)]
+        self.reset()
 
     def getBestAction(self, state):
         """ returns the action with maximal value in the given state. """
@@ -39,19 +33,19 @@ class RBFEstimator(Estimator):
         self.actions = r_[self.actions, action.reshape(1, 1)]
         self.targets = r_[self.targets, asarray(value).reshape(1, 1)]
    
-    def _clear(self):
+    def reset(self):
         """ clear collected training set. """
         self.inputs = zeros((0, self.stateDim))
         self.actions = zeros((0, 1))
         self.targets = zeros((0, 1))
+        self.models = [RBF(self.stateDim, 20, 1) for i in range(self.actionNum)]
                 
-    def _train(self):
+    def train(self):
         """ train individual models for each actions seperately. """
         if len(self.targets) == 0:
             return
             
         # avoiding the value drift by substracting the minimum of the training set
-        self.targets = (self.targets - min(self.targets))
         for a in range(self.actionNum):
             idx = where(self.actions[:,0] == a)[0]
             if len(idx) > 0 and idx.any():
@@ -74,8 +68,5 @@ class RBFOnlineEstimator(RBFEstimator):
         self.models = [RBF(stateDim, 20, 1) for i in range(actionNum)]
         
     def updateValue(self, state, action, value):
-        self.minimum = min(self.minimum, value)
-        value -= self.minimum
-        
         self.models[int(action.item())].add_sample_map(state.reshape(1, self.stateDim), asarray(value).reshape(1, 1))
         

@@ -10,22 +10,24 @@ from dopamine.tools.utilities import one_to_n
 class LWPREstimator(Estimator):
 
     conditions = {'discreteStates':False, 'discreteActions':True}
-    trainable = False
 
     def __init__(self, stateDim, actionNum):
         """ initialize with the state dimension and number of actions. """
         self.stateDim = stateDim
         self.actionNum = actionNum
+        self.minimum = inf
+        self.reset()
 
+    def reset(self):
         # initialize the LWPR function
         self.lwpr = LWPR(self.stateDim + self.actionNum, 1)     
-        self.lwpr.init_D = 50*eye(self.stateDim + self.actionNum)
-        self.lwpr.init_alpha = 250*ones([self.stateDim + self.actionNum, self.stateDim + self.actionNum])
+        self.lwpr.init_D = 1.*eye(self.stateDim + self.actionNum)
+        self.lwpr.init_alpha = 1.*ones([self.stateDim + self.actionNum, self.stateDim + self.actionNum])
         self.lwpr.meta = True
+    
+    def train(self):
+        pass
         
-        self.minimum = inf
-
-
     def getBestAction(self, state):
         """ returns the action with maximal value in the given state. """
         state = state.flatten()
@@ -61,7 +63,7 @@ class LWPREstimators(Estimator):
         self.actionNum = actionNum
 
         # initialize all RBF models, one for each action
-        self._clear()
+        self.reset()
 
     def getBestAction(self, state):
         """ returns the action with maximal value in the given state. """
@@ -80,7 +82,7 @@ class LWPREstimators(Estimator):
         action = action.flatten()
         self.models[int(action.item())].update(state, array(value).flatten())
 
-    def _clear(self):
+    def reset(self):
         """ clear collected training set. """
         # initialize all models, one for each action
         self.models = [LWPR(self.stateDim, 1) for i in range(self.actionNum)]        
@@ -88,11 +90,10 @@ class LWPREstimators(Estimator):
             m.init_D = 50*eye(self.stateDim)
             m.init_alpha = 250*ones([self.stateDim, self.stateDim])
             m.meta = True
+    
+    def train(self):
+        pass
 
-
-
-
-    # def _train(self):
     #     """ train individual models for each actions seperately. """
     #     # avoiding the value drift by substracting the minimum of the training set
     #     self.targets = (self.targets - min(self.targets))

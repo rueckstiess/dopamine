@@ -2,7 +2,7 @@
 # found under http://www.pybrain.org.
 
 from numpy import *
-from dopamine.tools.utilities import one_to_n
+from dopamine.tools.utilities import one_to_n, n_to_one
 from dopamine.agents.valuebased.estimator import Estimator
 
 from pybrain.tools.shortcuts import buildNetwork
@@ -12,7 +12,6 @@ from pybrain.supervised.trainers.rprop import RPropMinusTrainer, BackpropTrainer
 class NNEstimator(Estimator):
 
     conditions = {'discreteStates':False, 'discreteActions':True}
-    trainable = True
     
     def __init__(self, stateDim, actionNum):
         """ initialize with the state dimension and number of actions. """
@@ -33,14 +32,26 @@ class NNEstimator(Estimator):
     def updateValue(self, state, action, value):
         self.dataset.addSample(r_[state, one_to_n(action, self.actionNum)], value)
 
-    def _clear(self):
+    def reset(self):
         self.dataset.clear()
+        self.network.randomize()
 
-    def _train(self):
+    def train(self):
         # train module with backprop/rprop on dataset
-        trainer = RPropMinusTrainer(self.network, dataset=self.dataset, batchlearning=True, verbose=False)
+        trainer = RPropMinusTrainer(self.network, dataset=self.dataset, batchlearning=True, verbose=True)
         # trainer = BackpropTrainer(self.network, dataset=self.dataset, batchlearning=True, verbose=True)
         trainer.trainEpochs(100)
-     
+    
+    @property
+    def inputs(self):
+        return self.dataset['input'][:,:-self.actionNum]
+    
+    @property
+    def actions(self):
+        return array(map(n_to_one, self.dataset['input'][:,-self.actionNum:]))
+
+    @property
+    def targets(self):
+        return self.dataset['target']
         
 
