@@ -97,13 +97,13 @@ class BASAgent(Agent):
         """ go through whole episode and make Q-value updates. """  
         for i in range(1):
             
-            self.estimator._clear()
+            self.estimator.reset()
 
             for episode in self.history:
                 for state, action, reward, nextstate in episode:
-                    # don't consider last state
-                    if equal(state, nextstate).all():
-                        break
+                    # # don't consider last state
+                    # if equal(state, nextstate).all():
+                    #     break
 
                     qvalue = self.estimator.getValue(state, action)
                     bestnext = self.estimator.getValue(nextstate, self.estimator.getBestAction(nextstate))
@@ -111,4 +111,4 @@ class BASAgent(Agent):
 
                     self.estimator.updateValue(state, action, target)
 
-            self.estimator._train()
+            self.estimator.train()
