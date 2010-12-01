@@ -27,7 +27,7 @@ class TestEnvironment(Environment):
     
     def episodeFinished(self):
         Environment.episodeFinished(self)
-        return self.timestep >= 10
+        return self.timestep >= 20
         
     def reset(self):
         Environment.reset(self)
