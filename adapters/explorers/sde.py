@@ -1,7 +1,7 @@
 from dopamine.adapters.explorers import Explorer
-from numpy import random, array, dot
+from numpy import random, array, dot, exp, log
 
-class StateDependentExplorer(Explorer):
+class LinearSDExplorer(Explorer):
     
     # define the conditions of the environment
     inConditions = {'discreteActions':False}    
@@ -9,7 +9,10 @@ class StateDependentExplorer(Explorer):
     # define the conditions of the environment
     outConditions = {}
     
-    def __init__(self, sigma=0.2):
+    # use the derivative of the log likelihood to adapt sigma
+    sigmaAdaptation = False
+    
+    def __init__(self, sigma=0.0):
         """ set the variance sigma for the gaussian distribution. """
         Explorer.__init__(self)
         self.sigma = sigma
@@ -18,7 +21,7 @@ class StateDependentExplorer(Explorer):
         Explorer.setExperiment(self, experiment)
            
         # parameters for the linear exploration function
-        self.theta = random.normal(0, self.sigma, \
+        self.theta = random.normal(0, self.expln(self.sigma), \
             (self.experiment.conditions['stateDim'], self.experiment.conditions['actionDim']))
         
     def applyState(self, state):
@@ -33,6 +36,18 @@ class StateDependentExplorer(Explorer):
 
         return action 
 
+    def expln(self, x):
+        if x <= 0:
+            return exp(x)
+        else:
+            return log(x+1.)+1.
+
+    def explnPrime(self, x):
+        if x <= 0:
+            return exp(x)
+        else:
+            return 1./(x+1.)
+
     def _explFunction(self, state):
         return dot(state.reshape(1, self.experiment.conditions['stateDim']), self.theta)
     
@@ -40,7 +55,10 @@ class StateDependentExplorer(Explorer):
         """ apply transformations to episodeFinished and return it. """
         if episodeFinished:
             # at end of episode, randomize the exploration parameters
-            self.theta = random.normal(0, self.sigma, \
+            self.theta = random.normal(0, self.expln(self.sigma), \
                 (self.experiment.conditions['stateDim'], self.experiment.conditions['actionDim']))
         return episodeFinished
     
+    def getDerivative(self, state, derivs):
+        sss = sum(state**2)
+        return (derivs**2 - self.expln(self.sigma)**2*sss) / (self.expln(self.sigma)*sss) * self.explnPrime(self.sigma)

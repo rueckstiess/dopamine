@@ -1,5 +1,5 @@
 from adapter import Adapter
-from explorers import EpsilonGreedyExplorer, BoltzmannExplorer, GaussianExplorer, StateDependentExplorer
+from explorers import EpsilonGreedyExplorer, BoltzmannExplorer, GaussianExplorer, LinearSDExplorer
 from episodic import MakeEpisodicAdapter
 from normalize import NormalizingAdapter
 from index import IndexingAdapter
