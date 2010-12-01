@@ -1,3 +1,5 @@
 - different estimators for FQI. RBF linear regression.
 - discretizer visualization
 - get cart_vq_q working. with or without adaptClusters?
+- move __init__() from estimators to the Estimator base class
+- check if the same is needed for the controllers?
