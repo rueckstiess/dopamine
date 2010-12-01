@@ -10,7 +10,7 @@ class RBFController(Controller):
         self.numCenters = 10
         # create neural network and pybrain dataset
         self.model = RBF(stateDim, self.numCenters, actionDim)
-        self.model.beta = 3.
+        self.model.beta = 6.
         
     def randomize(self):
         """ randomizes the weights of the network. """
