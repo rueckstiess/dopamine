@@ -21,7 +21,7 @@ class LWPREstimator(Estimator):
     def reset(self):
         # initialize the LWPR function
         self.lwpr = LWPR(self.stateDim + self.actionNum, 1)     
-        self.lwpr.init_D = 1.*eye(self.stateDim + self.actionNum)
+        self.lwpr.init_D = 10.*eye(self.stateDim + self.actionNum)
         self.lwpr.init_alpha = 1.*ones([self.stateDim + self.actionNum, self.stateDim + self.actionNum])
         self.lwpr.meta = True
     
