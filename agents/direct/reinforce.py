@@ -6,31 +6,51 @@ from copy import copy
 
 class ReinforceAgent(DirectAgent):
  
-    alpha = 10e-1
-    sigmadecay = 0.99
-                              
+    alpha = 10e-2
+    alpha_sigma = 10e-3
+    sigmadecay = 0.05
+                          
     def learn(self):
         # create the derivative of the log likelihoods for each timestep in each episode
         # loglh has the shape of lists (episodes) of lists (timesteps) of arrays of dimensions (s, a)
         
-        loglh = []
+        loglh_mu = []
         for episode in self.history:
-            inner_loglh = []
+            inner_loglh_mu = []
             for s, a, r, ns in episode:
+                # calculate dpi/dmu
                 rl_error = array((a - self.controller.activate(s))).reshape(1, self.conditions['actionDim'])
-                inner_loglh.append(self.controller.getDerivative(s, rl_error))
-            loglh.append(inner_loglh)
+                # calculate dpi/dtheta
+                inner_loglh_mu.append(self.controller.getDerivative(s, rl_error))
+            loglh_mu.append(inner_loglh_mu)
         
-        baseline = mean([sum(loglh[ie], axis=0)**2 * mean(e.rewards) for ie, e in enumerate(self.history)], axis=0) / mean([sum(loglh[ie], axis=0)**2 for ie, e in enumerate(self.history)], axis=0)
-        gradient = mean([sum(loglh[ie], axis=0) * ((mean(e.rewards) - baseline)) for ie, e in enumerate(self.history)], axis=0)
+        baseline = mean([sum(loglh_mu[ie], axis=0)**2 * mean(e.rewards) for ie, e in enumerate(self.history)], axis=0) / mean([sum(loglh_mu[ie], axis=0)**2 for ie, e in enumerate(self.history)], axis=0)
+        gradient = mean([sum(loglh_mu[ie], axis=0) * ((mean(e.rewards) - baseline)) for ie, e in enumerate(self.history)], axis=0)
         
         # update parameters of controller
-        # print self.controller.parameters
         self.controller.parameters = self.controller.parameters + self.alpha * gradient.flatten()
-        # print self.controller.parameters
         
-        # decay exploration variance
+        
         for explorer in self.experiment.explorers:
-            explorer.sigma *= self.sigmadecay
+            if hasattr(explorer, 'sigmaAdaptation') and explorer.sigmaAdaptation:
+                loglh_sigma = []
+                for episode in self.history:
+                    inner_loglh_sigma = []
+                    for s, a, r, ns in episode:
+                        # calculate dpi/dmu
+                        rl_error = array((a - self.controller.activate(s))).reshape(1, self.conditions['actionDim'])
+                        # calculate dpi/dtheta
+                        inner_loglh_sigma.append(explorer.getDerivative(s, rl_error))
+                    loglh_sigma.append(inner_loglh_sigma)
+        
+                baseline = mean([sum(loglh_sigma[ie], axis=0)**2 * mean(e.rewards) for ie, e in enumerate(self.history)], axis=0) / mean([sum(loglh_sigma[ie], axis=0)**2 for ie, e in enumerate(self.history)], axis=0)
+                gradient = mean([sum(loglh_sigma[ie], axis=0) * ((mean(e.rewards) - baseline)) for ie, e in enumerate(self.history)], axis=0)
+        
+                # update parameters of explorer
+                explorer.sigma = explorer.sigma + self.alpha_sigma * gradient.flatten()
+            else:
+                # decay exploration variance
+                for explorer in self.experiment.explorers:
+                    explorer.sigma -= self.sigmadecay
         
         
