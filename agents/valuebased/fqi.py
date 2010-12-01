@@ -6,12 +6,14 @@ from dopamine.tools.utilities import one_to_n
 from numpy import mean, array, r_, c_, atleast_2d, random, equal
 from operator import itemgetter
 import time
+from random import shuffle
 
 class FQIAgent(Agent):
     
     alpha = 1.0
     gamma = 0.9
     iterations = 1
+    presentations = 1
     
     def __init__(self, estimatorClass=NNEstimator):
         """ initialize the agent with the estimatorClass. """
@@ -53,7 +55,9 @@ class FQIAgent(Agent):
             # ground targets to 0 to avoid drifting values
             mintarget = min(map(itemgetter(2), dataset))
             self.estimator.reset()
-            for state, action, target in dataset:
-                self.estimator.updateValue(state, action, target-mintarget)
+            for i in range(self.presentations):
+                shuffle(dataset)
+                for state, action, target in dataset:
+                    self.estimator.updateValue(state, action, target-mintarget)
             self.estimator.train()
 
