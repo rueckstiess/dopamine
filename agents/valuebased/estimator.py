@@ -2,8 +2,7 @@ from dopamine.tools.utilities import abstractMethod
 
 class Estimator(object):
     
-    conditions = {'discreteStates':False, 'discreteActions':False}
-    trainable = False
+    conditions = {'discreteStates':False, 'discreteActions':True}
     
     def getBestAction(self, state):
         """ returns the action with the highest value in the given state. """
