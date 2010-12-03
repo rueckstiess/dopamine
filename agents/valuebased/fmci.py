@@ -1,6 +1,6 @@
 from dopamine.agents import Agent
 from dopamine.agents.agent import AgentException
-from dopamine.agents.valuebased import *
+from dopamine.agents.valuebased.estimators.rbf import RBFEstimator
 from dopamine.tools.utilities import one_to_n
 
 from numpy import mean, array, r_, c_, atleast_2d, random, equal
@@ -14,7 +14,7 @@ class FMCIAgent(Agent):
     gamma = 0.9
     presentations = 1
     
-    def __init__(self, estimatorClass=NNEstimator):
+    def __init__(self, estimatorClass=RBFEstimator):
         """ initialize the agent with the estimatorClass. """
         Agent.__init__(self)
         self.estimatorClass = estimatorClass

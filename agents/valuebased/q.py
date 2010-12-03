@@ -1,6 +1,5 @@
-from dopamine.agents import Agent
-from dopamine.agents.agent import AgentException
-from dopamine.agents.valuebased import TableEstimator
+from dopamine.agents.agent import Agent, AgentException
+from dopamine.agents.valuebased.estimators.table import TableEstimator
 
 class QAgent(Agent):
     

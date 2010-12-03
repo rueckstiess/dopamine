@@ -6,7 +6,6 @@ from dopamine.adapters import EpsilonGreedyExplorer, NormalizingAdapter, Indexin
 from matplotlib import pyplot as plt
 from numpy import *
 
-
 # create agent, environment, renderer, experiment
 agent = FQIAgent(estimatorClass=RBFEstimator)
 agent.iterations = 1
