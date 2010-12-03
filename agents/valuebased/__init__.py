@@ -8,4 +8,5 @@ from fmci import FMCIAgent
 from bas import BASAgent
 
 # estimators
+from table import TableEstimator
 from estimators.__init__ import *
