@@ -11,15 +11,16 @@ from mpl_toolkits.mplot3d import axes3d
 # create agent, environment, renderer, experiment
 agent = FQIAgent(estimatorClass=LWPREstimator)
 agent.iterations = 1
+agent.presentations = 20
 
 environment = DiscreteCartPoleEnvironment()
 environment.centerCart = False
-environment.conditions['actionNum'] = 4
+environment.conditions['actionNum'] = 2
 experiment = Experiment(environment, agent)
 
 # cut off last two state dimensions
-# indexer = IndexingAdapter([0, 1], None)
-# experiment.addAdapter(indexer)
+indexer = IndexingAdapter([0, 1], None)
+experiment.addAdapter(indexer)
 
 # add normalization adapter
 normalizer = NormalizingAdapter()
@@ -49,28 +50,28 @@ for i in range(100):
 
     # agent.forget()
     
-    valdata = experiment.evaluateEpisodes(20, visualize=True)
+    valdata = experiment.evaluateEpisodes(20, visualize=False)
     print "exploration", explorer.epsilon
     print "mean return", mean([sum(v.rewards) for v in valdata])
     print "num episodes", len(agent.history)
     print "num total samples", agent.history.numTotalSamples()
     
         
-    # # # model 1
-    # zgrid1 = zeros(len(xgrid.flatten()))
-    # for i, (x, y) in enumerate(zip(xgrid.flatten(), ygrid.flatten())):
-    #     zgrid1[i] = agent.estimator.lwpr.predict(array([x, y, 0, 1]))
-    # 
-    # # model 2
-    # zgrid2 = zeros(len(xgrid.flatten()))
-    # for i, (x, y) in enumerate(zip(xgrid.flatten(), ygrid.flatten())):
-    #     zgrid2[i] = agent.estimator.lwpr.predict(array([x, y, 1, 0]))
-    # 
-    # if frame:
-    #     ax.collections.remove(frame)
-    # 
-    # frame = ax.plot_surface(xgrid, ygrid, zgrid1.reshape(xgrid.shape) - zgrid2.reshape(xgrid.shape), rstride=1, cstride=1, cmap=plt.cm.jet, antialiased=True)
-    # plt.draw()
+    # # model 1
+    zgrid1 = zeros(len(xgrid.flatten()))
+    for i, (x, y) in enumerate(zip(xgrid.flatten(), ygrid.flatten())):
+        zgrid1[i] = agent.estimator.lwpr.predict(array([x, y, 0, 1]))
+    
+    # model 2
+    zgrid2 = zeros(len(xgrid.flatten()))
+    for i, (x, y) in enumerate(zip(xgrid.flatten(), ygrid.flatten())):
+        zgrid2[i] = agent.estimator.lwpr.predict(array([x, y, 1, 0]))
+    
+    if frame:
+        ax.collections.remove(frame)
+    
+    frame = ax.plot_surface(xgrid, ygrid, zgrid1.reshape(xgrid.shape) - zgrid2.reshape(xgrid.shape), rstride=1, cstride=1, cmap=plt.cm.jet, antialiased=True)
+    plt.draw()
 
 plt.show()
 

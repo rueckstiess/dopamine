@@ -1,7 +1,7 @@
 from numpy import ndarray, ones
 import types
 
-from dopamine.agents.actorcritic.critic import Critic
+from dopamine.agents.actorcritic.critics.critic import Critic
 
 class TableException(Exception):
     pass

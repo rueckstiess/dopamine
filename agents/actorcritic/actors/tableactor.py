@@ -1,4 +1,4 @@
-from dopamine.agents.actorcritic.actor import Actor
+from dopamine.agents.actorcritic.actors.actor import Actor
 from numpy import ones, ndarray, argmax, where, array
 from random import choice
 import types
