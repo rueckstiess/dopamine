@@ -1,5 +1,6 @@
 from dopamine.agents import Agent, AgentException
-from dopamine.agents.actorcritic import TableActor, TableCritic
+from dopamine.agents.actorcritic.actors.tableactor import TableActor
+from dopamine.agents.actorcritic.critics.tablecritic import TableCritic
 
 class ActorCriticAgent(Agent):
     
