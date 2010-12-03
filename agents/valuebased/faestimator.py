@@ -34,14 +34,10 @@ class FAEstimator(Estimator):
    
     def reset(self):
         """ clear collected training set. """
-        self.models = [self.faClass(self.stateDim, 1) for i in range(self.actionNum)]
+        self.fas = [self.faClass(self.stateDim, 1) for i in range(self.actionNum)]
                 
     def train(self):
         """ train individual models for each actions seperately. """
-        if len(self.targets) == 0:
-            return
-            
-        # avoiding the value drift by substracting the minimum of the training set
         for a in range(self.actionNum):
-            self.fas[a].learn()
+            self.fas[a].train()
      

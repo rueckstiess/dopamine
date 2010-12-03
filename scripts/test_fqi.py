@@ -17,14 +17,14 @@ def plotPolicy(agent):
         plt.plot(s, q1, '.b')
 
     
-    inps = agent.estimator.dataset['input']
-    tgts = agent.estimator.dataset['target'].flatten()
-    
-    red = where(inps[:,1])[0]
-    blue = where(inps[:,2])[0]
-    
-    plt.plot(inps[red,0].flatten(), tgts[red], 'sr', alpha=0.5)
-    plt.plot(inps[blue,0].flatten(), tgts[blue], 'sb', alpha=0.5)
+    # inps = agent.estimator.dataset['input']
+    # tgts = agent.estimator.dataset['target'].flatten()
+    # 
+    # red = where(inps[:,1])[0]
+    # blue = where(inps[:,2])[0]
+    # 
+    # plt.plot(inps[red,0].flatten(), tgts[red], 'sr', alpha=0.5)
+    # plt.plot(inps[blue,0].flatten(), tgts[blue], 'sb', alpha=0.5)
     plt.gcf().canvas.draw()
 
 # create agent, environment, renderer, experiment
