@@ -30,7 +30,7 @@ class PyBrainNN(FA):
         self.network._setParameters(random.normal(0, 0.1, self.network.params.shape))
         self.pybdataset = SupervisedDataSet(self.indim, self.outdim)
 
-    def learn(self):
+    def train(self):
         if len(self.pybdataset) == 0:
             return
         # train module with backprop/rprop on dataset

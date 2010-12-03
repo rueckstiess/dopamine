@@ -20,7 +20,7 @@ class LWPRFA(FA):
         inp = self._asFlatArray(inp)
         return self.lwpr.predict(inp)
 
-    def learn(self):
+    def train(self):
         for i, t in self.dataset:
             i = self._asFlatArray(i)
             t = self._asFlatArray(t)

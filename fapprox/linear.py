@@ -16,7 +16,7 @@ class Linear(FA):
         FA.reset(self)
         self.matrix = np.random.uniform(-0.1, 0.1, (self.indim + 1, self.outdim))
 
-    def learn(self):
+    def train(self):
         """ some function approximators learn offline after collecting all 
             samples. this function executes one such learning step. """
         if len(self.dataset) == 0:

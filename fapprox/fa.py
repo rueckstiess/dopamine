@@ -30,7 +30,7 @@ class FA(object):
             forgetting everything it has learned before. """
         self.dataset.clear()
         
-    def learn(self):
+    def train(self):
         """ some function approximators learn offline after collecting all 
             samples. this function executes one such learning step. """
         pass

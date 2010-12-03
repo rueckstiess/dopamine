@@ -31,7 +31,7 @@ class RBF(FA):
         self.centers = [np.random.uniform(-1, 1, self.indim) for i in xrange(self.numCenters)]
         self.W = np.random.random((self.numCenters, self.outdim))
         
-    def learn(self):
+    def train(self):
         if len(self.dataset) == 0:
             return
         

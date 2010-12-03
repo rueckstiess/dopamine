@@ -10,7 +10,7 @@ class KNN(FA):
     neighborhood = 3
     parametric = False
     
-    def learn(self):
+    def train(self):
         pass
             
     def _getNeighbors(self, point, n):
