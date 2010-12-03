@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from dopamine.fa import *
+from dopamine.fapprox import *
 
 X_data = np.arange(-1, 1, 0.05)
 Y_data = [(x+1) * 3 * np.sin(8*x) + 4*x**2 + 10*x - 2 + np.random.normal(0, 1) for x in X_data]

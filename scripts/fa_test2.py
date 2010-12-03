@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import axes3d
 from random import shuffle
 
-from dopamine.fa import *
+from dopamine.fapprox import *
 
 X_data, Y_data = np.meshgrid(np.arange(-1, 1, 0.3), np.arange(-1, 1, 0.3))
 Z_data = np.sin(5*X_data) * np.cos(Y_data) + np.random.normal(0, 0.2, X_data.shape)
@@ -42,5 +42,4 @@ for mClass in models:
     plt.title(mClass)
     plt.gcf().canvas.draw()
 
-plt.legend(loc='lower right')
 plt.show()
