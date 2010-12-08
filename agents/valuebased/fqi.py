@@ -1,9 +1,8 @@
 from dopamine.agents.agent import Agent, AgentException
-from dopamine.agents.valuebased.estimators.rbf import RBFEstimator
 from dopamine.agents.valuebased.faestimator import FAEstimator
 from dopamine.fapprox import RBF
 
-from numpy import mean, array, r_, c_, atleast_2d, random, equal
+from numpy import mean, array, r_, c_, atleast_2d, random, equal, sign
 from operator import itemgetter
 import time
 from random import shuffle
@@ -15,11 +14,9 @@ class FQIAgent(Agent):
     iterations = 1
     presentations = 1
     
-    def __init__(self, faClass=RBF, old=True):
+    def __init__(self, faClass=RBF):
         """ initialize the agent with the estimatorClass. """
         Agent.__init__(self)
-        self.old = old
-        self.estimatorClass=RBFEstimator
         self.faClass = faClass
         
     
@@ -29,10 +26,7 @@ class FQIAgent(Agent):
         if not (self.conditions['discreteStates'] == False and self.conditions['discreteActions']):
             raise AgentException('FQIAgent expects continuous states and discrete actions. Use adapter or a different environment.')
         
-        if self.old:
-            self.estimator = self.estimatorClass(self.conditions['stateDim'], self.conditions['actionNum'])
-        else:
-            self.estimator = FAEstimator(self.conditions['stateDim'], self.conditions['actionNum'], self.faClass)
+        self.estimator = FAEstimator(self.conditions['stateDim'], self.conditions['actionNum'], self.faClass)
     
     def _calculate(self):
         self.action = self.estimator.getBestAction(self.state)
@@ -44,11 +38,7 @@ class FQIAgent(Agent):
             dataset = []
             
             for episode in self.history:
-                for state, action, reward, nextstate in episode:
-                    # don't consider last state
-                    # if equal(state, nextstate).all():
-                    #     break
-                    
+                for state, action, reward, nextstate in episode:                    
                     qvalue = self.estimator.getValue(state, action)
                     bestnext = self.estimator.getValue(nextstate, self.estimator.getBestAction(nextstate))
                     target = (1-self.alpha) * qvalue + self.alpha * (reward + self.gamma * bestnext)
@@ -60,6 +50,8 @@ class FQIAgent(Agent):
                 
             # ground targets to 0 to avoid drifting values
             mintarget = min(map(itemgetter(2), dataset))
+            
+            # reset estimator (not resetting might lead to faster convergence!)
             self.estimator.reset()
             for i in range(self.presentations):
                 shuffle(dataset)
