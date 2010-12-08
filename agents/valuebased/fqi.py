@@ -2,7 +2,7 @@ from dopamine.agents.agent import Agent, AgentException
 from dopamine.agents.valuebased.faestimator import FAEstimator
 from dopamine.fapprox import RBF
 
-from numpy import mean, array, r_, c_, atleast_2d, random, equal, sign
+from numpy import mean, array, r_, c_, atleast_2d, random, equal
 from operator import itemgetter
 import time
 from random import shuffle

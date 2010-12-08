@@ -1,5 +1,6 @@
 from dopamine.agents.agent import Agent, AgentException
-from dopamine.agents.valuebased.estimators.rbf import RBFEstimator
+from dopamine.agents.valuebased.faestimator import FAEstimator
+from dopamine.fapprox import RBF
 from dopamine.tools import History
 
 from numpy import mean, array, r_, c_, atleast_2d, random, equal, ones
@@ -10,7 +11,7 @@ class BASAgent(Agent):
     alpha = 1.0
     gamma = 0.9
     
-    def __init__(self, estimatorClass=RBFEstimator):
+    def __init__(self, faClass=RBF):
         """ initialize the agent with the estimatorClass. """
         Agent.__init__(self)
         
@@ -21,7 +22,7 @@ class BASAgent(Agent):
         # store (decision,action) tuples for one action in the list
         self.decisions = []
         
-        self.estimatorClass = estimatorClass
+        self.faClass = faClass
     
     def _setup(self, conditions):
         """ if agent is discrete in states and actions create Q-Table. """
@@ -29,7 +30,7 @@ class BASAgent(Agent):
         if not (self.conditions['discreteStates'] == False and self.conditions['discreteActions'] == False):
             raise AgentException('BASAgent expects continuous states and actions. Use adapter or a different environment.')
             
-        self.estimator = self.estimatorClass(self.conditions['stateDim'] + self.conditions['actionDim'], 2**self.conditions['actionDim'])
+        self.estimator = FAEstimator(self.conditions['stateDim'] + self.conditions['actionDim'], 2**self.conditions['actionDim'], self.faClass)
         
         # change history to store bas-extended experiences
         self.history = History(conditions['stateDim']+self.conditions['actionDim'] , 1)

@@ -1,7 +1,6 @@
-from dopamine.agents import Agent
-from dopamine.agents.agent import AgentException
-from dopamine.agents.valuebased.estimators.rbf import RBFEstimator
-from dopamine.tools.utilities import one_to_n
+from dopamine.agents.agent import Agent, AgentException
+from dopamine.agents.valuebased.faestimator import FAEstimator
+from dopamine.fapprox import RBF
 
 from numpy import mean, array, r_, c_, atleast_2d, random, equal
 from operator import itemgetter
@@ -14,10 +13,10 @@ class FMCIAgent(Agent):
     gamma = 0.9
     presentations = 1
     
-    def __init__(self, estimatorClass=RBFEstimator):
+    def __init__(self, faClass=RBF):
         """ initialize the agent with the estimatorClass. """
         Agent.__init__(self)
-        self.estimatorClass = estimatorClass
+        self.faClass = faClass
     
     def _setup(self, conditions):
         """ if agent is discrete in states and actions create Q-Table. """
@@ -25,7 +24,7 @@ class FMCIAgent(Agent):
         if not (self.conditions['discreteStates'] == False and self.conditions['discreteActions']):
             raise AgentException('FQIAgent expects continuous states and discrete actions. Use adapter or a different environment.')
             
-        self.estimator = self.estimatorClass(self.conditions['stateDim'], self.conditions['actionNum'])
+        self.estimator = FAEstimator(self.conditions['stateDim'], self.conditions['actionNum'], self.faClass)
     
     def _calculate(self):
         self.action = self.estimator.getBestAction(self.state)
