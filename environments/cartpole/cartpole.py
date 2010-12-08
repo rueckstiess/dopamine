@@ -87,14 +87,14 @@ class CartPoleEnvironment(Environment):
         s = abs(self.sensors[2])
         reward = 0
         if angle < 0.05 and (s < 0.05 or not self.centerCart):
-            reward = 0.
+            reward = +2.
         elif angle > 0.7 or s > 2.4:
-            reward = -2. * (self.maxSteps - self.timestep)
+            reward = 0. 
         else:
             if self.centerCart:
-                reward = max(-1., -s)
+                reward = min(+1., 2.-s)
             else:
-                reward = -1.
+                reward = +1.
         return reward
         
     def _derivs(self, x, t): 
