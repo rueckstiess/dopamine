@@ -1,5 +1,5 @@
 from dopamine.agents.direct.direct import DirectAgent
-from dopamine.agents.direct.linear import LinearController
+from dopamine.agents.direct.controllers.linear import LinearController
 from numpy import *
 from numpy.linalg import pinv
 from copy import copy

@@ -1,13 +1,13 @@
 from dopamine.agents import Agent, AgentException
-from dopamine.agents.direct.linear import LinearController
+from dopamine.fapprox import Linear
 
 from numpy import zeros, inf
 
 class DirectAgent(Agent):
     
-    def __init__(self, controllerClass=LinearController):
+    def __init__(self, faClass=Linear):
         Agent.__init__(self)
-        self.controllerClass = controllerClass
+        self.faClass = faClass
              
     def _setup(self, conditions):
         """ Tells the agent, if the environment is discrete or continuous and the
@@ -23,13 +23,14 @@ class DirectAgent(Agent):
         if not self.conditions['episodic']:
             raise AgentException('DirectAgent expects an episodic environment. Use adapter or different environment.')
             
-        self.controller = self.controllerClass(self.conditions['stateDim'], self.conditions['actionDim'])
+        self.controller = self.faClass(self.conditions['stateDim'], self.conditions['actionDim'])
+        # todo: check if controller is parametric
         
     def learn(self):
         pass
             
     def _calculate(self):
         """ calls the controller's activate and returns the result """
-        self.action = self.controller.activate(self.state)
+        self.action = self.controller.predict(self.state)
     
     

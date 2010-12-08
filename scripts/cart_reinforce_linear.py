@@ -1,12 +1,12 @@
 from dopamine.environments import CartPoleEnvironment, CartPoleRenderer
-from dopamine.agents import ReinforceAgent, LinearController
-from dopamine.adapters import IndexingAdapter, NormalizingAdapter, GaussianExplorer, StateDependentExplorer
+from dopamine.agents import ReinforceAgent
+from dopamine.adapters import IndexingAdapter, NormalizingAdapter, GaussianExplorer, LinearSDExplorer
 from dopamine.experiments import Experiment
 from numpy import *
 
 from dopamine.tools import Episode
 
-environment = CartPoleEnvironment(maxSteps=400)
+environment = CartPoleEnvironment(maxSteps=100)
 environment.centerCart = False
 
 renderer = CartPoleRenderer()
@@ -15,21 +15,22 @@ agent = ReinforceAgent()
 experiment = Experiment(environment, agent)
 
 # cut off last two state dimensions
-# indexer = IndexingAdapter([0, 1], None)
-# experiment.addAdapter(indexer)
+indexer = IndexingAdapter([0, 1], None)
+experiment.addAdapter(indexer)
 
 # add normalization adapter
 normalizer = NormalizingAdapter(scaleActions=[(-50, 50)])
 experiment.addAdapter(normalizer)
 
 # add gaussian explorer
-explorer = StateDependentExplorer(sigma=0.2)
+explorer = LinearSDExplorer(sigma=2.)
 experiment.addAdapter(explorer)
-# explorer = GaussianExplorer(sigma=0.2)
-# experiment.addAdapter(explorer)
+explorer = GaussianExplorer(sigma=0.)
+experiment.addAdapter(explorer)
 
 # force setup here already to initiate pretraining
 experiment.setup()
+
 # environment.renderer = renderer
 # renderer.start()
 
@@ -58,12 +59,12 @@ for i in range(5000):
     agent.forget()
 
     valdata = experiment.evaluateEpisodes(10, visualize=True)
-    environment.renderer = renderer
-    experiment.evaluateEpisodes(1, visualize=False)
-    environment.renderer = None
+    # environment.renderer = renderer
+    # experiment.evaluateEpisodes(1, visualize=False)
+    # environment.renderer = None
     
     print "mean return", mean([sum(v.rewards) for v in valdata])
-    if mean([sum(v.rewards) for v in valdata]) > -300:
+    if mean([sum(v.rewards) for v in valdata]) > -150:
         if not renderer.isAlive():
             pass
             # renderer.start()

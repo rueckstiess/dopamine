@@ -1,5 +1,5 @@
 from dopamine.agents.direct.direct import DirectAgent
-from dopamine.agents.direct.linear import LinearController
+from dopamine.agents.direct.controllers.linear import LinearController
 from numpy import *
 from numpy.linalg import pinv
 from copy import copy
@@ -19,9 +19,10 @@ class ReinforceAgent(DirectAgent):
             inner_loglh_mu = []
             for s, a, r, ns in episode:
                 # calculate dpi/dmu
-                rl_error = array((a - self.controller.activate(s))).reshape(1, self.conditions['actionDim'])
+                rl_error = array((a - self.controller.predict(s))).reshape(1, self.conditions['actionDim'])
                 # calculate dpi/dtheta
-                inner_loglh_mu.append(self.controller.getDerivative(s, rl_error))
+                derivFkt = self.controller.getDerivative(s)
+                inner_loglh_mu.append(derivFkt(rl_error))
             loglh_mu.append(inner_loglh_mu)
         
         baseline = mean([sum(loglh_mu[ie], axis=0)**2 * mean(e.rewards) for ie, e in enumerate(self.history)], axis=0) / mean([sum(loglh_mu[ie], axis=0)**2 for ie, e in enumerate(self.history)], axis=0)
@@ -38,7 +39,7 @@ class ReinforceAgent(DirectAgent):
                     inner_loglh_sigma = []
                     for s, a, r, ns in episode:
                         # calculate dpi/dmu
-                        rl_error = array((a - self.controller.activate(s))).reshape(1, self.conditions['actionDim'])
+                        rl_error = array((a - self.controller.predict(s))).reshape(1, self.conditions['actionDim'])
                         # calculate dpi/dtheta
                         inner_loglh_sigma.append(explorer.getDerivative(s, rl_error))
                     loglh_sigma.append(inner_loglh_sigma)
