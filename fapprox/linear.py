@@ -22,14 +22,21 @@ class Linear(FA):
         if len(self.dataset) == 0:
             return
         self.matrix = np.dot(np.linalg.pinv(np.c_[self.dataset.inputs, np.ones((len(self.dataset), 1))]), self.dataset.targets)
-
+        
+    def dOutdTheta(self, inp, outp):
+        """ return the derivative of the output with respect to the parameters
+            for a given input and output. 
+        """
+        inp = np.r_[inp, np.array([1])]
+        return np.dot(np.asarray(inp).reshape(self.indim+1, 1), np.asarray(outp).reshape(1, self.outdim)).flatten()
+        
     def _getParameters(self):
         """ getter method for parameters. """
         return self.matrix.flatten()
 
     def _setParameters(self, parameters):
         """ setter method for parameters. """
-        self.matrix = parameters.reshape(self.indim, self.outdim)
+        self.matrix = parameters.reshape(self.indim+1, self.outdim)
         
     parameters = property(_getParameters, _setParameters)
             

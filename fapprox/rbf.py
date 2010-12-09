@@ -48,6 +48,13 @@ class RBF(FA):
         # calculate output weights (pseudoinverse)
         self.W = np.dot(np.linalg.pinv(G), Y)
 
+    def dOutdTheta(self, inp, outp):
+        """ return the derivative of the output with respect to the parameters
+            for a given input and output. 
+        """
+        G = self._designMatrix(np.asarray(inp).reshape(1, self.indim))
+        return np.dot(G.T, np.asarray(outp).reshape(1, self.outdim)).flatten()
+
     def _getParameters(self):
         """ getter method for parameters. """
         return self.W.flatten()

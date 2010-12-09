@@ -26,7 +26,8 @@ class PyBrainNN(FA):
     def reset(self):
         FA.reset(self)
         
-        self.network = buildNetwork(self.indim, 2*(self.indim+self.outdim), self.outdim)
+        # self.network = buildNetwork(self.indim, 2*(self.indim+self.outdim), self.outdim)
+        self.network = buildNetwork(self.indim, self.outdim, bias=True)
         self.network._setParameters(random.normal(0, 0.1, self.network.params.shape))
         self.pybdataset = SupervisedDataSet(self.indim, self.outdim)
 
@@ -37,6 +38,12 @@ class PyBrainNN(FA):
         trainer = RPropMinusTrainer(self.network, dataset=self.pybdataset, batchlearning=True, verbose=False)
         # trainer = BackpropTrainer(self.network, dataset=self.pybdataset, batchlearning=True, verbose=True)
         trainer.trainEpochs(100)        
+
+    def dOutdTheta(self, inp, outp):
+        self.network.reset()
+        self.network.activate(inp)
+        self.network.backActivate(outp)
+        return self.network.derivs
 
     def _getParameters(self):
         return self._asFlatArray(self.network.params)
