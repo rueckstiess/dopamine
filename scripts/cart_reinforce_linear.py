@@ -2,6 +2,7 @@ from dopamine.environments import CartPoleEnvironment, CartPoleRenderer
 from dopamine.agents import ReinforceAgent
 from dopamine.adapters import IndexingAdapter, NormalizingAdapter, GaussianExplorer, LinearSDExplorer
 from dopamine.experiments import Experiment
+from dopamine.fapprox import *
 from numpy import *
 
 from dopamine.tools import Episode
@@ -11,7 +12,7 @@ environment.centerCart = False
 
 renderer = CartPoleRenderer()
 
-agent = ReinforceAgent()
+agent = ReinforceAgent(faClass=Linear)
 experiment = Experiment(environment, agent)
 
 # cut off last two state dimensions
@@ -24,8 +25,10 @@ experiment.addAdapter(normalizer)
 
 # add gaussian explorer
 explorer = LinearSDExplorer(sigma=2.)
+explorer.sigmaAdaptation = False
 experiment.addAdapter(explorer)
 explorer = GaussianExplorer(sigma=0.)
+explorer.sigmaAdaptation = True
 experiment.addAdapter(explorer)
 
 # force setup here already to initiate pretraining
@@ -36,7 +39,7 @@ experiment.setup()
 
 # run experiment
 for i in range(5000):
-    experiment.runEpisodes(20)
+    experiment.runEpisodes(1)
     
     # # split episodes into pieces
     # split = 40
@@ -56,13 +59,14 @@ for i in range(5000):
     #         agent.history.appendEpisode(piece)
     
     agent.learn()
-    agent.forget()
+    # agent.forget()
 
     valdata = experiment.evaluateEpisodes(10, visualize=True)
     # environment.renderer = renderer
     # experiment.evaluateEpisodes(1, visualize=False)
     # environment.renderer = None
     
+    print i
     print "mean return", mean([sum(v.rewards) for v in valdata])
     if mean([sum(v.rewards) for v in valdata]) > -150:
         if not renderer.isAlive():
@@ -70,5 +74,6 @@ for i in range(5000):
             # renderer.start()
     print "avg. episode length", mean([len(v) for v in valdata])
     print "exploration variance", explorer.sigma
+    print
     
 plt.show()
