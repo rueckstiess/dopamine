@@ -3,3 +3,9 @@
 - get cart_vq_q working. with or without adaptClusters?
 - move __init__() from estimators to the Estimator base class
 - check if the same is needed for the controllers?
+
+- check discretization adapters. working? needed?
+- create a grid discretization adapter
+- pong environment
+- use KNN for continuous actions (arg max Q is datapoint with highest value)
+ 
