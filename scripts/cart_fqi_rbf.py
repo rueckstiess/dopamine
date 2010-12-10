@@ -2,7 +2,7 @@ from dopamine.environments import DiscreteCartPoleEnvironment, CartPoleRenderer
 from dopamine.agents import FQIAgent
 from dopamine.fapprox import *
 from dopamine.experiments import Experiment
-from dopamine.adapters import EpsilonGreedyExplorer, NormalizingAdapter, IndexingAdapter, RewardBaselineAdapter
+from dopamine.adapters import EpsilonGreedyExplorer, NormalizingAdapter, IndexingAdapter
 
 from matplotlib import pyplot as plt
 from numpy import *
@@ -17,8 +17,8 @@ environment.centerCart = False
 experiment = Experiment(environment, agent)
 
 # cut off last two state dimensions
-# indexer = IndexingAdapter([0, 1], None)
-# experiment.addAdapter(indexer)
+indexer = IndexingAdapter([0, 1], None)
+experiment.addAdapter(indexer)
 
 # add normalization adapter
 normalizer = NormalizingAdapter()
