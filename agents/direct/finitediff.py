@@ -1,12 +1,12 @@
 from dopamine.agents.direct.direct import DirectAgent
-from dopamine.agents.direct.controllers.linear import LinearController
+from dopamine.fapprox import Linear
 from numpy import *
 from numpy.linalg import pinv
 from copy import copy
 
 class FiniteDifferenceAgent(DirectAgent):
  
-    def __init__(self, controllerClass=LinearController):
+    def __init__(self, faClass=Linear):
         self.deltas = None
         self.alpha = 0.01
         self.epsilon = 0.1
@@ -15,7 +15,7 @@ class FiniteDifferenceAgent(DirectAgent):
         self.deltaList = []
         self._evaluation = False
         
-        DirectAgent.__init__(self, controllerClass)
+        DirectAgent.__init__(self, faClass)
         
     def _setup(self, conditions):
         """ setup the agent and copy the original parameters. """
