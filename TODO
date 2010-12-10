@@ -5,6 +5,7 @@
 - check if the same is needed for the controllers?
 
 - check discretization adapters. working? needed?
+- check FiniteDifference agent. seems not to work anymore.
 - create a grid discretization adapter
 - pong environment
 - use KNN for continuous actions (arg max Q is datapoint with highest value)

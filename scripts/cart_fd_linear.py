@@ -1,5 +1,5 @@
 from dopamine.environments import CartPoleEnvironment, CartPoleRenderer
-from dopamine.agents import FiniteDifferenceAgent, LinearController
+from dopamine.agents import FiniteDifferenceAgent
 from dopamine.adapters import IndexingAdapter, NormalizingAdapter
 from dopamine.experiments import Experiment
 from numpy import *
