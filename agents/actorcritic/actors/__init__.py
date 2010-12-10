@@ -1,1 +1,0 @@
-from tableactor import TableActor

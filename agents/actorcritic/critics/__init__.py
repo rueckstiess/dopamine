@@ -1,1 +1,0 @@
-from tablecritic import TableCritic
