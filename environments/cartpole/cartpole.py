@@ -92,7 +92,7 @@ class CartPoleEnvironment(Environment):
             reward = 0. 
         else:
             if self.centerCart:
-                reward = min(+1., 2.-s)
+                reward = max(+1., 2*(1.-s))
             else:
                 reward = +1.
         return reward
