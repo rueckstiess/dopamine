@@ -18,7 +18,7 @@ class OrderedFQIAgent(FQIAgent):
         FQIAgent.newEpisode(self)
         self.estimator.resetMemory()
     
-    def getAction(self):
-        action = FQIAgent.getAction(self)
-        self.estimator.rememberAction(action)
-        return action
+    def giveReward(self, reward):
+        """ additionally remember the chosen action to not draw it again. """
+        self.estimator.rememberAction(self.action)
+        FQIAgent.giveReward(self, reward)
