@@ -102,7 +102,7 @@ class History(object):
         
             
     def __len__(self):
-        """ returns the length of episodes (empty episode at the end not considered). """
+        """ returns the number of episodes (empty episode at the end not considered). """
         return len(self.episodes)
         
     def __iter__(self):
