@@ -3,6 +3,7 @@ from lwpr import LWPR
 import numpy as np
 import hashlib
 import time
+import os
 
 class LWPRFA(FA):
     
@@ -13,7 +14,7 @@ class LWPRFA(FA):
         
         # initialize the LWPR function
         self.lwpr = LWPR(self.indim, self.outdim)     
-        self.lwpr.init_D = 100.*np.eye(self.indim)
+        self.lwpr.init_D = 10.*np.eye(self.indim)
         self.lwpr.init_alpha = 0.1*np.ones([self.indim, self.indim])
         self.lwpr.meta = True
     
@@ -35,7 +36,9 @@ class LWPRFA(FA):
         """
         # create unique hash key for filename and write lwpr to file
         hashkey = hashlib.sha1(str(self.lwpr) + time.ctime()).hexdigest()[:6]
-        self.filename = 'lwpr_%s.binary'%hashkey
+        if not os.path.exists('.lwprmodels'):
+            os.makedirs('.lwprmodels')   
+        self.filename = '.lwprmodels/lwpr_%s.binary'%hashkey
         self.lwpr.write_binary(self.filename)
         
         # remove lwpr from dictionary and return state
