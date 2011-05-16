@@ -14,7 +14,7 @@ class LWPRFA(FA):
         
         # initialize the LWPR function
         self.lwpr = LWPR(self.indim, self.outdim)     
-        self.lwpr.init_D = 100.*np.eye(self.indim)
+        self.lwpr.init_D = 10.*np.eye(self.indim)
         self.lwpr.init_alpha = 0.1*np.ones([self.indim, self.indim])
         self.lwpr.meta = True
     
