@@ -24,6 +24,8 @@ class EpsilonGreedyExplorer(Explorer):
         if random.random() < self.epsilon:
             action = array([random.randint(self.experiment.conditions['actionNum'])])
         
-        self.epsilon *= self.decay
+        if self.active:
+            self.epsilon *= self.decay
+            
         return action
     

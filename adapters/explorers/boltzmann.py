@@ -28,7 +28,7 @@ class BoltzmannExplorer(Explorer):
         pdf /= sum(pdf)
         cdf = [sum(pdf[:i+1]).item() for i in range(len(pdf))]
         
-        if self.tau > 0.01:
+        if self.active and self.tau > 0.01:
             self.tau *= self.decay
             
         r = random.random()   
