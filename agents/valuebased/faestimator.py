@@ -1,6 +1,6 @@
 from numpy import *
 from dopamine.agents.valuebased.estimator import Estimator
-from dopamine.fapprox import RBF, Linear
+from dopamine.fapprox import RBF, LWPRFA, Linear
 
 from matplotlib import pyplot as plt
 
@@ -13,7 +13,8 @@ class FAEstimator(Estimator):
         self.stateDim = stateDim
         self.actionNum = actionNum
         self.faClass = faClass
-        
+        self.fas = []
+                
         # define training and target array
         self.reset()
 
@@ -34,6 +35,10 @@ class FAEstimator(Estimator):
    
     def reset(self):
         """ clear collected training set. """
+        # special case to clean up lwpr models that were pickled
+        if self.faClass == LWPRFA:
+            for fa in self.fas:
+                fa._cleanup()
         self.fas = [self.faClass(self.stateDim, 1) for i in range(self.actionNum)]
                 
     def train(self):
