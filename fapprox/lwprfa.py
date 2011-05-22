@@ -24,8 +24,13 @@ class LWPRFA(FA):
     
     def predict(self, inp):
         """ predict the output for the given input. """
+        # the next 3 lines fix a bug when lwpr models are pickled and unpickled again
+        # without it, a TypeError is thrown "Expected a double precision numpy array."
+        # even though the numpy array is double precision.
         inp = self._asFlatArray(inp)
-        return self.lwpr.predict(inp)
+        inp_tmp = np.zeros(inp.shape)
+        inp_tmp[:] = inp
+        return self.lwpr.predict(inp_tmp)
 
     def train(self):
         for i, t in self.dataset:
