@@ -14,11 +14,11 @@ class FQIAgent(Agent):
     iterations = 1
     presentations = 1
     
-    def __init__(self, faClass=RBF):
+    def __init__(self, faClass=RBF, resetFA=True):
         """ initialize the agent with the estimatorClass. """
         Agent.__init__(self)
         self.faClass = faClass
-        
+        self.resetFA = resetFA
     
     def _setup(self, conditions):
         """ if agent is discrete in states and actions create Q-Table. """
@@ -52,7 +52,8 @@ class FQIAgent(Agent):
             mintarget = min(map(itemgetter(2), dataset))
             
             # reset estimator (not resetting might lead to faster convergence!)
-            self.estimator.reset()
+            if self.resetFA:
+                self.estimator.reset()
             for i in range(self.presentations):
                 shuffle(dataset)
                 for state, action, target in dataset:
