@@ -45,7 +45,7 @@ class Dataset(object):
             self.inputs_.resize((2*shape[0]+1, self.inputs_.shape[1]), refcheck=False)
             self.targets_.resize((2*shape[0]+1, self.targets_.shape[1]), refcheck=False)
         
-        # append input, target, reward to arrays
+        # append input, target arrays
         self.inputs_[self.length, :] = asarray(inp)
         self.targets_[self.length, :] = asarray(tgt)
         
