@@ -22,7 +22,10 @@ class Classifier(object):
         """ update the function approximator to return something closer
             to target when queried for input next time. Some function
             approximators only collect the input/target tuples here and
-            learn only on a call to learn(). """
+            learn only on a call to learn(). 
+            tgt is an integer for the class number. conversion to one-of-k
+            coding is done internally.
+        """
         self.dataset.append(inp, tgt)
     
     def reset(self):
@@ -45,6 +48,17 @@ class Classifier(object):
 
     def _asFlatArray(self, value):
         return np.asarray(value).flatten()
+        
+    def _asOneOfK(self, n, k, twodim=False):
+        """ returns a k-dimensional vector with all zeros except the n-th
+            element which is 1. if twodim is set to True, a (1,k)-dimensional
+            row vector is returned instead.
+        """
+            ret = np.zeros(k)
+            ret[n] = 1.
+            if twodim:
+                ret = ret.reshape(1,k)
+            return ret
         
         
     # overwrite the two above functions and re-declare this property
