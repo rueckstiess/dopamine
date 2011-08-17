@@ -49,16 +49,17 @@ class Classifier(object):
     def _asFlatArray(self, value):
         return np.asarray(value).flatten()
         
-    def _asOneOfK(self, n, k, twodim=False):
+    def _asOneOfK(self, n, twodim=False):
         """ returns a k-dimensional vector with all zeros except the n-th
             element which is 1. if twodim is set to True, a (1,k)-dimensional
             row vector is returned instead.
         """
-            ret = np.zeros(k)
-            ret[n] = 1.
-            if twodim:
-                ret = ret.reshape(1,k)
-            return ret
+        k = self.nclasses
+        ret = np.zeros(k)
+        ret[n] = 1.
+        if twodim:
+            ret = ret.reshape(1,k)
+        return ret
         
         
     # overwrite the two above functions and re-declare this property
