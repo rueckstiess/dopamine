@@ -18,7 +18,7 @@ class LogisticRegression(Classifier):
         
         # normalize for probabilities
         z = sum(a)
-        probs = [a[k] / z for k in range(len(a))]
+        probs = np.array([a[k] / z for k in range(len(a))])
         
         # store the belief for later use
         self.belief = probs
