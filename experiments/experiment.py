@@ -164,7 +164,7 @@ class Experiment(object):
         if not exploration:
             explorers = []
             for a in self.adapters_:
-                if isinstance(a, Explorer):
+                if isinstance(a, Explorer) and a.active:
                     explorers.append(a)
                     a.active = False
             
