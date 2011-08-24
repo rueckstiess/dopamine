@@ -1,4 +1,5 @@
 from numpy import *
+from random import choice
 from dopamine.agents.valuebased.estimator import Estimator
 from dopamine.fapprox import RBF, LWPRFA, Linear
 
@@ -19,9 +20,13 @@ class FAEstimator(Estimator):
         self.reset()
 
     def getBestAction(self, state):
-        """ returns the action with maximal value in the given state. """
+        """ returns the action with maximal value in the given state. if several
+            actions have the same value, pick one at random.
+        """
         state = state.flatten()
-        action = array([argmax([self.getValue(state, array([a])) for a in range(self.actionNum)])])
+        values = array([self.getValue(state, array([a])) for a in range(self.actionNum)])
+        maxvalues = where(values == values.max())[0]
+        action = array([choice(maxvalues)])
         return action
 
     def getValue(self, state, action):
