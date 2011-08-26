@@ -1,4 +1,5 @@
 from numpy import *
+import types
 
 class Dataset(object):
     
@@ -70,9 +71,17 @@ class Dataset(object):
         """ returns the length (number of samples) of the dataset. """
         return self.length
 
-    def __getitem__(self, index):
-        """Return the interaction at the given index. """ 
-        return self.inputs[index,:], self.targets[index,:]
+    def __getitem__(self, key):
+        """ Returns a dataset that is a slice of the original dataset
+            according to key. key can be an integer (positive or negative)
+            or a slice object (represented by x:y notation). 
+        """
+        ds = Dataset(self.indim, self.outdim)
+        if type(key) == types.SliceType:
+            ds.setArrays(self.inputs[key,:], self.targets[key,:])
+        elif type(key) == types.IntType:
+            ds.append(self.inputs[key,:], self.targets[key,:])
+        return ds
     
     def __iter__(self):
         """ iterate over dataset and return input and target. """
