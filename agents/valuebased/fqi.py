@@ -1,5 +1,5 @@
 from dopamine.agents.agent import Agent, AgentException
-from dopamine.agents.valuebased.faestimator import FAEstimator
+from dopamine.agents.valuebased.faestimator import FAEstimator, OrderedFAEstimator
 from dopamine.fapprox import RBF
 
 from numpy import mean, array, r_, c_, atleast_2d, random, equal
@@ -40,7 +40,10 @@ class FQIAgent(Agent):
             for episode in self.history:
                 for state, action, reward, nextstate in episode:                    
                     qvalue = self.estimator.getValue(state, action)
-                    bestnext = self.estimator.getValue(nextstate, self.estimator.getBestAction(nextstate))
+                    if nextstate != None:
+                        bestnext = self.estimator.getValue(nextstate, self.estimator.getBestAction(nextstate))
+                    else:
+                        bestnext = 0.
                     target = (1-self.alpha) * qvalue + self.alpha * (reward + self.gamma * bestnext)
 
                     dataset.append([state, action, target])

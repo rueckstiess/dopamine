@@ -100,7 +100,9 @@ class Episode(object):
             if i+1 < self.length:
                 ns = self.states[i+1,:]
             else:
-                ns = self.states[i,:]
+                # changed to return None instead
+                # ns = self.states[i,:]
+                ns = None
             yield(s, a, r, ns)
     
     def randomizedSamples(self):

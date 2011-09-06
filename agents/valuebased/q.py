@@ -4,7 +4,7 @@ from dopamine.agents.valuebased.table import TableEstimator
 class QAgent(Agent):
     
     alpha = 0.5
-    gamma = 0.5
+    gamma = 0.9
     
     def _setup(self, conditions):
         """ if agent is discrete in states and actions create Q-Table. """
@@ -24,11 +24,13 @@ class QAgent(Agent):
             
                 state = int(state)
                 action = int(action)
-                nextstate = int(nextstate)
      
                 qvalue = self.estimator.getValue(self.state, self.action)
-                maxnext = self.estimator.getValue(nextstate, self.estimator.getBestAction(nextstate))
-                
+                if nextstate != None:
+                    maxnext = self.estimator.getValue(int(nextstate), self.estimator.getBestAction(nextstate))
+                else:
+                    maxnext = 0.
+
                 self.estimator.updateValue(state, action, qvalue + self.alpha * (reward + self.gamma * maxnext - qvalue))
 
     
