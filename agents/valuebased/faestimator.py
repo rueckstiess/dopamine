@@ -26,7 +26,11 @@ class FAEstimator(Estimator):
         state = state.flatten()
         values = array([self.getValue(state, array([a])) for a in range(self.actionNum)])
         maxvalues = where(values == values.max())[0]
-        action = array([choice(maxvalues)])
+        if maxvalues:
+            action = array([choice(maxvalues)])
+        else:
+            # this should not happen, but it does in rare cases, return the first action
+            action = array([0])
         return action
 
     def getValue(self, state, action):
