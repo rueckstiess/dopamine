@@ -4,7 +4,6 @@ from sarsa import SARSAAgent
 
 # continuous agents
 from fqi import FQIAgent
-from orderedfqi import OrderedFQIAgent
 from fmci import FMCIAgent
 from bas import BASAgent
 
