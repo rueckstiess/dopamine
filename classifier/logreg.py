@@ -34,8 +34,9 @@ class LogisticRegression(Classifier):
             tgt is an integer for the class number. conversion to one-of-k
             coding is done internally.
         """
-        Classifier.update(self, inp, tgt)
-
+        # online method doesn't need to keep track of data points
+        # Classifier.update(self, inp, tgt)
+        
         self.classify(inp)
                 
         # attach 1 for the bias
