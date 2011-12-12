@@ -7,11 +7,10 @@ from operator import itemgetter
 import time
 from random import shuffle
 
-class FMCIAgent(Agent):
+class APIAgent(Agent):
     
     alpha = 1.0
     gamma = 0.9
-    presentations = 1
     
     def __init__(self, faClass=RBF):
         """ initialize the agent with the estimatorClass. """

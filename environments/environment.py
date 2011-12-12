@@ -38,6 +38,11 @@ class Environment(object):
         self.action = zeros(0)
         self.reward = 0
 
+        # flag that describes if the environment is a generator (can be reset in 
+        # any random state) or not. if True, resetToState() and getRandomState()
+        # need to be implemented
+        self.generator = False
+
     
     def getState(self):
         """ the currently visible state of the world (the observation may be 
@@ -48,7 +53,8 @@ class Environment(object):
             return self.state
         else:
             raise EnvironmentException('state was requested twice before action was given.')
-                    
+
+
     def performAction(self, action):
         """ perform an action on the world that changes it's internal state (maybe 
             stochastically).
@@ -76,6 +82,7 @@ class Environment(object):
         """ return whether or not an episode is over. Life-long environments always return False. """
         return False
 
+
     def reset(self):
         """ Most environments will implement this optional method that allows for 
             reinitialization. 
@@ -83,6 +90,22 @@ class Environment(object):
         self.progressCnt = 0
         self.timestep = 0
         
+
+    def resetToState(self, state):
+        """ if the environment is a generator, then this function needs to be implemented 
+            and reset the environment in the given state (rather than a start state). 
+            This is important for algorithms like Approximate Policy Iteration (API).
+        """
+        self.reset()
+
+    def getRandomState(self):
+        """ if the environment is a generator, then this function needs to be implemented 
+            and return a valid random state in the state space. 
+            This is important for algorithms like Approximate Policy Iteration (API).
+        """
+        return zeros(0)
+                
+
     def _update(self):
         """ integrate the action into the environment and set the new state and reward. """
         pass
