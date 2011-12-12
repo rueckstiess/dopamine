@@ -25,7 +25,7 @@ class APIExperiment(Experiment):
         # pick a random state from the environment
         randomState = self.environment.getRandomState()
         
-        # for each possible action, run one Rollout
+        # for each possible action, run one rollout
         for action in range(self.conditions['actionNum']):
             self.environment.resetToState(randomState)
         

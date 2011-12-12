@@ -5,7 +5,7 @@ from dopamine.fapprox import Linear
 
 from matplotlib import pyplot as plt
 
-class APIEstimator(Estimator):
+class VectorBlockEstimator(Estimator):
 
     conditions = {'discreteStates':False, 'discreteActions':True}
     
