@@ -1,5 +1,5 @@
 from dopamine.agents.agent import Agent, AgentException
-from dopamine.agents.valuebased.faestimator import FAEstimator, OrderedFAEstimator
+from dopamine.agents.valuebased.faestimator import FAEstimator
 from dopamine.fapprox import RBF
 
 from numpy import mean, array, r_, c_, atleast_2d, random, equal
@@ -28,10 +28,7 @@ class FQIAgent(Agent):
         if not (self.conditions['discreteStates'] == False and self.conditions['discreteActions']):
             raise AgentException('FQIAgent expects continuous states and discrete actions. Use adapter or a different environment.')
         
-        if self.ordered:
-            self.estimator = OrderedFAEstimator(self.conditions['stateDim'], self.conditions['actionNum'], self.faClass)
-        else:
-            self.estimator = FAEstimator(self.conditions['stateDim'], self.conditions['actionNum'], self.faClass)
+        self.estimator = FAEstimator(self.conditions['stateDim'], self.conditions['actionNum'], self.faClass, ordered=self.ordered)
     
 
     def _calculate(self):

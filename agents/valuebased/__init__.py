@@ -9,6 +9,6 @@ from bas import BASAgent
 
 # estimators
 from table import TableEstimator
-from faestimator import FAEstimator, OrderedFAEstimator
+from faestimator import FAEstimator
 from vblockestimator import VectorBlockEstimator
 
