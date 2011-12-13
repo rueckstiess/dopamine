@@ -40,6 +40,7 @@ class CartPoleEnvironment(Environment):
         self.action = 0.0
         self.maxSteps = maxSteps
         self.centerCart = False
+        self.generator = True
         
 
     def getState(self):
@@ -64,6 +65,21 @@ class CartPoleEnvironment(Environment):
         if self.renderer:
             self.renderer.updateData(self.sensors)
             time.sleep(0.05)
+
+
+    def resetToState(self, state):
+        Environment.reset(self)
+        self.sensors = state
+
+    def getRandomState(self):
+        """ if the environment is a generator, then this function needs to be implemented 
+            and return a valid random state in the state space. 
+            This is important for algorithms like Approximate Policy Iteration (API).
+        """
+        angle = random.uniform(-0.2, 0.2)
+        pos = random.uniform(-1., 1.)
+        state = (angle, 0.0, pos, 0.0)
+        return state
                         
     def reset(self):
         """ re-initializes the environment, setting the cart back in a random position.

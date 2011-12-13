@@ -1,9 +1,9 @@
 from dopamine.experiments.experiment import Experiment
-
+import numpy as np
 
 class APIExperiment(Experiment):
 
-    def runEpisode(self):
+    def runEpisode(self, reset=True):
         """ resets the environment in a random state, then creates rollouts until
             the environment and its adapters signals the end of an episode, for each
             possible action from the initial state. Note: this call will generate
@@ -19,8 +19,9 @@ class APIExperiment(Experiment):
             raise ExperimentException('API Experiments require a discrete action space, but the environment has a continuous action space.')
 
         # reset adapters and environment
-        for adapter in self.adapters_:
-            adapter.reset()
+        if reset:
+            for adapter in self.adapters_:
+                adapter.reset()
         
         # pick a random state from the environment
         randomState = self.environment.getRandomState()
@@ -71,10 +72,10 @@ class APIExperiment(Experiment):
             state = adapter.applyState(state)
         self.agent.integrateState(state)
         
+        action = self.agent.getAction()
+        # overwrite action with the forced one (getAction still needs to be called)
         if forceAction:
             action = forceAction
-        else:
-            action = self.agent.getAction()
 
         for adapter in reversed(self.adapters_):
             action = adapter.applyAction(action)

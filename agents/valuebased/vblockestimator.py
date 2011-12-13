@@ -49,11 +49,9 @@ class VectorBlockEstimator(Estimator):
    
     def reset(self):
         """ clear collected training set. """
-        # special case to clean up lwpr models that were pickled
-        if self.faClass == LWPRFA:
-            fa._cleanup()
         self.fa = Linear(self.stateDim * self.actionNum, 1)
                 
     def train(self):
         """ train individual models for each actions seperately. """
         self.fa.train()
+

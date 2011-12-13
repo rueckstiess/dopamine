@@ -157,9 +157,13 @@ class Experiment(object):
             self.runEpisode(reset)
     
     def evaluateEpisodes(self, count, reset=True, exploration=False, visualize=True):
+        self.setup()
+        
         # tell agent that evaluation is taking place
         self.agent.evaluation = True
-        
+    
+        currNumEpisodes = len(self.agent.history)
+
         # disable all explorers and store them for later        
         if not exploration:
             explorers = []
@@ -171,12 +175,12 @@ class Experiment(object):
         # run experiment for evaluation and store history
         self.runEpisodes(count, reset)
         
-        # copy the latest 'count' episodes to a new history
+        # copy the latest episodes to a new history
         history = History(self.agent.history.stateDim, self.agent.history.actionDim)
-        history.episodes_ = self.agent.history.episodes_[-count-1:-1]
+        history.episodes_ = self.agent.history.episodes_[currNumEpisodes:-1]
 
         # remove the evaluation histories from the agent
-        self.agent.history.episodes_ = self.agent.history.episodes_[:-(count+1)] + [self.agent.history.episodes_[-1]]
+        self.agent.history.episodes_ = self.agent.history.episodes_[:currNumEpisodes] + [self.agent.history.episodes_[-1]]
         
         # enable exploration again if disabled before
         if not exploration:
