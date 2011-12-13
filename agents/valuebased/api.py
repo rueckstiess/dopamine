@@ -1,6 +1,6 @@
 from dopamine.agents.agent import Agent, AgentException
 from dopamine.agents.valuebased.vblockestimator import VectorBlockEstimator
-from dopamine.fapprox import RBF
+from dopamine.fapprox import RBF, Linear
 
 from numpy import mean, array, r_, c_, atleast_2d, random, equal
 from operator import itemgetter
@@ -25,7 +25,7 @@ class APIAgent(Agent):
         if not (self.conditions['discreteStates'] == False and self.conditions['discreteActions']):
             raise AgentException('FQIAgent expects continuous states and discrete actions. Use adapter or a different environment.')
             
-        self.estimator = VectorBlockEstimator(self.conditions['stateDim'], self.conditions['actionNum'])
+        self.estimator = VectorBlockEstimator(self.conditions['stateDim'], self.conditions['actionNum'], faClass=Linear)
     
     def _calculate(self):
         self.action = self.estimator.getBestAction(self.state)
@@ -37,10 +37,13 @@ class APIAgent(Agent):
             dataset = []
             
             for episode in self.history:
-                for e, (state, action, reward, nextstate) in enumerate(episode):
+                ret = 0.
+                for state, action, reward, nextstate in episode.reversedSamples():
                     qvalue = self.estimator.getValue(state, action)
-                    target = (1-self.alpha) * qvalue + self.alpha * sum([self.gamma**k * r for k,r in enumerate(episode.rewards[e:])])
+                    ret += reward
+                    target = (1-self.alpha) * qvalue + self.alpha * ret
                     dataset.append([state, action, target])
+                    ret *= self.gamma
 
             if len(dataset) != 0:
                 # ground targets to 0 to avoid drifting values

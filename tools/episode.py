@@ -105,6 +105,22 @@ class Episode(object):
                 ns = None
             yield(s, a, r, ns)
     
+    def reversedSamples(self):
+        """ iterate over all samples in history (like __iter__) but
+            in reversed order. return state, action, reward and next state
+            for each iteration. 
+        """
+        for i in xrange(self.length-1, -1, -1):
+            s = self.states[i,:]
+            a = self.actions[i,:]
+            r = self.rewards[i]
+            if i+1 < self.length:
+                ns = self.states[i+1,:]
+            else:
+                # changed to return None instead
+                ns = None
+            yield(s, a, r, ns)
+    
     def randomizedSamples(self):
         """ iterate over all samples in history (like __iter__) but
             in random order. return state, action, reward and next state for each
