@@ -1,4 +1,4 @@
-from dopamine.experiments.experiment import Experiment
+from dopamine.experiments.experiment import Experiment, ExperimentException
 import numpy as np
 
 class APIExperiment(Experiment):
