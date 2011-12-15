@@ -45,17 +45,23 @@ class History(object):
     def numTotalSamples(self):
         return sum([len(e) for e in self.episodes])
         
-    def pop(self):
-        """ returns and removes the last non-empty episode in the history.
-            after this call, history will always have a new empty episode
-            as it's last element onto which new samples are added.
+    def pop(self, nonempty=True):
+        """ returns and removes the last (by default: non-empty) episode in 
+            the history. after this call, history will always have a new empty 
+            episode as it's last element onto which new samples are added.
         """
-        if len(self.episodes) == 0:
-            raise IndexError('pop from empty history')
+        if not nonempty:
+            episode = self.episodes_.pop()
+            self.newEpisode()
+        
+        else:            
+            if len(self.episodes) == 0:
+                raise IndexError('pop from empty history')
             
-        episode = self.episodes[-1]
-        self.episodes_ = self.episodes[:-1]
-        self.newEpisode()
+            episode = self.episodes[-1]
+            self.episodes_ = self.episodes[:-1]
+            self.newEpisode()
+        
         return episode
     
     def truncate(self, n, newest=True):
