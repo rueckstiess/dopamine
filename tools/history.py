@@ -20,13 +20,48 @@ class History(object):
         self.episodes_ = [Episode(self.stateDim, self.actionDim)]
     
     def newEpisode(self):
+        """ signals the end of the current episode and prepares the history
+            to append new samples to a fresh episode.
+            
+            Example:
+            history => [aaaa bbb]
+            history.newEpisode()
+            history => [aaaa bbb .]
+        """
         if len(self.episodes_) == 0 or len(self.episodes_[-1]) > 0:
             self.episodes_.append(Episode(self.stateDim, self.actionDim))
+        
+    def editLastEpisode(self):
+        """ this reverses the effect of newEpisode() and will append
+            new samples to the last existing episode instead. If the
+            last episode is not empty, this call has no effect. 
+            
+            Example:
+            history => [aaaa bbb .]
+            history.newEpisode()
+            history => [aaaa bbb]
+        """
+        if len(self.episodes) > 0 and len(self.episodes_[-1]) == 0:
+            self.episodes_ = self.episodes_[:-1]
     
     def append(self, state, action, reward):
+        """ appends samples to the current episode. If newEpisode() was
+            called, append will start adding samples to that new episode.
+        """
         self.episodes_[-1].append(state, action, reward)
     
     def appendEpisode(self, episode):
+        """ This will append a full episode to the history rather than
+            single samples with append(). If the last episode was open
+            and not finished yet, it will be finished and a new episode
+            starts after the added episode.
+            
+            Example (. is the empty episode):
+            
+            history => [aaaaa bb cccc]
+            history.appendEpisode([ddd])
+            history => [aaaaa bb cccc ddd .]
+        """
         episode = self.episodes_[-1]
         if len(episode) == 0:
             self.episodes_ = self.episodes_[:-1]
