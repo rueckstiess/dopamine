@@ -1,7 +1,7 @@
 from numpy import *
 from random import choice
 from dopamine.agents.valuebased.faestimator import FAEstimator
-from dopamine.fapprox import LWPRFA
+from dopamine.fapprox import Linear, LWPRFA
 import types
 
 from matplotlib import pyplot as plt
@@ -10,6 +10,10 @@ class VectorBlockEstimator(FAEstimator):
 
     conditions = {'discreteStates':False, 'discreteActions':True}
     
+    def __init__(self, stateDim, actionNum, faClass=Linear, ordered=False):
+        self.fa = None
+        FAEstimator.__init__(self, stateDim, actionNum, faClass, ordered)
+
     def _vectorBlockState(self, state, action):
         state = state.flatten()
         if type(action) != types.IntType:
@@ -34,7 +38,8 @@ class VectorBlockEstimator(FAEstimator):
         """ clear collected training set. """
         # special case to clean up lwpr models that were pickled
         if self.faClass == LWPRFA:
-            self.fa._cleanup()
+            if self.fa:
+                self.fa._cleanup()
 
         self.fa = self.faClass(self.stateDim * self.actionNum, 1)
                 
