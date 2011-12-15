@@ -28,7 +28,7 @@ class FQIAgent(Agent):
         if not (self.conditions['discreteStates'] == False and self.conditions['discreteActions']):
             raise AgentException('FQIAgent expects continuous states and discrete actions. Use adapter or a different environment.')
         
-        self.estimator = FAEstimator(self.conditions['stateDim'], self.conditions['actionNum'], self.faClass, ordered=self.ordered)
+        self.estimator = FAEstimator(self.conditions['stateDim'], self.conditions['actionNum'], faClass=self.faClass, ordered=self.ordered)
     
 
     def _calculate(self):
