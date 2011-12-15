@@ -14,10 +14,12 @@ class APIAgent(Agent):
     presentations = 1
     iterations = 1
     
-    def __init__(self, resetFA=True):
+    def __init__(self, faClass=Linear, resetFA=True, ordered=False):
         """ initialize the agent with the estimatorClass. """
         Agent.__init__(self)
         self.resetFA = resetFA
+        self.ordered = ordered
+        self.faClass = faClass
     
     def _setup(self, conditions):
         """ if agent is discrete in states and actions create Q-Table. """
@@ -25,7 +27,22 @@ class APIAgent(Agent):
         if not (self.conditions['discreteStates'] == False and self.conditions['discreteActions']):
             raise AgentException('FQIAgent expects continuous states and discrete actions. Use adapter or a different environment.')
             
-        self.estimator = VectorBlockEstimator(self.conditions['stateDim'], self.conditions['actionNum'], faClass=Linear)
+        self.estimator = VectorBlockEstimator(self.conditions['stateDim'], self.conditions['actionNum'], faClass=self.faClass, ordered=self.ordered)
+    
+    def newEpisode(self):
+        """ reset the memory. """
+        Agent.newEpisode(self)
+
+        if self.ordered:
+            self.estimator.resetMemory()
+    
+
+    def giveReward(self, reward):
+        """ additionally remember the chosen action to not draw it again. """
+        if self.ordered:
+            self.estimator.rememberAction(self.action)
+        
+        Agent.giveReward(self, reward)    
     
     def _calculate(self):
         self.action = self.estimator.getBestAction(self.state)
