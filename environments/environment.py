@@ -40,7 +40,10 @@ class Environment(object):
 
         # flag that describes if the environment is a generator (can be reset in 
         # any random state) or not. if True, resetToState() and getRandomState()
-        # need to be implemented
+        # need to be implemented. It also means that setting the state with 
+        # resetToState() received from getRandomState() puts the environment
+        # into the unique identical state it used to be before. In other words,
+        # the environment has to be an MDP. 
         self.generator = False
 
     
