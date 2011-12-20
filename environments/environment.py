@@ -101,12 +101,16 @@ class Environment(object):
         """
         self.reset()
 
-    def getRandomState(self):
+    def randomStateReached(self):
         """ if the environment is a generator, then this function needs to be implemented 
-            and return a valid random state in the state space. 
-            This is important for algorithms like Approximate Policy Iteration (API).
+            and return False until the agent reached a random state in the environment,
+            where it should return the state (or a unique identifier to restore that
+            state) with resetToState().
+            
+            If for example all episodes have length x, then this function should return
+            the state after randint(x) steps in the environment.
         """
-        return zeros(0)
+        return False
                 
 
     def _update(self):
