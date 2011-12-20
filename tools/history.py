@@ -62,12 +62,11 @@ class History(object):
             history.appendEpisode([ddd])
             history => [aaaaa bb cccc ddd .]
         """
-        episode = self.episodes_[-1]
-        if len(episode) == 0:
+        lastep = self.episodes_[-1]
+        if len(lastep) == 0:
             self.episodes_ = self.episodes_[:-1]
         self.episodes_.append(episode)
-        if len(episode) == 0:
-            self.newEpisode()
+        self.newEpisode()
         
     def extend(self, history):
         episode = self.episodes_[-1]
