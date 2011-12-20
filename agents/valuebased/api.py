@@ -1,4 +1,5 @@
 from dopamine.agents.agent import Agent, AgentException
+from dopamine.agents.valuebased import FQIAgent
 from dopamine.agents.valuebased.vblockestimator import VectorBlockEstimator
 from dopamine.fapprox import RBF, Linear
 
@@ -7,19 +8,11 @@ from operator import itemgetter
 import time
 from random import shuffle
 
-class APIAgent(Agent):
-    
-    alpha = 1.0
-    gamma = 0.9
-    presentations = 1
-    iterations = 1
+class APIAgent(FQIAgent):
     
     def __init__(self, faClass=Linear, resetFA=True, ordered=False):
         """ initialize the agent with the estimatorClass. """
-        Agent.__init__(self)
-        self.resetFA = resetFA
-        self.ordered = ordered
-        self.faClass = faClass
+        FQIAgent.__init__(self, faClass, resetFA, ordered)
     
     def _setup(self, conditions):
         """ if agent is discrete in states and actions create Q-Table. """
@@ -28,25 +21,7 @@ class APIAgent(Agent):
             raise AgentException('FQIAgent expects continuous states and discrete actions. Use adapter or a different environment.')
             
         self.estimator = VectorBlockEstimator(self.conditions['stateDim'], self.conditions['actionNum'], faClass=self.faClass, ordered=self.ordered)
-    
-    def newEpisode(self):
-        """ reset the memory. """
-        Agent.newEpisode(self)
-
-        if self.ordered:
-            self.estimator.resetMemory()
-    
-
-    def giveReward(self, reward):
-        """ additionally remember the chosen action to not draw it again. """
-        if self.ordered:
-            self.estimator.rememberAction(self.action)
-        
-        Agent.giveReward(self, reward)    
-    
-    def _calculate(self):
-        self.action = self.estimator.getBestAction(self.state)
-    
+            
     def learn(self):
         """ go through whole episode and make Q-value updates. """  
 
