@@ -51,6 +51,16 @@ class FQIAgent(Agent):
         Agent.giveReward(self, reward)    
 
     
+    def buildMemoryFromEpisode(self, episode):
+        """ builds the memory for already executed actions from the current
+            episode. this is necessary if the episode was appended without
+            actually being executed via the experiments interact() method. 
+        """
+        if self.ordered:
+            for a in episode.actions:
+                self.estimator.rememberAction(a)
+                
+    
     def learn(self):
         """ go through whole episode and make Q-value updates. """  
 
