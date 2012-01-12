@@ -1,5 +1,6 @@
 from dopamine.experiments.experiment import Experiment, ExperimentException
 import numpy as np
+import types
 
 class APIExperiment(Experiment):
 
@@ -22,14 +23,40 @@ class APIExperiment(Experiment):
         if reset:
             for adapter in self.adapters_:
                 adapter.reset()
+            self.environment.reset()
         
-        # pick a random state from the environment
-        randomState = self.environment.getRandomState()
+        # interate to a random state in the environment
+        while True:
+            randomState = self.environment.randomStateReached()
+            if randomState:
+                break
+            self.interact()
+        
+        # store and remove the current episode from the agent
+        randomEpisode = self.agent.history.pop(nonempty=False)
         
         # for each possible action, run one rollout
         for action in range(self.conditions['actionNum']):
+            
+            # put environment in previous state
             self.environment.resetToState(randomState)
-        
+            
+            
+            #### TODO: is this working correctly???
+            ####
+            ####
+            
+            # add stored episode to agent and rebuild the memory
+            # self.agent.history.appendEpisode(randomEpisode)
+            # self.agent.history.editLastEpisode()
+            self.agent.buildMemoryFromEpisode(randomEpisode)
+            # print len(self.agent.history)
+            
+            ####
+            ####
+            ######################################
+            
+            
             # get environment's episodeFinished and push it through all adapters
             episodeFinished = self.environment.episodeFinished()
             for adapter in self.adapters_:
@@ -52,7 +79,16 @@ class APIExperiment(Experiment):
         
             # tell agent that it should start a new episode
             self.agent.newEpisode()
-
+            self.numEpisodes += 1
+    
+    
+    def evaluateEpisodes(self, count, reset=True, exploration=False, visualize=True):
+        """ executes the original Experiment.runEpisode() function during evaluation. """
+        self.funcRunEpisode = self.runEpisode
+        self.runEpisode = types.MethodType(Experiment.runEpisode, self)
+        valdata = Experiment.evaluateEpisodes(self, count, reset, exploration, visualize)
+        self.runEpisode = self.funcRunEpisode
+        return valdata
 
     def interact(self, forceAction=None):
         """ run one interaction between agent and environment. The state from
