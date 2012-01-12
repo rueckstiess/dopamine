@@ -13,7 +13,9 @@ class Experiment(object):
         self.environment = environment
         self.agent = agent
         self.adapters_ = []
-        self.visualHistory = []
+        self.visual_x = []
+        self.visual_y = []
+        self.numEpisodes = 0
         
         # marker that stores if setup on agent has been completed
         self.setupComplete_ = False
@@ -151,6 +153,7 @@ class Experiment(object):
         
         # tell agent that it should start a new episode
         self.agent.newEpisode()
+        self.numEpisodes += 1
     
     def runEpisodes(self, count, reset=True):
         for i in range(count):
@@ -174,6 +177,7 @@ class Experiment(object):
             
         # run experiment for evaluation and store history
         self.runEpisodes(count, reset)
+        self.numEpisodes -= count
         
         # copy the latest episodes to a new history
         history = History(self.agent.history.stateDim, self.agent.history.actionDim)
@@ -193,8 +197,9 @@ class Experiment(object):
         if visualize:
             plt.ion()
             plt.clf()
-            self.visualHistory.append(mean([sum(e.rewards) for e in history]))
-            plt.plot(self.visualHistory, 'o-', color='black')
+            self.visual_x.append(self.numEpisodes)
+            self.visual_y.append(mean([sum(e.rewards) for e in history]))
+            plt.plot(self.visual_x, self.visual_y, 'o-', color='black')
             plt.gcf().canvas.draw()
                 
         return history
