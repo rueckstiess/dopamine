@@ -1,5 +1,6 @@
 from dopamine.agents.agent import Agent, AgentException
 from dopamine.agents.valuebased.faestimator import FAEstimator
+from dopamine.agents.valuebased.vblockestimator import VectorBlockEstimator
 from dopamine.fapprox import RBF
 
 from numpy import mean, array, r_, c_, atleast_2d, random, equal
@@ -14,12 +15,13 @@ class FQIAgent(Agent):
     iterations = 1
     presentations = 1
     
-    def __init__(self, faClass=RBF, resetFA=True, ordered=False):
+    def __init__(self, faClass=RBF, resetFA=True, ordered=False, vectorblock=False):
         """ initialize the agent with the estimatorClass. """
         Agent.__init__(self)
         self.faClass = faClass
         self.resetFA = resetFA
         self.ordered = ordered
+        self.vectorblock = vectorblock
 
     
     def _setup(self, conditions):
@@ -28,7 +30,10 @@ class FQIAgent(Agent):
         if not (self.conditions['discreteStates'] == False and self.conditions['discreteActions']):
             raise AgentException('FQIAgent expects continuous states and discrete actions. Use adapter or a different environment.')
         
-        self.estimator = FAEstimator(self.conditions['stateDim'], self.conditions['actionNum'], faClass=self.faClass, ordered=self.ordered)
+        if self.vectorblock:
+            self.estimator = VectorBlockEstimator(self.conditions['stateDim'], self.conditions['actionNum'], faClass=self.faClass, ordered=self.ordered)
+        else:
+            self.estimator = FAEstimator(self.conditions['stateDim'], self.conditions['actionNum'], faClass=self.faClass, ordered=self.ordered)
     
 
     def _calculate(self):

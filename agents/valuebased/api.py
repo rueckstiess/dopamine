@@ -1,6 +1,6 @@
 from dopamine.agents.agent import Agent, AgentException
 from dopamine.agents.valuebased import FQIAgent
-from dopamine.agents.valuebased.vblockestimator import VectorBlockEstimator
+from dopamine.agents.valuebased.vblockestimator import FAEstimator, VectorBlockEstimator
 from dopamine.fapprox import RBF, Linear
 
 from numpy import mean, array, r_, c_, atleast_2d, random, equal
@@ -10,17 +10,9 @@ from random import shuffle
 
 class APIAgent(FQIAgent):
     
-    def __init__(self, faClass=Linear, resetFA=True, ordered=False):
+    def __init__(self, faClass=Linear, resetFA=False, ordered=False, vectorblock=True):
         """ initialize the agent with the estimatorClass. """
-        FQIAgent.__init__(self, faClass, resetFA, ordered)
-    
-    def _setup(self, conditions):
-        """ if agent is discrete in states and actions create Q-Table. """
-        Agent._setup(self, conditions)
-        if not (self.conditions['discreteStates'] == False and self.conditions['discreteActions']):
-            raise AgentException('FQIAgent expects continuous states and discrete actions. Use adapter or a different environment.')
-            
-        self.estimator = VectorBlockEstimator(self.conditions['stateDim'], self.conditions['actionNum'], faClass=self.faClass, ordered=self.ordered)
+        FQIAgent.__init__(self, faClass, resetFA, ordered, vectorblock)
             
     def learn(self):
         """ go through whole episode and make Q-value updates. """  
