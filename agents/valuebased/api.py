@@ -1,6 +1,5 @@
 from dopamine.agents.agent import Agent, AgentException
 from dopamine.agents.valuebased import FQIAgent
-from dopamine.agents.valuebased.vblockestimator import FAEstimator, VectorBlockEstimator
 from dopamine.fapprox import RBF, Linear
 
 from numpy import mean, array, r_, c_, atleast_2d, random, equal
