@@ -33,21 +33,24 @@ class ResampledLinear(Linear):
         weights = np.diag(self.weights)
         
         self.matrix = np.dot(np.dot(np.dot(np.linalg.pinv(np.dot(np.dot(inputs.T, weights), inputs)), inputs.T), weights), self.dataset.targets)  
+        
+        # Linear.train(self)
         self.prune()
                 
 
     def prune(self):
         
         # nsamples has to be at least self.indim+1
-        nsamples = self.indim*2
+        nsamples = self.indim+10
         
         input_min = np.min(self.dataset.inputs, axis=0)
         input_max = np.max(self.dataset.inputs, axis=0)
         
-        inputs = np.random.uniform(input_min, input_max, size=(nsamples, self.indim))
-        # inputs = np.eye(self.indim)
-        # inputs = np.r_[np.zeros((1,inputs.shape[1])), inputs]
+        inputs = np.diag(input_max)
+        inputs = np.r_[inputs, np.zeros((1, inputs.shape[1]))]
+        inputs = np.r_[inputs, np.random.uniform(input_min, input_max, size=(nsamples-self.indim-1, self.indim))]
+        
         outputs = np.dot(np.c_[inputs, np.ones(inputs.shape[0])], self.matrix)
         
-        self.weights = np.ones(nsamples) # * (sum(self.weights) / nsamples)
+        self.weights = np.ones(nsamples) * (sum(self.weights) / nsamples)
         self.dataset.setArrays(inputs, outputs)
