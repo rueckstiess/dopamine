@@ -1,7 +1,7 @@
 from numpy import *
 from random import choice
 from dopamine.agents.valuebased.estimator import Estimator
-from dopamine.fapprox import RBF, LWPRFA
+from dopamine.fapprox import LWPRFA
 
 from matplotlib import pyplot as plt
 
@@ -9,7 +9,7 @@ class FAEstimator(Estimator):
 
     conditions = {'discreteStates':False, 'discreteActions':True}
     
-    def __init__(self, stateDim, actionNum, faClass=RBF, ordered=False):
+    def __init__(self, stateDim, actionNum, faClass=LWPRFA, ordered=False):
         """ initialize with the state dimension and number of actions. """
         self.stateDim = stateDim
         self.actionNum = actionNum

@@ -1,6 +1,6 @@
 from dopamine.agents.agent import Agent, AgentException
 from dopamine.agents.valuebased import FQIAgent
-from dopamine.fapprox import RBF, Linear
+from dopamine.fapprox import Linear
 
 from numpy import mean, array, r_, c_, atleast_2d, random, equal
 from operator import itemgetter
@@ -38,4 +38,3 @@ class APIAgent(FQIAgent):
                     for state, action, target in dataset:
                         self.estimator.updateValue(state, action, target-mintarget)
                 self.estimator.train()
-

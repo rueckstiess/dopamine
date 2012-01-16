@@ -1,6 +1,6 @@
 from dopamine.agents.agent import Agent, AgentException
 from dopamine.agents.valuebased.faestimator import FAEstimator
-from dopamine.fapprox import RBF
+from dopamine.fapprox import Linear
 from dopamine.tools import History
 
 from numpy import mean, array, r_, c_, atleast_2d, random, equal, ones
@@ -11,7 +11,7 @@ class BASAgent(Agent):
     alpha = 1.0
     gamma = 0.9
     
-    def __init__(self, faClass=RBF):
+    def __init__(self, faClass=Linear):
         """ initialize the agent with the estimatorClass. """
         Agent.__init__(self)
         

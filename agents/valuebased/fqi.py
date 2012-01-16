@@ -1,12 +1,14 @@
 from dopamine.agents.agent import Agent, AgentException
 from dopamine.agents.valuebased.faestimator import FAEstimator
+from dopamine.agents.valuebased.mdfaestimator import MDFAEstimator
 from dopamine.agents.valuebased.vblockestimator import VectorBlockEstimator
-from dopamine.fapprox import RBF
+from dopamine.fapprox import Linear
 
 from numpy import mean, array, r_, c_, atleast_2d, random, equal
 from operator import itemgetter
 from random import shuffle
 import time
+
 
 class FQIAgent(Agent):
     
@@ -15,7 +17,7 @@ class FQIAgent(Agent):
     iterations = 1
     presentations = 1
     
-    def __init__(self, faClass=RBF, resetFA=True, ordered=False, vectorblock=False):
+    def __init__(self, faClass=Linear, resetFA=True, ordered=False, vectorblock=False):
         """ initialize the agent with the estimatorClass. """
         Agent.__init__(self)
         self.faClass = faClass
