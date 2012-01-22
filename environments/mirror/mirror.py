@@ -34,5 +34,3 @@ class MirrorEnvironment(Environment):
     def _update(self):
         self.reward = -abs(self.state - self.action)
         # self.state = np.random.uniform(-10, 10, 1)        
-        
-    
