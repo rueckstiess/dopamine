@@ -30,7 +30,7 @@ class BinaryActionSearchAdapter(Adapter):
     def setExperiment(self, experiment):
         """ give adapter access to the experiment. """
         self.experiment = experiment
-        self.outConditions['stateDim'] = self.experiment.conditions['stateDim'] + 1 + self.resolution
+        self.outConditions['stateDim'] = self.experiment.conditions['stateDim'] + 1 + 1
     
     def applyState(self, state):
         """ apply transformations to state and return it. """
@@ -40,7 +40,7 @@ class BinaryActionSearchAdapter(Adapter):
     def applyAction(self, action):
         """ apply transformations to action and return it. """
         decision = int(action.item()) * 2 - 1
-        self.history[0] = decision
+        self.history[0] += 1
         self.delta /= 2.
         self.currAction += self.delta * decision
         
@@ -60,7 +60,7 @@ class BinaryActionSearchAdapter(Adapter):
                 action = adapter.applyAction(action)
             
             decision = int(action.item()) * 2 - 1
-            self.history[i+1] = decision
+            self.history[0] += 1
             self.delta /= 2.
             self.currAction += self.delta * decision
         
@@ -79,5 +79,5 @@ class BinaryActionSearchAdapter(Adapter):
         
         self.delta = (self.amax-self.amin) * 2**(self.resolution-1) / (2**self.resolution -1)
         self.currAction = (self.amax+self.amin) / 2.
-        self.history = np.zeros(self.resolution)
+        self.history = np.zeros(1)
         
