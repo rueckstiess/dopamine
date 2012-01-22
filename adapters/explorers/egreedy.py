@@ -21,6 +21,12 @@ class EpsilonGreedyExplorer(Explorer):
         """ draw random number r uniformly in [0,1]. if r < epsilon, make random move,
             otherwise return action as is.
         """
+        
+        # disable exploration if tau drops below 0.01
+        if self.epsilon < 0.0001:
+            self.active = False
+            return array([action])
+        
         if random.random() < self.epsilon:
             action = array([random.randint(self.experiment.conditions['actionNum'])])
         
