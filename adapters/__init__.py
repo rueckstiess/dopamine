@@ -5,6 +5,7 @@ from normalize import NormalizingAdapter
 from index import IndexingAdapter
 from vqstates import VQStateDiscretizationAdapter
 from vqactions import VQActionDiscretizationAdapter
+from bas import BinaryActionSearchAdapter
 
 # explorers
 from explorers.__init__ import *
