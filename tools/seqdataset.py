@@ -44,11 +44,11 @@ class SequenceDataset(object):
         if len(self.sequences) > 0 and len(self.sequences_[-1]) == 0:
             self.sequences_ = self.sequences_[:-1]
     
-    def append(self, inp, tgt):
+    def append(self, inp, tgt, imp=1.):
         """ appends samples to the current sequence. If newSequence() was
             called, append will start adding samples to that new sequence.
         """
-        self.sequences_[-1].append(inp, tgt)
+        self.sequences_[-1].append(inp, tgt, imp)
     
     def appendSequence(self, sequence):
         """ This will append a full sequence to the history rather than
@@ -134,6 +134,13 @@ class SequenceDataset(object):
             tgts = r_[tgts, s.targets.reshape(len(s), self.outdim)]
         return tgts
             
+    @property
+    def importance(self):
+        """ return array of all targets over all sequences in shape n x outdim """
+        imp = zeros([])
+        for s in self.sequences:
+            imp = r_[imp, s.importance]
+        return imp
             
     def __len__(self):
         """ returns the number of sequences (empty sequence at the end not considered). """
