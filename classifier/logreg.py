@@ -37,7 +37,8 @@ class LogisticRegression(Classifier):
         # online method doesn't need to keep track of data points
         # Classifier.update(self, inp, tgt)
         
-        self.classify(inp)
+        cls = self.classify(inp)
+        ret = (cls == tgt)
                 
         # attach 1 for the bias
         inp = np.asarray(inp)
@@ -49,6 +50,8 @@ class LogisticRegression(Classifier):
         for j in range(self.weights.shape[0]):
             for k in range(self.weights.shape[1]):
                 self.weights[j,k] -= self.alpha*(self.belief[k]-tgt[k])*inp[j]
+
+        return ret
                     
     
     def reset(self):

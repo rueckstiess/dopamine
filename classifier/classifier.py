@@ -3,7 +3,7 @@ from dopamine.tools.dataset import Dataset
 import numpy as np
 
 class Classifier(object):
-    """ This is the base class for general function approximators. """
+    """ This is the base class for general classifiers. """
     
     parametric = False
     
@@ -46,6 +46,9 @@ class Classifier(object):
         """ setter method for parameters. """
         pass
 
+    # overwrite the two above functions and re-declare this property
+    parameters = property(_getParameters, _setParameters)
+    
     def _asFlatArray(self, value):
         return np.asarray(value).flatten()
         
@@ -62,5 +65,4 @@ class Classifier(object):
         return ret
         
         
-    # overwrite the two above functions and re-declare this property
-    parameters = property(_getParameters, _setParameters)
+
