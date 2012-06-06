@@ -1,4 +1,4 @@
-from numpy import ones, ndarray, argmax, where, array
+from numpy import ones, ndarray, argmax, where, array, random
 from random import choice
 import types
 
@@ -19,6 +19,7 @@ class TableEstimator(Estimator):
         self.actionNum = actionNum
         
         self.initialize(0.0)
+        self.randomize()
  
     def getBestAction(self, state):
         """ expects a scalar or a list or array with one element. """
@@ -42,6 +43,9 @@ class TableEstimator(Estimator):
         """ Initialize the whole table with the given value. """
         self.values = ones((self.stateNum, self.actionNum)) * value
     
+    def randomize(self):
+        self.values = 0.1*random.random(size=self.values.shape)
+
     def _forceScalar(self, value):
         """ accepts scalars, lists and arrays. scalars are just passed through, while
             lists and arrays must have one single element. that element is passed back
