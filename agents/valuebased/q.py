@@ -21,11 +21,10 @@ class QAgent(Agent):
         """ go through whole episode and make Q-value updates. """
         for episode in self.history:
             for state, action, reward, nextstate in episode:
-            
                 state = int(state)
                 action = int(action)
      
-                qvalue = self.estimator.getValue(self.state, self.action)
+                qvalue = self.estimator.getValue(state, action)
                 if nextstate != None:
                     maxnext = self.estimator.getValue(int(nextstate), self.estimator.getBestAction(nextstate))
                 else:

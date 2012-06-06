@@ -12,7 +12,7 @@ class SARSAAgent(QAgent):
                 state = int(state)
                 action = int(action)
      
-                qvalue = self.estimator.getValue(self.state, self.action)
+                qvalue = self.estimator.getValue(state, action)
                 if nextstate != None:
                     _, nextaction, _ = episode[i+1]
                     nextval = self.estimator.getValue(int(nextstate), int(nextaction))
