@@ -1,5 +1,5 @@
 from dopamine.environments import MDPMaze
-from dopamine.agents import QAgent, SARSAAgent
+from dopamine.agents import QAgent, SARSAAgent, QLambdaAgent
 from dopamine.experiments import Experiment
 from dopamine.adapters import MakeEpisodicAdapter, EpsilonGreedyExplorer
 
@@ -8,7 +8,7 @@ from numpy import *
 import time
 
 
-agent = QAgent()
+agent = QLambdaAgent()
 # agent = SARSAAgent()
 
 environment = MDPMaze()
@@ -16,7 +16,7 @@ experiment = Experiment(environment, agent)
 experiment.addAdapter(MakeEpisodicAdapter(1000))
 
 
-explorer = EpsilonGreedyExplorer(0.3, 0.9999)
+explorer = EpsilonGreedyExplorer(0.3, 0.99999)
 experiment.addAdapter(explorer)
 
 plt.ion()
@@ -25,6 +25,7 @@ for i in range(1000):
     # run one episode and learn
     experiment.runEpisode(reset=True)
     agent.learn()
+    agent.forget()
 
     shape = environment.mazeTable.shape
     

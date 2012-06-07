@@ -1,5 +1,6 @@
 # discrete agents
 from q import QAgent
+from qlambda import QLambdaAgent
 from sarsa import SARSAAgent
 
 # continuous agents
