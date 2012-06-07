@@ -2,6 +2,7 @@
 from explorer import Explorer
 from egreedy import EpsilonGreedyExplorer
 from boltzmann import BoltzmannExplorer
+from dsde import DiscreteSDExplorer
 
 # continuous exploration
 from gaussian import GaussianExplorer
