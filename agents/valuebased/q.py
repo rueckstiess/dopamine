@@ -26,7 +26,8 @@ class QAgent(Agent):
      
                 qvalue = self.estimator.getValue(state, action)
                 if nextstate != None:
-                    maxnext = self.estimator.getValue(int(nextstate), self.estimator.getBestAction(nextstate))
+                    nextstate = int(nextstate)
+                    maxnext = self.estimator.getValue(nextstate, self.estimator.getBestAction(nextstate))
                 else:
                     maxnext = 0.
 
