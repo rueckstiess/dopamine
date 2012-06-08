@@ -1,5 +1,6 @@
 from dopamine.tools.dataset import Dataset
 from numpy import zeros, r_
+import types
 
 class SequenceDataset(object):
 
@@ -151,9 +152,18 @@ class SequenceDataset(object):
         for s in self.sequences:
             yield s
     
-    def __getitem__(self, index):
-        """return the sequence at the given index. """ 
-        return self.sequences[index]
+    def __getitem__(self, key):
+        """ if key is a slice object, return a new SequenceDataset containing the sliced
+            sequences. if key is of type int, return that sequence (of type Dataset).
+        """
+        if type(key) == types.SliceType:
+            sds = SequenceDataset(self.indim, self.outdim)
+            for s in self.sequences[key]:
+                sds.appendSequence(s)
+            return sds
+        elif type(key) == types.IntType:
+            return self.sequences[key]
+
     
     def __str__(self):
         out = []
