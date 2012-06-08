@@ -56,7 +56,7 @@ if options.play:
     raise SystemExit
 
 # add e-greedy exploration
-explorer = EpsilonGreedyExplorer(0.3, 0.99995)
+explorer = EpsilonGreedyExplorer(0.3, episodeCount=1000)
 experiment.addAdapter(explorer)
     
 if os.path.exists('cart_play.saved'):

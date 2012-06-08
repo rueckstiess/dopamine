@@ -14,7 +14,7 @@ environment = MDPMaze()
 experiment = Experiment(environment, agent)
 experiment.addAdapter(MakeEpisodicAdapter(1000))
 
-explorer = EpsilonGreedyExplorer(0.3, 0.9999)
+explorer = EpsilonGreedyExplorer(0.3, episodeCount=500)
 experiment.addAdapter(explorer)
 
 plt.ion()

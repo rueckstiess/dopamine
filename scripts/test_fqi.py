@@ -37,8 +37,8 @@ experiment = Experiment(environment, agent)
 # experiment.addAdapter(normalizer)
 
 # add e-greedy exploration
-# explorer = BoltzmannExplorer(2.0, decay=0.999)
-explorer = EpsilonGreedyExplorer(0.5, decay=0.999)
+# explorer = BoltzmannExplorer(2.0, episodeCount=1000)
+explorer = EpsilonGreedyExplorer(0.5, episodeCount=1000)
 experiment.addAdapter(explorer)
 
 # run 10 episodes to initialize the normalizing adapter

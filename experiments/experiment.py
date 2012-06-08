@@ -1,4 +1,4 @@
-from dopamine.adapters.explorers.explorer import Explorer
+from dopamine.adapters.explorers.explorer import Explorer, DecayExplorer
 from dopamine.tools.history import History
 from matplotlib import pyplot as plt
 from numpy import mean
@@ -89,6 +89,11 @@ class Experiment(object):
             print "pre-training...",
             sys.stdout.flush()
             self.evaluateEpisodes(self.conditions['requirePretraining'], reset=True, exploration=True, visualize=False)
+            # reset epsilon to initial value for all DecayExplorers
+            for a in self.adapters_:
+                if isinstance(a, DecayExplorer):
+                    a.resetExploration()
+
             print "done."
 
 
@@ -132,7 +137,7 @@ class Experiment(object):
         """
         if not self.conditions['episodic']:
             raise ExperimentException('Environment is not episodic, or adapters transformed it into non-episodic. Use interact() method.')
-        
+
         # reset adapters and environment
         if reset:
             for adapter in self.adapters_:
@@ -143,7 +148,7 @@ class Experiment(object):
         episodeFinished = self.environment.episodeFinished()
         for adapter in self.adapters_:
             episodeFinished = adapter.applyEpisodeFinished(episodeFinished)
-        
+
         # while the resulting episodeFinished is False, loop over interactions
         while not episodeFinished:
             self.interact()
@@ -178,7 +183,7 @@ class Experiment(object):
         # run experiment for evaluation and store history
         self.runEpisodes(count, reset)
         self.numEpisodes -= count
-        
+
         # copy the latest episodes to a new history
         history = History(self.agent.history.stateDim, self.agent.history.actionDim)
         history.episodes_ = self.agent.history.episodes_[currNumEpisodes:-1]

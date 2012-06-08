@@ -4,8 +4,7 @@ from dopamine.classifier.classifier import Classifier
 
 class LogisticRegression(Classifier):
     
-    alpha = 0.01
-    
+    alpha = 0.1
     
     def classify(self, inp):
         """ predict the output for the given input. """

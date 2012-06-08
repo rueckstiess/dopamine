@@ -1,7 +1,7 @@
 from dopamine.environments import MDPMaze
 from dopamine.agents import QAgent, SARSAAgent, QLambdaAgent
 from dopamine.experiments import Experiment
-from dopamine.adapters import MakeEpisodicAdapter, EpsilonGreedyExplorer
+from dopamine.adapters import MakeEpisodicAdapter, EpsilonGreedyExplorer, BoltzmannExplorer
 
 from matplotlib import pyplot as plt
 from numpy import *
@@ -9,14 +9,14 @@ import time
 
 
 agent = QLambdaAgent()
-# agent = SARSAAgent()
+agent = SARSAAgent()
 
 environment = MDPMaze()
 experiment = Experiment(environment, agent)
 experiment.addAdapter(MakeEpisodicAdapter(1000))
 
 
-explorer = EpsilonGreedyExplorer(0.3, 0.99999)
+explorer = BoltzmannExplorer(5, episodeCount=200)
 experiment.addAdapter(explorer)
 
 plt.ion()
@@ -30,7 +30,7 @@ for i in range(1000):
     shape = environment.mazeTable.shape
     
     # plot max_a Q(s, a) for each state s
-    plt.clf()
+    plt.clf() 
     plt.pcolor(agent.estimator.values.max(axis=1).reshape(shape), cmap='gray') 
 
     # create meshgrid for quiver 

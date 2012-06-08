@@ -21,7 +21,7 @@ normalizer = NormalizingAdapter()
 experiment.addAdapter(normalizer)
 
 # add e-greedy exploration
-explorer = EpsilonGreedyExplorer(0.2, 1.0)
+explorer = EpsilonGreedyExplorer(0.2, episodeCount=100)
 experiment.addAdapter(explorer)
 
 experiment.runEpisodes(10)

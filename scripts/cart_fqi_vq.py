@@ -27,7 +27,7 @@ discretizer = VQActionDiscretizationAdapter(5)
 experiment.addAdapter(discretizer)
 
 # add e-greedy exploration
-explorer = EpsilonGreedyExplorer(0.3, 0.99995)
+explorer = EpsilonGreedyExplorer(0.3, episodeCount=1000)
 experiment.addAdapter(explorer)
 
 # renderer = CartPoleRenderer()

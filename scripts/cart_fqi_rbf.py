@@ -25,12 +25,10 @@ normalizer = NormalizingAdapter()
 experiment.addAdapter(normalizer)
 
 # add e-greedy exploration
-explorer = EpsilonGreedyExplorer(0.3)
+explorer = EpsilonGreedyExplorer(0.3, episodeCount=1000)
 experiment.addAdapter(explorer)
 
 experiment.setup()
-explorer.epsilon = 0.5
-explorer.decay = 0.9999
 
 # renderer = CartPoleRenderer()
 # environment.renderer = renderer

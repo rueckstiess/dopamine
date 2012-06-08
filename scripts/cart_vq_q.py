@@ -21,7 +21,7 @@ discretizer = VQStateDiscretizationAdapter(30)
 experiment.addAdapter(discretizer)
 
 # add e-greedy exploration
-explorer = EpsilonGreedyExplorer(0.3, decay=0.999)
+explorer = EpsilonGreedyExplorer(0.3, episodeCount=1000)
 experiment.addAdapter(explorer)
 
 # force experiment setup now

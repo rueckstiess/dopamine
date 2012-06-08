@@ -20,7 +20,7 @@ bas = BinaryActionSearchAdapter(3., 4., 10)
 experiment.addAdapter(bas)
 
 # add e-greedy exploration
-# explorer = EpsilonGreedyExplorer(0.5, decay=0.99995)
+# explorer = EpsilonGreedyExplorer(0.5, episodeCount=10000)
 # experiment.addAdapter(explorer)
 
 # run experiment

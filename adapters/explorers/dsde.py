@@ -1,21 +1,18 @@
-from dopamine.adapters.explorers import Explorer
+from dopamine.adapters.explorers.explorer import DecayExplorer
 import numpy as np
 from copy import copy
 
-class DiscreteSDExplorer(Explorer):
+class DiscreteSDExplorer(DecayExplorer):
     
     # define the conditions of the environment
     inConditions = {'discreteStates':True, 'discreteActions':True}
             
 
-    def __init__(self, epsilon=0.5, decay=0.9999):        
+    def __init__(self, epsilon, episodeCount=None, actionCount=None):
+        DecayExplorer.__init__(self, epsilon, episodeCount, actionCount)
+
         # active is now property, this is the helper variable
         self.active_ = True   
-
-        # probability and its decay to permute a row in the value table
-        self.epsilon = epsilon
-        self.decay = decay
-
         self.oldTable = None
 
     def reset(self):
@@ -23,6 +20,9 @@ class DiscreteSDExplorer(Explorer):
 
 
     def _permuteTableRows(self):
+        if self.experiment == None:
+            return
+
         table = self.experiment.agent.estimator.values
 
         if self.oldTable == None:
@@ -35,6 +35,8 @@ class DiscreteSDExplorer(Explorer):
 
     def applyEpisodeFinished(self, episodeFinished):
         """ apply transformations to episodeFinished and return it. """
+        episodeFinished = DecayExplorer.applyEpisodeFinished(self, episodeFinished)
+        
         if episodeFinished:
             if self.oldTable != None:
                 self.experiment.agent.estimator.values[:] = self.oldTable
@@ -43,16 +45,6 @@ class DiscreteSDExplorer(Explorer):
         return episodeFinished
 
     
-    def _explore(self, action):
-        # disable exploration if tau drops below 0.01
-        if self.epsilon < 0.0001:
-            self.active = False
-        
-        if self.active:
-            self.epsilon *= self.decay
-
-        return np.array([action])
-
     def _setActive(self, active):
         if active:
             self._permuteTableRows()
