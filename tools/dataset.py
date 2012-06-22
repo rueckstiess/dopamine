@@ -75,7 +75,7 @@ class Dataset(object):
             to be the same length. if importance is not set (default), all 
             importance values are assumed to be 1. 
         """
-        if not importance:
+        if importance == None:
             importance = ones(inputs.shape[0])
         if inputs.shape[0] == targets.shape[0] == importance.shape[0]:
             self.inputs_ = inputs

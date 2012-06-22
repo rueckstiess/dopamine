@@ -100,8 +100,6 @@ class Episode(object):
             if i+1 < self.length:
                 ns = self.states[i+1,:]
             else:
-                # changed to return None instead
-                # ns = self.states[i,:]
                 ns = None
             yield(s, a, r, ns)
     
