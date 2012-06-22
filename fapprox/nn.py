@@ -33,7 +33,7 @@ class NN(FA):
         # outputs of neurons (after sigmoid function)
         self.iOutput = np.zeros((self.indim+1, 1), dtype=float)      # +1 for bias
         self.hOutput = np.zeros((self.nhidden+1, 1), dtype=float)    # +1 for bias
-        self.oOutput = np.zeros((self.outdim), dtype=float)
+        self.oOutput = np.zeros((self.outdim, 1), dtype=float)
         
         # deltas for hidden and output layer
         self.hDelta = np.zeros((self.nhidden), dtype=float)
@@ -66,9 +66,9 @@ class NN(FA):
         # output layer
         self.oActivation = np.dot(self.oWeights, self.hOutput)
         if self.classification:
-            self.oOutput = self.softmax(self.oActivation)
+            self.oOutput[:] = self.softmax(self.oActivation)
         else:
-            self.oOutput = self.logistic(self.oActivation)
+            self.oOutput[:] = self.logistic(self.oActivation)
         return self.oOutput
     
     
@@ -92,7 +92,7 @@ class NN(FA):
         
     
     def backward(self, teach):
-        error = self.oOutput - np.array(teach, dtype=float) 
+        error = self.oOutput - np.asarray(teach, dtype=float).reshape(self.outdim, 1)
 
         # deltas of output neurons
         if self.classification:
@@ -102,7 +102,7 @@ class NN(FA):
                 
         # deltas of hidden neurons
         self.hDelta = self.logistic_prime(self.hActivation) * np.dot(self.oWeights[:,:-1].T, self.oDelta)
-                
+        
         # apply weight changes
         self.hWeights = self.hWeights - self.alpha * np.dot(self.hDelta, self.iOutput.T) 
         self.oWeights = self.oWeights - self.alpha * np.dot(self.oDelta, self.hOutput.T)
