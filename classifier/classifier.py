@@ -18,15 +18,16 @@ class Classifier(object):
         """ predict the output for the given input. """
         abstractMethod()
         
-    def update(self, inp, tgt):
+    def update(self, inp, tgt, imp=1.):
         """ update the function approximator to return something closer
             to target when queried for input next time. Some function
             approximators only collect the input/target tuples here and
             learn only on a call to learn(). 
             tgt is an integer for the class number. conversion to one-of-k
-            coding is done internally.
+            coding is done internally. imp is the importance [0., 1.] of
+            the sample.
         """
-        self.dataset.append(inp, tgt)
+        self.dataset.append(inp, tgt, imp)
     
     def reset(self):
         """ this initializes the function approximator to an initial state,

@@ -25,13 +25,14 @@ class LogisticRegression(Classifier):
         return np.argmax(probs)
         
         
-    def update(self, inp, tgt):
+    def update(self, inp, tgt, imp=1.):
         """ update the function approximator to return something closer
             to target when queried for input next time. Some function
             approximators only collect the input/target tuples here and
             learn only on a call to learn(). 
             tgt is an integer for the class number. conversion to one-of-k
-            coding is done internally.
+            coding is done internally. imp is the importance [0., 1.] of
+            the sample.
         """
         # online method doesn't need to keep track of data points
         # Classifier.update(self, inp, tgt)
@@ -48,7 +49,7 @@ class LogisticRegression(Classifier):
     
         for j in range(self.weights.shape[0]):
             for k in range(self.weights.shape[1]):
-                self.weights[j,k] -= self.alpha*(self.belief[k]-tgt[k])*inp[j]
+                self.weights[j,k] -= self.alpha*imp*(self.belief[k]-tgt[k])*inp[j]
 
         return ret
                     
@@ -76,3 +77,5 @@ class LogisticRegression(Classifier):
     def _setParameters(self, parameters):
         """ setter method for parameters. """
         self.weights = parameters.reshape(self.indim+1, self.nclasses)
+
+    parameters = property(_getParameters, _setParameters)
