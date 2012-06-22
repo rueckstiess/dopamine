@@ -1,5 +1,5 @@
 from dopamine.tools.episode import Episode
-from numpy import zeros, r_
+import numpy as np
 
 class History(object):
 
@@ -44,11 +44,11 @@ class History(object):
         if len(self.episodes) > 0 and len(self.episodes_[-1]) == 0:
             self.episodes_ = self.episodes_[:-1]
     
-    def append(self, state, action, reward):
+    def append(self, state, action, reward, nextstate=None):
         """ appends samples to the current episode. If newEpisode() was
             called, append will start adding samples to that new episode.
         """
-        self.episodes_[-1].append(state, action, reward)
+        self.episodes_[-1].append(state, action, reward, nextstate)
     
     def appendEpisode(self, episode):
         """ This will append a full episode to the history rather than
@@ -133,28 +133,35 @@ class History(object):
     @property
     def states(self):
         """ return array of all states over all episodes in shape n x stateDim """
-        st = zeros((0, self.stateDim))
+        st = np.zeros((0, self.stateDim))
         for e in self.episodes:
-            st = r_[st, e.states.reshape(len(e), self.stateDim)]
+            st = np.r_[st, e.states.reshape(len(e), self.stateDim)]
         return st
     
     @property
     def actions(self):
         """ return array of all actions over all episodes in shape n x actionDim """
-        ac = zeros((0, self.actionDim))
+        ac = np.zeros((0, self.actionDim))
         for e in self.episodes:
-            ac = r_[ac, e.actions.reshape(len(e), self.actionDim)]
+            ac = np.r_[ac, e.actions.reshape(len(e), self.actionDim)]
         return ac
     
     @property
     def rewards(self):
         """ return array of all rewards over all episodes in shape n x 1 """
-        rew = zeros((0, 1))
+        rew = np.zeros((0, 1))
         for e in self.episodes:
-            rew = r_[rew, e.rewards.reshape(len(e), 1)]
+            rew = np.r_[rew, e.rewards.reshape(len(e), 1)]
         return rew
         
-            
+    @property
+    def nextstates(self):
+        """ return array of all next states over all episodes in shape n x stateDim """
+        st = np.zeros((0, self.stateDim))
+        for e in self.episodes:
+            st = np.r_[st, e.nextstates.reshape(len(e), self.stateDim)]
+        return st
+          
     def __len__(self):
         """ returns the number of episodes (empty episode at the end not considered). """
         return len(self.episodes)
