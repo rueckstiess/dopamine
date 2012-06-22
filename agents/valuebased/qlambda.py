@@ -32,7 +32,7 @@ class QLambdaAgent(QAgent):
 
                 i = 0
                 for t_ in xrange(t, -1, -1):
-                    if i >= self.trace_limit: 
+                    if i >= self.trace_limit and not self.trace_limit == None: 
                         break
                     state_ = episode.states[t_]
                     action_ = episode.actions[t_]
