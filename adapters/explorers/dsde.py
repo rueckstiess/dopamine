@@ -3,7 +3,12 @@ import numpy as np
 from copy import copy
 
 class DiscreteSDExplorer(DecayExplorer):
-    
+    """ This version of State Dependent Exploration switches
+        the table rows of a Q table (discrete case) after
+        each episode. Within an episode, the controller is
+        deterministic.
+    """
+
     # define the conditions of the environment
     inConditions = {'discreteStates':True, 'discreteActions':True}
             
