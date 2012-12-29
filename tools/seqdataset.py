@@ -1,5 +1,6 @@
 from dopamine.tools.dataset import Dataset
 from numpy import zeros, r_
+from numpy import random
 import types
 
 class SequenceDataset(object):
@@ -109,7 +110,11 @@ class SequenceDataset(object):
             self.sequences_ = self.sequences_[-n:]
         else:
             self.sequences_ = self.sequences_[:n]
-                    
+         
+    def shuffle(self):
+        """ shuffles the sequences in random order, then starts a new sequence. """
+        self.sequences_ = [self.sequences_[i] for i in random.permutation(len(self.sequences))]
+        self.newSequence()
     
     @property
     def sequences(self):
@@ -163,7 +168,6 @@ class SequenceDataset(object):
             return sds
         elif type(key) == types.IntType:
             return self.sequences[key]
-
     
     def __str__(self):
         out = []
