@@ -1,1 +1,2 @@
 from logreg import LogisticRegression
+from naivebayes import NaiveBayes
